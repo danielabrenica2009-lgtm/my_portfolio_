@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Linked List Visualizer{% endblock %}
+
+{% block content %}
+<h1>Linked List UI</h1>
+<p>Add or remove nodes from the list below:</p>
+
+<form method="POST" style="margin-bottom: 20px;">
+    <div class="form-group">
+        <label for="value">Node Value:</label>
+        <input type="text" id="value" name="value" placeholder="Enter text or number">
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <button type="submit" name="action" value="add_head" class="btn">Add to Head</button>
+        <button type="submit" name="action" value="add_tail" class="btn">Add to Tail</button>
+        <button type="submit" name="action" value="pop_head" class="btn" style="background-color: #c62828;">Remove Head</button>
+        <button type="submit" name="action" value="clear" class="btn" style="background-color: #616161;">Clear List</button>
+    </div>
+</form>
+
+<h3>Visualized Linked List</h3>
+<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+    {% if items %}
+        {% for item in items %}
+            <div style="background: var(--primary-green); color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; min-width: 40px; text-align: center;">
+                {{ item }}
+            </div>
+            {% if not loop.last %}
+                <span style="font-size: 1.5rem; font-weight: bold; color: var(--primary-green);">➔</span>
+            {% else %}
+                <span style="font-size: 1.2rem; font-weight: bold; color: #888;">➔ NULL</span>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p style="color: #777; font-style: italic;">The list is currently empty (EMPTY LIST ➔ NULL).</p>
+    {% endif %}
+</div>
+{% endblock %}

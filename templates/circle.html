@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Area of Circle{% endblock %}
+
+{% block content %}
+<h1>Area of Circle Calculator</h1>
+<form method="POST">
+    <div class="form-group">
+        <label for="radius">Radius:</label>
+        <input type="number" step="any" id="radius" name="radius" placeholder="Enter radius value" required>
+    </div>
+    <button type="submit" class="btn">Calculate Area</button>
+</form>
+
+{% if result is not none %}
+    <div class="output-box">
+        <h3>Result:</h3>
+        <p><strong>Radius:</strong> {{ radius }}</p>
+        <p><strong>Calculated Area:</strong> {{ "%.2f"|format(result) }}</p>
+    </div>
+{% endif %}
+{% endblock %}

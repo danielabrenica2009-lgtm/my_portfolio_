@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Home - Personal Portfolio{% endblock %}
+
+{% block content %}
+<h1>Welcome Back!</h1>
+<p>This is my personal portfolio web application.</p>
+<p>Select an option below or use navigation bar on top to navigate:</p>
+<div style="display: flex; gap: 10px; margin-top: 20px;">
+    <a href="{{ url_for('profile') }}" class="btn">View Profile</a>
+    <a href="{{ url_for('works') }}" class="btn">Programming Works</a>
+    <a href="{{ url_for('contact') }}" class="btn">Contact Info</a>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem; border-bottom: 2px solid rgba(16, 185, 129, 0.3); padding-bottom: 1rem;">
+    <!-- Bagong kulay para sa Title -->
+    <h1 style="margin: 0; font-size: 2.2rem; color: #34d399;">Personal Profile</h1>
+    <!-- PINALITAN: Ginawang puti at mas malinaw ang pangalan mo -->
+    <h3 style="margin: 5px 0 0 0; color: #ffffff; font-weight: 600;">{{ user.name }}</h3>
+</div>
+
+<div style="line-height: 1.6; color: #ecfdf5;">
+    <p><strong style="color: #34d399;">Title:</strong> {{ user.title }}</p>
+    <p style="color: #a7f3d0;">{{ user.bio }}</p>
+
+    <h3 style="color: #34d399; margin-top: 1.5rem;">Skills & Technologies</h3>
+    <ul style="padding-left: 20px; color: #ecfdf5;">
+        {% for skill in user.skills %}
+            <li style="margin-bottom: 6px;">{{ skill }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

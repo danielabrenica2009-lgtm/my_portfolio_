@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem; border-bottom: 2px solid var(--light-green); padding-bottom: 1rem;">
+    <h1 style="margin: 0; font-size: 2.2rem; color: var(--primary-green);">Contact Information</h1>
+</div>
+
+<div style="line-height: 1.8; font-size: 1.05rem;">
+    <p><strong>Email:</strong> {{ contact.email }}</p>
+    <p><strong>Phone:</strong> {{ contact.phone }}</p>
+    <p><strong>Location:</strong> {{ contact.location }}</p>
+    <p><strong>GitHub:</strong> <a href="{{ contact.github }}" target="_blank" style="color: var(--primary-green); font-weight: bold;">{{ contact.github }}</a></p>
+    <p><strong>LinkedIn:</strong> <a href="{{ contact.linkedin }}" target="_blank" style="color: var(--primary-green); font-weight: bold;">{{ contact.linkedin }}</a></p>
+</div>
+{% endblock %}

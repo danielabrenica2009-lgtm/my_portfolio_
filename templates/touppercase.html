@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Text Converter{% endblock %}
+
+{% block content %}
+<h1>Text to Uppercase</h1>
+<form method="POST">
+    <div class="form-group">
+        <label for="inputString">Text Input:</label>
+        <textarea id="inputString" name="inputString" rows="4" required></textarea>
+    </div>
+    <button type="submit" class="btn">Convert</button>
+</form>
+
+{% if result %}
+    <div class="output-box">
+        <h3>Result:</h3>
+        <p><strong>Original:</strong> {{ original_text }}</p>
+        <p><strong>Converted:</strong> {{ result }}</p>
+    </div>
+{% endif %}
+{% endblock %}

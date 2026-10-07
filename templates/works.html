@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Programming Works{% endblock %}
+
+{% block content %}
+<h1>Programming Works & Tools</h1>
+<ul style="line-height: 2; font-size: 1.1rem;">
+    <li><a href="{{ url_for('circle') }}" style="color: var(--primary-green); font-weight: bold;">Area of Circle Calculator</a></li>
+    <li><a href="{{ url_for('triangle') }}" style="color: var(--primary-green); font-weight: bold;">Area of Triangle Calculator</a></li>
+    <li><a href="{{ url_for('linkedlist') }}" style="color: var(--primary-green); font-weight: bold;">Linked List Implementation UI</a></li>
+    <li><a href="{{ url_for('touppercase') }}" style="color: var(--primary-green); font-weight: bold;">String to Uppercase Converter</a></li>
+</ul>
+{% endblock %}
