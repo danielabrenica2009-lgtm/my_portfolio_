@@ -94,7 +94,7 @@ def triangle():
   )
 
 
-# 4d. Linked List Implementation UI
+# 4d. inked List Implementation UI
 @app.route('/works/linkedlist', methods=['GET', 'POST'])
 def linkedlist():
   global linked_list_data
