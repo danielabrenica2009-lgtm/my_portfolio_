@@ -18,10 +18,11 @@ def index():
 def profile():
   user_data = {
       'name': 'Daniel Abrenica',
+      'course': 'Bachelor of Science in Computer Science Engineering 2-1',
       'title': 'Student / Aspiring Developer',
       'bio': (
           'A passionate student exploring web development, data structures, and'
-          ' algorithms.'
+          ' building for the web and solving problems one algorithm at a time.'
       ),
       'skills': ['Python', 'Flask', 'HTML/CSS', 'JavaScript', 'Data Structures'],
   }
