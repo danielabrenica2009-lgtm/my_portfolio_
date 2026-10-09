@@ -25,7 +25,7 @@ def profile():
           ' algorithms.'
       ),
       'skills': ['Python', 'Flask', 'HTML/CSS', 'JavaScript', 'Data Structures'],
-  }  # <--- Siguraduhing may closing brace '}' dito!
+  }
   return render_template('profile.html', user=user_data)
 
 

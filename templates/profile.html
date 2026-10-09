@@ -1,22 +1,84 @@
-{% extends "base.html" %}
-{% block title %}Profile{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <!-- Professional Modern Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <!-- Modularized External CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 
-{% block content %}
-<div style="margin-bottom: 2rem; border-bottom: 2px solid rgba(16, 185, 129, 0.3); padding-bottom: 1rem;">
-    <h1 style="margin: 0; font-size: 2.2rem; color: #34d399;">Personal Profile</h1>
-    <h3 style="margin: 5px 0 0 0; color: #ffffff; font-weight: 600;">{{ user.name }}</h3>
-    <p style="margin: 3px 0 0 0; color: #a7f3d0; font-size: 0.95rem; font-weight: 500;">{{ user.course }}</p>
-</div>
+    <nav>
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='profile.jpg') }}" 
+                 alt="Profile" 
+                 class="nav-profile-img"
+                 onclick="openImageModal()">
+            <a href="{{ url_for('index') }}" style="text-decoration: none;">
+                <span class="logo">MyPortfolio</span>
+            </a>
+        </div>
 
-<div style="line-height: 1.6; color: #ecfdf5;">
-    <p><strong style="color: #34d399;">Title:</strong> {{ user.title }}</p>
-    <p style="color: #a7f3d0;">{{ user.bio }}</p>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('works') }}">Works</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+        </ul>
+    </nav>
 
-    <h3 style="color: #34d399; margin-top: 1.5rem;">Skills & Technologies</h3>
-    <ul style="padding-left: 20px; color: #ecfdf5;">
-        {% for skill in user.skills %}
-            <li style="margin-bottom: 6px;">{{ skill }}</li>
-        {% endfor %}
-    </ul>
-</div>
-{% endblock %}
+    <div class="main-container">
+        <div style="margin-bottom: 2rem; border-bottom: 2px solid rgba(16, 185, 129, 0.3); padding-bottom: 1rem;">
+            <h1 style="margin: 0; font-size: 2.2rem; color: #34d399;">Personal Profile</h1>
+            <h3 style="margin: 5px 0 0 0; color: #ffffff; font-weight: 600;">{{ user.name }}</h3>
+            <p style="margin: 3px 0 0 0; color: #a7f3d0; font-size: 0.95rem; font-weight: 500;">{{ user.course }}</p>
+        </div>
+
+        <div style="line-height: 1.6; color: #ecfdf5;">
+            <p><strong style="color: #34d399;">Title:</strong> {{ user.title }}</p>
+            <p style="color: #a7f3d0;">{{ user.bio }}</p>
+
+            <h3 style="color: #34d399; margin-top: 1.5rem;">Skills & Technologies</h3>
+            <ul style="padding-left: 20px; color: #ecfdf5;">
+                {% for skill in user.skills %}
+                    <li style="margin-bottom: 6px;">{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- PROFILE IMAGE POPUP MODAL -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
+            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Photo">
+            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
+            <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Daniel Abrenica | My Personal Portfolio 
+    </footer>
+
+    <script>
+        function openImageModal() {
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeImageModalDirect() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        function closeImageModal(event) {
+            if (event.target.id === 'imageModal') {
+                document.getElementById('imageModal').style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>

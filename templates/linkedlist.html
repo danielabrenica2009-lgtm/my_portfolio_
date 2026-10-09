@@ -1,44 +1,106 @@
-{% extends "base.html" %}
-{% block title %}Linked List Visualizer{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List Visualizer</title>
+    <!-- Professional Modern Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <!-- Modularized External CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 
-{% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-    <h1 style="margin: 0;">Linked List UI</h1>
-    <a href="{{ url_for('works') }}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: var(--text-muted); border: 1px solid var(--border-glass);">
-        &#8592; Back
-    </a>
-</div>
+    <nav>
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='profile.jpg') }}" 
+                 alt="Profile" 
+                 class="nav-profile-img"
+                 onclick="openImageModal()">
+            <a href="{{ url_for('index') }}" style="text-decoration: none;">
+                <span class="logo">MyPortfolio</span>
+            </a>
+        </div>
 
-<p style="color: var(--text-muted);">Add or remove nodes from the list below:</p>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('works') }}">Works</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+        </ul>
+    </nav>
 
-<form method="POST" style="margin-bottom: 25px;">
-    <div class="form-group">
-        <label for="value">Node Value:</label>
-        <input type="text" id="value" name="value" placeholder="Enter text or number">
-    </div>
-    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <button type="submit" name="action" value="add_head" class="btn">Add to Head</button>
-        <button type="submit" name="action" value="add_tail" class="btn">Add to Tail</button>
-        <button type="submit" name="action" value="pop_head" class="btn" style="background-color: #ef4444; color: white;">Remove Head</button>
-        <button type="submit" name="action" value="clear" class="btn" style="background-color: #4b5563; color: white;">Clear List</button>
-    </div>
-</form>
+    <div class="main-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h1 style="margin: 0;">Linked List UI</h1>
+            <a href="{{ url_for('works') }}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: var(--text-muted); border: 1px solid var(--border-glass);">
+                &#8592; Back
+            </a>
+        </div>
 
-<h3>Visualized Linked List</h3>
-<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
-    {% if items %}
-        {% for item in items %}
-            <div style="background: var(--primary-green); color: #022c22; padding: 12px 20px; border-radius: 8px; font-weight: bold; min-width: 40px; text-align: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
-                {{ item }}
+        <p style="color: var(--text-muted);">Add or remove nodes from the list below:</p>
+
+        <form method="POST" style="margin-bottom: 25px;">
+            <div class="form-group">
+                <label for="value">Node Value:</label>
+                <input type="text" id="value" name="value" placeholder="Enter text or number">
             </div>
-            {% if not loop.last %}
-                <span style="font-size: 1.5rem; font-weight: bold; color: var(--primary-green);">➔</span>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button type="submit" name="action" value="add_head" class="btn">Add to Head</button>
+                <button type="submit" name="action" value="add_tail" class="btn">Add to Tail</button>
+                <button type="submit" name="action" value="pop_head" class="btn" style="background-color: #ef4444; color: white;">Remove Head</button>
+                <button type="submit" name="action" value="clear" class="btn" style="background-color: #4b5563; color: white;">Clear List</button>
+            </div>
+        </form>
+
+        <h3>Visualized Linked List</h3>
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+            {% if items %}
+                {% for item in items %}
+                    <div style="background: var(--primary-green); color: #022c22; padding: 12px 20px; border-radius: 8px; font-weight: bold; min-width: 40px; text-align: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                        {{ item }}
+                    </div>
+                    {% if not loop.last %}
+                        <span style="font-size: 1.5rem; font-weight: bold; color: var(--primary-green);">➔</span>
+                    {% else %}
+                        <span style="font-size: 1.1rem; font-weight: bold; color: var(--text-muted);">➔ NULL</span>
+                    {% endif %}
+                {% endfor %}
             {% else %}
-                <span style="font-size: 1.1rem; font-weight: bold; color: var(--text-muted);">➔ NULL</span>
+                <p style="color: var(--text-muted); font-style: italic;">The list is currently empty (EMPTY LIST ➔ NULL).</p>
             {% endif %}
-        {% endfor %}
-    {% else %}
-        <p style="color: var(--text-muted); font-style: italic;">The list is currently empty (EMPTY LIST ➔ NULL).</p>
-    {% endif %}
-</div>
-{% endblock %}
+        </div>
+    </div>
+
+    <!-- PROFILE IMAGE POPUP MODAL -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
+            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Photo">
+            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
+            <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Daniel Abrenica | My Personal Portfolio 
+    </footer>
+
+    <script>
+        function openImageModal() {
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeImageModalDirect() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        function closeImageModal(event) {
+            if (event.target.id === 'imageModal') {
+                document.getElementById('imageModal').style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>

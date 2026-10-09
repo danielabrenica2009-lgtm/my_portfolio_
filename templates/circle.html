@@ -1,27 +1,89 @@
-{% extends "base.html" %}
-{% block title %}Area of Circle{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area of Circle</title>
+    <!-- Professional Modern Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <!-- Modularized External CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 
-{% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-    <h1 style="margin: 0;">Area of Circle Calculator</h1>
-    <a href="{{ url_for('works') }}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: var(--text-muted); border: 1px solid var(--border-glass);">
-        &#8592; Back
-    </a>
-</div>
+    <nav>
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='profile.jpg') }}" 
+                 alt="Profile" 
+                 class="nav-profile-img"
+                 onclick="openImageModal()">
+            <a href="{{ url_for('index') }}" style="text-decoration: none;">
+                <span class="logo">MyPortfolio</span>
+            </a>
+        </div>
 
-<form method="POST">
-    <div class="form-group">
-        <label for="radius">Radius:</label>
-        <input type="number" step="any" id="radius" name="radius" placeholder="Enter radius value" required>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('works') }}">Works</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h1 style="margin: 0;">Area of Circle Calculator</h1>
+            <a href="{{ url_for('works') }}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: var(--text-muted); border: 1px solid var(--border-glass);">
+                &#8592; Back
+            </a>
+        </div>
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="radius">Radius:</label>
+                <input type="number" step="any" id="radius" name="radius" placeholder="Enter radius value" required>
+            </div>
+            <button type="submit" class="btn">Calculate Area</button>
+        </form>
+
+        {% if result is not none %}
+            <div class="output-box">
+                <h3>Result:</h3>
+                <p><strong>Radius:</strong> {{ radius }}</p>
+                <p><strong>Calculated Area:</strong> {{ "%.2f"|format(result) }}</p>
+            </div>
+        {% endif %}
     </div>
-    <button type="submit" class="btn">Calculate Area</button>
-</form>
 
-{% if result is not none %}
-    <div class="output-box">
-        <h3>Result:</h3>
-        <p><strong>Radius:</strong> {{ radius }}</p>
-        <p><strong>Calculated Area:</strong> {{ "%.2f"|format(result) }}</p>
+    <!-- PROFILE IMAGE POPUP MODAL -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
+            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Photo">
+            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
+            <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
+        </div>
     </div>
-{% endif %}
-{% endblock %}
+
+    <footer>
+        &copy; 2026 Daniel Abrenica | My Personal Portfolio 
+    </footer>
+
+    <script>
+        function openImageModal() {
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeImageModalDirect() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        function closeImageModal(event) {
+            if (event.target.id === 'imageModal') {
+                document.getElementById('imageModal').style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>
