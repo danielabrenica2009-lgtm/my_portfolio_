@@ -17,7 +17,7 @@ def index():
 @app.route('/profile')
 def profile():
   user_data = {
-      'name': 'Daniel Abrenica',
+      'name': 'Daniel H. Abrenica',
       'course': 'Bachelor of Science in Computer Engineering 2-1',
       'title': 'Student / Aspiring Developer',
       'bio': (
