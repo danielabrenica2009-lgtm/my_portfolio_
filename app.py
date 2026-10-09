@@ -8,7 +8,7 @@ linked_list_data = []
 
 
 # 1. Homepage
-@app.route('/') # tells server which html file to be read
+@app.route('/')
 def index():
   return render_template('index.html')
 
@@ -18,14 +18,14 @@ def index():
 def profile():
   user_data = {
       'name': 'Daniel Abrenica',
-      'course': 'Bachelor of Science in Computer Science Engineering 2-1',
+      'course': 'Bachelor of Science in Computer Engineering 2-1',
       'title': 'Student / Aspiring Developer',
       'bio': (
           'A passionate student exploring web development, data structures, and'
-          ' building for the web and solving problems one algorithm at a time.'
+          ' algorithms.'
       ),
       'skills': ['Python', 'Flask', 'HTML/CSS', 'JavaScript', 'Data Structures'],
-  }
+  }  # <--- Siguraduhing may closing brace '}' dito!
   return render_template('profile.html', user=user_data)
 
 
@@ -48,7 +48,7 @@ def works():
   return render_template('works.html')
 
 
-# 4.1String to Uppercase Converter
+# 4.1 String to Uppercase Converter
 @app.route('/works/touppercase', methods=['GET', 'POST'])
 def touppercase():
   result = None
@@ -61,9 +61,8 @@ def touppercase():
   )
 
 
-# 4b. Area of Circle Calculator
-@app.route('/works/area/circle', methods=['GET', 'POST'], endpoint='circle')
-@app.route('/works/area/circle', methods=['GET', 'POST'], endpoint='acircle')
+# 4.2 Area of Circle Calculator
+@app.route('/works/area/circle', methods=['GET', 'POST'])
 def circle():
   result = None
   radius = None
@@ -76,7 +75,7 @@ def circle():
   return render_template('circle.html', result=result, radius=radius)
 
 
-# 4c. Area of Triangle Calculator
+# 4.3 Area of Triangle Calculator
 @app.route('/works/area/triangle', methods=['GET', 'POST'])
 def triangle():
   result = None
@@ -94,7 +93,7 @@ def triangle():
   )
 
 
-# 4d. inked List Implementation UI
+# 4.4 Linked List Implementation UI
 @app.route('/works/linkedlist', methods=['GET', 'POST'])
 def linkedlist():
   global linked_list_data
@@ -116,6 +115,5 @@ def linkedlist():
   return render_template('linkedlist.html', items=linked_list_data)
 
 
-# ensuring that it go to the left in this block without spaces
 if __name__ == '__main__':
   app.run(debug=True)
