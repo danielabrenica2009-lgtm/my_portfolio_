@@ -8,6 +8,79 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <!-- Modularized External CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <style>
+        /* Node Structural Styling (Patterned after Data + Next Pointer structure) */
+        .ll-node-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ll-node {
+            display: flex;
+            flex-direction: column;
+            width: 90px;
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #022c22;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+            transition: transform 0.2s ease;
+        }
+
+        .ll-node:hover {
+            transform: translateY(-3px);
+        }
+
+        .ll-node-data {
+            background: #10b981;
+            color: #022c22;
+            padding: 8px 4px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            word-break: break-all;
+            border-bottom: 2px solid #047857;
+        }
+
+        .ll-node-next {
+            background: rgba(6, 78, 59, 0.8);
+            color: #a7f3d0;
+            padding: 4px;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .ll-pointer-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #34d399;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .ll-arrow {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #34d399;
+        }
+
+        .ll-null-badge {
+            background: rgba(255, 255, 255, 0.08);
+            color: #a7f3d0;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px dashed rgba(16, 185, 129, 0.4);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+    </style>
 </head>
 <body>
 
@@ -32,42 +105,54 @@
 
     <div class="main-container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h1 style="margin: 0;">Linked List UI</h1>
+            <h1 style="margin: 0;">Linked List Operations & Visualization</h1>
             <a href="{{ url_for('works') }}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: var(--text-muted); border: 1px solid var(--border-glass);">
                 &#8592; Back
             </a>
         </div>
 
-        <p style="color: var(--text-muted);">Add or remove nodes from the list below:</p>
+        <p style="color: var(--text-muted);">Perform linked list operations and visualize nodes patagilid below:</p>
 
         <form method="POST" style="margin-bottom: 25px;">
             <div class="form-group">
                 <label for="value">Node Value:</label>
                 <input type="text" id="value" name="value" placeholder="Enter text or number">
             </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button type="submit" name="action" value="add_head" class="btn">Add to Head</button>
-                <button type="submit" name="action" value="add_tail" class="btn">Add to Tail</button>
-                <button type="submit" name="action" value="pop_head" class="btn" style="background-color: #ef4444; color: white;">Remove Head</button>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="submit" name="action" value="add_head" class="btn" style="background-color: #10b981; color: #022c22;">Prepend (Head)</button>
+                <button type="submit" name="action" value="add_tail" class="btn" style="background-color: #059669; color: white;">Append (Tail)</button>
+                <button type="submit" name="action" value="pop_head" class="btn" style="background-color: #ef4444; color: white;">Pop Head</button>
+                <button type="submit" name="action" value="pop_tail" class="btn" style="background-color: #dc2626; color: white;">Pop Tail</button>
                 <button type="submit" name="action" value="clear" class="btn" style="background-color: #4b5563; color: white;">Clear List</button>
             </div>
         </form>
 
-        <h3>Visualized Linked List</h3>
-        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+        <h3 style="color: #34d399; margin-bottom: 15px;">Linked List Visualization (Total Nodes: {{ items|length }})</h3>
+        
+        <!-- Patagilid (Horizontal) Nodes Container -->
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 15px; padding: 15px 0;">
             {% if items %}
                 {% for item in items %}
-                    <div style="background: var(--primary-green); color: #022c22; padding: 12px 20px; border-radius: 8px; font-weight: bold; min-width: 40px; text-align: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
-                        {{ item }}
+                    <div class="ll-node-container">
+                        <!-- Node Box with DATA and NEXT pointer layout -->
+                        <div class="ll-node">
+                            <div class="ll-node-data">{{ item }}</div>
+                            <div class="ll-node-next">
+                                <span class="ll-pointer-dot"></span> NEXT
+                            </div>
+                        </div>
+                        
+                        <!-- Horizontal Pointer Arrow -->
+                        {% if not loop.last %}
+                            <span class="ll-arrow">➔</span>
+                        {% else %}
+                            <span class="ll-arrow">➔</span>
+                            <div class="ll-null-badge">NULL</div>
+                        {% endif %}
                     </div>
-                    {% if not loop.last %}
-                        <span style="font-size: 1.5rem; font-weight: bold; color: var(--primary-green);">➔</span>
-                    {% else %}
-                        <span style="font-size: 1.1rem; font-weight: bold; color: var(--text-muted);">➔ NULL</span>
-                    {% endif %}
                 {% endfor %}
             {% else %}
-                <p style="color: var(--text-muted); font-style: italic;">The list is currently empty (EMPTY LIST ➔ NULL).</p>
+                <p style="color: var(--text-muted); font-style: italic;">The Linked List is currently empty (HEAD ➔ NULL).</p>
             {% endif %}
         </div>
     </div>

@@ -102,18 +102,19 @@ def linkedlist():
     value = request.form.get('value', '').strip()
 
     if action == 'add_head' and value:
-      linked_list_data.insert(0, value)
+      linked_list_data.insert(0, value)  # Prepend (Start / Head)
     elif action == 'add_tail' and value:
-      linked_list_data.append(value)
+      linked_list_data.append(value)  # Append (End / Tail)
     elif action == 'pop_head' and linked_list_data:
-      linked_list_data.pop(0)
+      linked_list_data.pop(0)  # Pop Head
+    elif action == 'pop_tail' and linked_list_data:
+      linked_list_data.pop()  # Pop Tail
     elif action == 'clear':
-      linked_list_data = []
+      linked_list_data = []  # Clear List
 
     return redirect(url_for('linkedlist'))
 
   return render_template('linkedlist.html', items=linked_list_data)
-
 
 if __name__ == '__main__':
   app.run(debug=True)
