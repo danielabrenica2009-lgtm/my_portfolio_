@@ -97,24 +97,56 @@ def triangle():
 @app.route('/works/linkedlist', methods=['GET', 'POST'])
 def linkedlist():
   global linked_list_data
+  message = None
+
   if request.method == 'POST':
     action = request.form.get('action')
     value = request.form.get('value', '').strip()
+    index_str = request.form.get('index', '').strip()
 
-    if action == 'add_head' and value:
-      linked_list_data.insert(0, value)  # Prepend (Start / Head)
-    elif action == 'add_tail' and value:
-      linked_list_data.append(value)  # Append (End / Tail)
+    if action == 'add_tail' and value:
+      linked_list_data.append(value)
+      message = f"Appended '{value}' to the end."
+    elif action == 'add_head' and value:
+      linked_list_data.insert(0, value)
+      message = f"Prepended '{value}' to the start."
+    elif action == 'insert_index' and value:
+      try:
+        idx = int(index_str)
+        if 0 <= idx <= len(linked_list_data):
+          linked_list_data.insert(idx, value)
+          message = f"Inserted '{value}' at index {idx}."
+        else:
+          message = 'Error: Index out of range.'
+      except ValueError:
+        message = 'Error: Please enter a valid integer for index.'
+    elif action == 'search' and value:
+      if value in linked_list_data:
+        idx = linked_list_data.index(value)
+        message = f"Value '{value}' found at index {idx}."
+      else:
+        message = f"Value '{value}' not found in the list."
+    elif action == 'delete_val' and value:
+      if value in linked_list_data:
+        linked_list_data.remove(value)
+        message = f"Deleted value '{value}' from the list."
+      else:
+        message = f"No index or value found for '{value}'."
     elif action == 'pop_head' and linked_list_data:
-      linked_list_data.pop(0)  # Pop Head
+      popped = linked_list_data.pop(0)
+      message = f"Popped '{popped}' from the head."
     elif action == 'pop_tail' and linked_list_data:
-      linked_list_data.pop()  # Pop Tail
+      popped = linked_list_data.pop()
+      message = f"Popped '{popped}' from the tail."
     elif action == 'clear':
-      linked_list_data = []  # Clear List
+      linked_list_data = []
+      message = 'Linked list cleared.'
 
-    return redirect(url_for('linkedlist'))
+    return render_template(
+        'linkedlist.html', items=linked_list_data, message=message
+    )
 
-  return render_template('linkedlist.html', items=linked_list_data)
+  return render_template('linkedlist.html', items=linked_list_data, message=None)
 
 if __name__ == '__main__':
   app.run(debug=True)
