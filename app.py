@@ -17,7 +17,7 @@ def index():
 @app.route('/profile')
 def profile():
   user_data = {
-      'name': 'Daniel H. Abrenica',
+      'name': 'Daniel Abrenica',
       'course': 'Bachelor of Science in Computer Engineering 2-1',
       'title': 'Student / Aspiring Developer',
       'bio': (
@@ -147,6 +147,86 @@ def linkedlist():
     )
 
   return render_template('linkedlist.html', items=linked_list_data, message=None)
+
+
+# 4.5 Infix to Postfix Expression Converter (Stack Algorithm)
+@app.route('/works/infixtopostfix', methods=['GET', 'POST'])
+def infixtopostfix():
+  postfix_result = None
+  infix_expr = ''
+  steps = []
+
+  if request.method == 'POST':
+    infix_expr = request.form.get('infixExpression', '').strip()
+    if infix_expr:
+      precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}
+      ops_stack = []
+      output_list = []
+
+      tokens = list(infix_expr.replace(' ', ''))
+      steps.append(
+          f"Initialized empty stacks. Scanning tokens: {' '.join(tokens)}"
+      )
+
+      for token in tokens:
+        if token.isalnum():
+          output_list.append(token)
+          steps.append(
+              f"Operand '{token}' found ➔ Added directly to output:"
+              f" {''.join(output_list)}"
+          )
+        elif token == '(':
+          ops_stack.append(token)
+          steps.append(
+              f"Opening bracket '(' found ➔ Pushed to ops stack:"
+              f" {list(ops_stack)}"
+          )
+        elif token == ')':
+          steps.append(
+              "Closing bracket ')' found ➔ Popping from ops stack to output"
+              " until '(' is met."
+          )
+          while ops_stack and ops_stack[-1] != '(':
+            popped = ops_stack.pop()
+            output_list.append(popped)
+          if ops_stack and ops_stack[-1] == '(':
+            ops_stack.pop()
+          steps.append(f"Current Output: {''.join(output_list)}")
+        elif token in precedence:
+          while (
+              ops_stack
+              and ops_stack[-1] != '('
+              and ops_stack[-1] in precedence
+              and precedence[ops_stack[-1]] >= precedence[token]
+          ):
+            popped = ops_stack.pop()
+            output_list.append(popped)
+            steps.append(
+                f"Operator precedence rule: Popped '{popped}' to output."
+            )
+          ops_stack.append(token)
+          steps.append(
+              f"Operator '{token}' pushed to ops stack. Current Ops Stack:"
+              f" {list(ops_stack)}"
+          )
+
+      while ops_stack:
+        popped = ops_stack.pop()
+        output_list.append(popped)
+        steps.append(
+            f"End of expression ➔ Popped remaining '{popped}' to output."
+        )
+
+      postfix_result = ''.join(output_list)
+      steps.append(f'Final Postfix Expression: {postfix_result}')
+
+  return render_template(
+      'infixtopostfix.html',
+      result=postfix_result,
+      infix_expr=infix_expr,
+      steps=steps,
+  )
+
 
 if __name__ == '__main__':
   app.run(debug=True)
