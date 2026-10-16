@@ -6,6 +6,19 @@
     <title>Programming Works - My Portfolio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .main-container ul li a {
+            color: var(--primary-green);
+            text-decoration: underline;
+            display: inline-block;
+            transition: color 0.2s ease, text-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .main-container ul li a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(52, 211, 153, 0.9);
+            transform: translateX(6px);
+        }
+    </style>
 </head>
 <body>
 
@@ -32,11 +45,11 @@
         <h1>Programming Works & Tools</h1>
         
         <ul style="line-height: 2.2; font-size: 1.1rem; padding-left: 20px;">
-            <li><a href="{{ url_for('circle') }}" style="color: var(--primary-green); text-decoration: underline;">Area of Circle Calculator</a></li>
-            <li><a href="{{ url_for('triangle') }}" style="color: var(--primary-green); text-decoration: underline;">Area of Triangle Calculator</a></li>
-            <li><a href="{{ url_for('linkedlist') }}" style="color: var(--primary-green); text-decoration: underline;">Linked List Implementation UI</a></li>
-            <li><a href="{{ url_for('touppercase') }}" style="color: var(--primary-green); text-decoration: underline;">String to Uppercase Converter</a></li>
-            <li><a href="{{ url_for('infixtopostfix') }}" style="color: var(--primary-green); text-decoration: underline;">Infix to Postfix Converter (Stack)</a></li>
+            <li><a href="{{ url_for('circle') }}">Area of Circle Calculator</a></li>
+            <li><a href="{{ url_for('triangle') }}">Area of Triangle Calculator</a></li>
+            <li><a href="{{ url_for('linkedlist') }}">Linked List Implementation UI</a></li>
+            <li><a href="{{ url_for('touppercase') }}">String to Uppercase Converter</a></li>
+            <li><a href="{{ url_for('infixtopostfix') }}">Infix to Postfix Converter (Stack)</a></li>
         </ul>
     </div>
 
