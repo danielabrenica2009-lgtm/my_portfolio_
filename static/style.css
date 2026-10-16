@@ -9,7 +9,7 @@
     --text-muted: #a7f3d0;
 }
 
-/* REALISTIC DARK EMERALD GRADIENT WITH AMBIENT GLOW */
+/* HULK BACKGROUND THEME WITH DARK GREEN GLASS OVERLAY */
 body {
     font-family: 'Inter', sans-serif;
     margin: 0;
@@ -18,7 +18,10 @@ body {
     flex-direction: column;
     min-height: 100vh;
     color: var(--text-main);
-    background: radial-gradient(circle at 50% 0%, #065f46 0%, #022c22 75%);
+    /* Binawasan natin ang opacity ng green gradient para mas lumitaw si Hulk, at tinugma ang filename na hulk(1).jpg */
+    background: linear-gradient(rgba(2, 44, 34, 0.75), rgba(6, 78, 59, 0.65)), url('hulk(1).jpg');
+    background-size: cover;
+    background-position: center;
     background-attachment: fixed;
 }
 
@@ -95,19 +98,21 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* REALISTIC FROSTED GLASS CARD CONTAINER */
+/* MODERN FROSTED GLASS CARD CONTAINER */
 .main-container {
     flex: 1;
     max-width: 820px;
     width: 88%;
     margin: 2.5rem auto;
-    background: var(--card-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    /* Ginawa nating mas madilim at sleek ang glass background para lumutang siya sa background ni Hulk */
+    background: rgba(2, 38, 30, 0.65);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     padding: 2.5rem;
-    border-radius: 16px;
-    border: 1px solid var(--border-glass);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    border-radius: 18px;
+    /* Pinatingkad natin ang border at nilagyan ng ambient green shadow para sa realistic depth */
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 25px rgba(16, 185, 129, 0.15);
 }
 
 h1, h2, h3 {
