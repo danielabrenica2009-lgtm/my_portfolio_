@@ -149,7 +149,7 @@ def linkedlist():
   return render_template('linkedlist.html', items=linked_list_data, message=None)
 
 
-# 4.5 Infix to Postfix Expression Converter (Stack Algorithm)
+# 4.5 Infix to Postfix Expression Converter (Strict Validation)
 @app.route('/works/infixtopostfix', methods=['GET', 'POST'])
 def infixtopostfix():
   postfix_result = None
@@ -160,65 +160,80 @@ def infixtopostfix():
     infix_expr = request.form.get('infixExpression', '').strip()
     if infix_expr:
       precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}
-      ops_stack = []
-      output_list = []
+      allowed_chars = set(precedence.keys()).union({'(', ')'})
 
-      tokens = list(infix_expr.replace(' ', ''))
-      steps.append(
-          f"Initialized empty stacks. Scanning tokens: {' '.join(tokens)}"
-      )
+      # 1. I-check kung may lumabas na invalid character (hindi letra/numero, hindi operator, hindi parenthesis, hindi space)
+      invalid_chars = [char for char in infix_expr if not (char.isalnum() or char in allowed_chars or char.isspace())]
 
-      for token in tokens:
-        if token.isalnum():
-          output_list.append(token)
-          steps.append(
-              f"Operand '{token}' found ➔ Added directly to output:"
-              f" {''.join(output_list)}"
-          )
-        elif token == '(':
-          ops_stack.append(token)
-          steps.append(
-              f"Opening bracket '(' found ➔ Pushed to ops stack:"
-              f" {list(ops_stack)}"
-          )
-        elif token == ')':
-          steps.append(
-              "Closing bracket ')' found ➔ Popping from ops stack to output"
-              " until '(' is met."
-          )
-          while ops_stack and ops_stack[-1] != '(':
-            popped = ops_stack.pop()
-            output_list.append(popped)
-          if ops_stack and ops_stack[-1] == '(':
-            ops_stack.pop()
-          steps.append(f"Current Output: {''.join(output_list)}")
-        elif token in precedence:
-          while (
-              ops_stack
-              and ops_stack[-1] != '('
-              and ops_stack[-1] in precedence
-              and precedence[ops_stack[-1]] >= precedence[token]
-          ):
-            popped = ops_stack.pop()
-            output_list.append(popped)
-            steps.append(
-                f"Operator precedence rule: Popped '{popped}' to output."
-            )
-          ops_stack.append(token)
-          steps.append(
-              f"Operator '{token}' pushed to ops stack. Current Ops Stack:"
-              f" {list(ops_stack)}"
-          )
+      # 2. I-check din kung may kasamang operator
+      has_operator = any(op in infix_expr for op in precedence.keys())
 
-      while ops_stack:
-        popped = ops_stack.pop()
-        output_list.append(popped)
+      if invalid_chars:
+        steps.append(f"Error: Invalid character(s) detected: {', '.join(set(invalid_chars))}. Only letters, numbers, operators (+, -, *, /, ^), and brackets are allowed.")
+        postfix_result = "Error: Invalid Expression (Contains Invalid Symbols)"
+      elif not has_operator:
+        steps.append("Error: Invalid expression. An infix expression must contain at least one valid operator (+, -, *, /, ^).")
+        postfix_result = "Error: Invalid Expression (Missing Operators)"
+      else:
+        ops_stack = []
+        output_list = []
+
+        tokens = list(infix_expr.replace(' ', ''))
         steps.append(
-            f"End of expression ➔ Popped remaining '{popped}' to output."
+            f"Initialized empty stacks. Scanning tokens: {' '.join(tokens)}"
         )
 
-      postfix_result = ''.join(output_list)
-      steps.append(f'Final Postfix Expression: {postfix_result}')
+        for token in tokens:
+          if token.isalnum():
+            output_list.append(token)
+            steps.append(
+                f"Operand '{token}' found ➔ Added directly to output:"
+                f" {''.join(output_list)}"
+            )
+          elif token == '(':
+            ops_stack.append(token)
+            steps.append(
+                f"Opening bracket '(' found ➔ Pushed to ops stack:"
+                f" {list(ops_stack)}"
+            )
+          elif token == ')':
+            steps.append(
+                "Closing bracket ')' found ➔ Popping from ops stack to output"
+                " until '(' is met."
+            )
+            while ops_stack and ops_stack[-1] != '(':
+              popped = ops_stack.pop()
+              output_list.append(popped)
+            if ops_stack and ops_stack[-1] == '(':
+              ops_stack.pop()
+            steps.append(f"Current Output: {''.join(output_list)}")
+          elif token in precedence:
+            while (
+                ops_stack
+                and ops_stack[-1] != '('
+                and ops_stack[-1] in precedence
+                and precedence[ops_stack[-1]] >= precedence[token]
+            ):
+              popped = ops_stack.pop()
+              output_list.append(popped)
+              steps.append(
+                  f"Operator precedence rule: Popped '{popped}' to output."
+              )
+            ops_stack.append(token)
+            steps.append(
+                f"Operator '{token}' pushed to ops stack. Current Ops Stack:"
+                f" {list(ops_stack)}"
+            )
+
+        while ops_stack:
+          popped = ops_stack.pop()
+          output_list.append(popped)
+          steps.append(
+              f"End of expression ➔ Popped remaining '{popped}' to output."
+          )
+
+        postfix_result = ''.join(output_list)
+        steps.append(f'Final Postfix Expression: {postfix_result}')
 
   return render_template(
       'infixtopostfix.html',
