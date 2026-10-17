@@ -162,10 +162,10 @@ def infixtopostfix():
       precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}
       allowed_chars = set(precedence.keys()).union({'(', ')'})
 
-      # 1. I-check kung may lumabas na invalid character (hindi letra/numero, hindi operator, hindi parenthesis, hindi space)
+      # 1. Will check if there is an invalid character (not letter/number, not operator, not parenthesis, not space)
       invalid_chars = [char for char in infix_expr if not (char.isalnum() or char in allowed_chars or char.isspace())]
 
-      # 2. I-check din kung may kasamang operator
+      # 2. Will check if there is at least one valid operator
       has_operator = any(op in infix_expr for op in precedence.keys())
 
       if invalid_chars:
