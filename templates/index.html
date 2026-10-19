@@ -8,6 +8,77 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <!-- Modularized External CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .home-hero-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* 3 Columns Balanced Grid Container */
+        .cards-grid {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 20px;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        /* Individual Feature Card with Bright Green Edge */
+        .feature-card {
+            flex: 1;
+            min-width: 200px;
+            max-width: 240px;
+            background: rgba(2, 44, 34, 0.7);
+            border: 2px solid #10b981; /* Bright Green Border */
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: #34d399;
+            box-shadow: 0 0 25px rgba(52, 211, 153, 0.6);
+        }
+
+        /* Image Box Container */
+        .card-img-box {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .card-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .card-img-box img {
+            transform: scale(1.08);
+        }
+
+        .card-btn {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
 
@@ -23,7 +94,7 @@
         </div>
 
         <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('index') }}" class="active">Home</a></li>
             <li><a href="{{ url_for('profile') }}">Profile</a></li>
             <li><a href="{{ url_for('works') }}">Works</a></li>
             <li><a href="{{ url_for('contact') }}">Contact</a></li>
@@ -31,13 +102,39 @@
     </nav>
 
     <div class="main-container">
-        <h1>Hello, Welcome to My Portfolio!</h1>
-        <p>This is my personal portfolio web application.</p>
-        <p>Please select an option below or use navigation bar on top to navigate:</p>
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <a href="{{ url_for('profile') }}" class="btn">View Profile</a>
-            <a href="{{ url_for('works') }}" class="btn">Programming Works</a>
-            <a href="{{ url_for('contact') }}" class="btn">Contact Info</a>
+        <div class="home-hero-section">
+            <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Hello, Welcome to My Portfolio!</h1>
+            <p style="color: var(--text-muted); font-size: 1rem; margin: 0;">This is my personal portfolio web application.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">Please select an option below or use navigation bar on top to navigate:</p>
+        </div>
+
+        <!-- Centered, Equal Distance Grid Cards -->
+        <div class="cards-grid">
+            
+            <!-- Card 1: View Profile -->
+            <div class="feature-card">
+                <div class="card-img-box">
+                    <img src="{{ url_for('static', filename='profile_icon.png') }}" alt="Profile Icon">
+                </div>
+                <a href="{{ url_for('profile') }}" class="btn card-btn">View Profile</a>
+            </div>
+
+            <!-- Card 2: Programming Works -->
+            <div class="feature-card">
+                <div class="card-img-box">
+                    <img src="{{ url_for('static', filename='works_icon.jpg') }}" alt="Works Icon">
+                </div>
+                <a href="{{ url_for('works') }}" class="btn card-btn">Programming Works</a>
+            </div>
+
+            <!-- Card 3: Contact Info -->
+            <div class="feature-card">
+                <div class="card-img-box">
+                    <img src="{{ url_for('static', filename='contact_icon.jpg') }}" alt="Contact Icon">
+                </div>
+                <a href="{{ url_for('contact') }}" class="btn card-btn">Contact Info</a>
+            </div>
+
         </div>
     </div>
 
