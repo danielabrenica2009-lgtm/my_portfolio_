@@ -41,6 +41,35 @@
         .steps-box li {
             margin-bottom: 6px;
         }
+
+        /* CUSTOM SUGGESTIONS DROPDOWN (Gray background, white text, sa ibaba ng input) */
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #334155; /* Gray background */
+            border: 1px solid var(--border-glass);
+            border-radius: 6px;
+            margin-top: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 10px 12px;
+            color: #ffffff; /* White text font */
+            cursor: pointer;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .suggestion-item:hover {
+            background-color: #475569; /* gray color */
+        }
     </style>
 </head>
 <body>
@@ -76,10 +105,13 @@
             A stack-based application utilizing the Shunting Yard algorithm to convert infix expressions (such as A*(B+C)/D) into postfix notation without parentheses.
         </p>
 
-        <form method="POST">
-            <div class="form-group" style="margin-bottom: 15px;">
+        <form method="POST" onsubmit="saveToRecent()">
+            <div class="form-group" style="margin-bottom: 15px; position: relative;">
                 <label for="infixExpression" style="display: block; margin-bottom: 8px; font-weight: 500;">Enter Infix Expression:</label>
-                <input type="text" id="infixExpression" name="infixExpression" value="{{ infix_expr }}" placeholder="e.g. A*(B+C)/D" required style="width: 100%; padding: 10px; background: rgba(2, 44, 34, 0.6); border: 1px solid var(--border-glass); border-radius: 6px; color: white;">
+                <input type="text" id="infixExpression" name="infixExpression" value="{{ infix_expr }}" placeholder="e.g. A*(B+C)/D" required autocomplete="off" style="width: 100%; padding: 10px; background: rgba(2, 44, 34, 0.6); border: 1px solid var(--border-glass); border-radius: 6px; color: white;">
+                
+                <!-- Recent Search Dropdown -->
+                <div id="suggestions-box" class="suggestions-dropdown"></div>
             </div>
             <button type="submit" class="btn" style="background-color: var(--primary-green); color: #022c22; width: 100%; padding: 10px; font-weight: 600;">Convert Expression</button>
         </form>
@@ -120,6 +152,66 @@
     </footer>
 
     <script>
+        const inputField = document.getElementById('infixExpression');
+        const suggestionsBox = document.getElementById('suggestions-box');
+
+        inputField.addEventListener('focus', function() {
+            showSuggestions();
+        });
+
+        inputField.addEventListener('input', function() {
+            showSuggestions();
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.form-group')) {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        function showSuggestions() {
+            const query = inputField.value.trim().toLowerCase();
+            const recent = JSON.parse(localStorage.getItem('infix_recent_searches')) || [];
+            
+            // I-filter ang mga suggestions base sa input
+            const filtered = recent.filter(item => item.toLowerCase().includes(query));
+
+            // If there is no match or empty query, it hides the dropdown to avoid blocking the input field
+            if (filtered.length === 0) {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+
+            suggestionsBox.innerHTML = '';
+            filtered.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.textContent = item;
+                div.addEventListener('click', function() {
+                    inputField.value = item;
+                    suggestionsBox.style.display = 'none';
+                });
+                suggestionsBox.appendChild(div);
+            });
+
+            suggestionsBox.style.display = 'block';
+        }
+
+        function saveToRecent() {
+            const val = inputField.value.trim();
+            if (!val) return;
+
+            let recent = JSON.parse(localStorage.getItem('infix_recent_searches')) || [];
+            recent = recent.filter(item => item !== val);
+            recent.unshift(val);
+            
+            if (recent.length > 10) {
+                recent.pop();
+            }
+
+            localStorage.setItem('infix_recent_searches', JSON.stringify(recent));
+        }
+
         function openImageModal() {
             document.getElementById('imageModal').style.display = 'flex';
         }

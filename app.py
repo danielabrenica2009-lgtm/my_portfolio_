@@ -93,7 +93,7 @@ def triangle():
   )
 
 
-# 4.4 Linked List Implementation UI
+# 4.4 Stack Implementation UI
 @app.route('/works/linkedlist', methods=['GET', 'POST'])
 def linkedlist():
   global linked_list_data
@@ -102,45 +102,25 @@ def linkedlist():
   if request.method == 'POST':
     action = request.form.get('action')
     value = request.form.get('value', '').strip()
-    index_str = request.form.get('index', '').strip()
 
-    if action == 'add_tail' and value:
-      linked_list_data.append(value)
-      message = f"Appended '{value}' to the end."
-    elif action == 'add_head' and value:
-      linked_list_data.insert(0, value)
-      message = f"Prepended '{value}' to the start."
-    elif action == 'insert_index' and value:
-      try:
-        idx = int(index_str)
-        if 0 <= idx <= len(linked_list_data):
-          linked_list_data.insert(idx, value)
-          message = f"Inserted '{value}' at index {idx}."
-        else:
-          message = 'Error: Index out of range.'
-      except ValueError:
-        message = 'Error: Please enter a valid integer for index.'
-    elif action == 'search' and value:
-      if value in linked_list_data:
-        idx = linked_list_data.index(value)
-        message = f"Value '{value}' found at index {idx}."
+    if action == 'push':
+      if value:
+        linked_list_data.append(value)
+        message = f"Pushed '{value}' to the stack."
       else:
-        message = f"Value '{value}' not found in the list."
-    elif action == 'delete_val' and value:
-      if value in linked_list_data:
-        linked_list_data.remove(value)
-        message = f"Deleted value '{value}' from the list."
+        message = "Error: Please enter a value to push."
+    elif action == 'pop':
+      if linked_list_data:
+        popped = linked_list_data.pop()
+        message = f"Popped '{popped}' from the stack."
       else:
-        message = f"No index or value found for '{value}'."
-    elif action == 'pop_head' and linked_list_data:
-      popped = linked_list_data.pop(0)
-      message = f"Popped '{popped}' from the head."
-    elif action == 'pop_tail' and linked_list_data:
-      popped = linked_list_data.pop()
-      message = f"Popped '{popped}' from the tail."
-    elif action == 'clear':
-      linked_list_data = []
-      message = 'Linked list cleared.'
+        message = "Error: Stack underflow! The stack is already empty."
+    elif action == 'peek':
+      if linked_list_data:
+        top_item = linked_list_data[-1]
+        message = f"Top of the stack (Peek): '{top_item}'."
+      else:
+        message = "Error: The stack is empty. Nothing to peek."
 
     return render_template(
         'linkedlist.html', items=linked_list_data, message=message
