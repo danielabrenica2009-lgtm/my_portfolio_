@@ -25,15 +25,15 @@
         <ul>
             <li><a href="{{ url_for('index') }}">Home</a></li>
             <li><a href="{{ url_for('profile') }}">Profile</a></li>
-            <li><a href="{{ url_for('works') }}">Works</a></li>
+            <li><a href="{{ url_for('works') }}" class="active">Works</a></li>
             <li><a href="{{ url_for('contact') }}">Contact</a></li>
         </ul>
     </nav>
 
     <div class="main-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h1 style="margin: 0;">Text to Uppercase</h1>
-            <a href="{{ url_for('works') }}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: var(--text-muted); border: 1px solid var(--border-glass);">
+        <div class="uppercase-header-flex">
+            <h1 class="uppercase-title">Text to Uppercase</h1>
+            <a href="{{ url_for('works') }}" class="btn uppercase-back-btn">
                 &#8592; Back 
             </a>
         </div>

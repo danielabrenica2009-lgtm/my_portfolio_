@@ -5,35 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - My Portfolio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <!-- Font Awesome Icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .contact-list p {
-            margin-bottom: 1.2rem;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .contact-icon {
-            color: var(--primary-green);
-            font-size: 1.1rem;
-            width: 24px;
-            text-align: center;
-        }
-        .contact-list a {
-            color: var(--primary-green);
-            text-decoration: underline;
-            display: inline-block;
-            transition: color 0.2s ease, text-shadow 0.2s ease, transform 0.2s ease;
-        }
-        .contact-list a:hover {
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(52, 211, 153, 0.9);
-            transform: translateX(6px);
-        }
-    </style>
 </head>
 <body>
 
@@ -83,9 +56,39 @@
                 <a href="{{ contact.linkedin }}" target="_blank">{{ contact.linkedin }}</a>
             </p>
         </div>
+
+        <hr class="contact-divider">
+
+        <div class="message-form-section">
+            <h2>Send Me a Message</h2>
+            <p>If you cannot reach me through my social media accounts or email, you can contact me using the form below.</p>
+            
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="Enter the subject" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Write your message here..." required></textarea>
+                </div>
+
+                <button type="submit" class="send-btn">Send Message</button>
+            </form>
+        </div>
     </div>
 
-    <!-- PROFILE IMAGE POPUP MODAL -->
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>

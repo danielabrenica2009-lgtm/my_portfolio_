@@ -6,20 +6,6 @@
     <title>Profile - My Portfolio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .profile-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 1.5rem;
-        }
-        @media (max-width: 768px) {
-            .profile-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -44,20 +30,19 @@
 
     <div class="main-container">
         <h1 style="margin-bottom: 0.5rem;">Personal Profile</h1>
-        <h3 style="color: #ffffff; margin-bottom: 0.2rem;">{{ user.name }}</h3>
-        <!-- Pinalitan ng kulay puti (#ffffff) ang font para sa course, year, at section -->
-        <p style="color: #ffffff; font-weight: 500; margin-bottom: 1rem;">{{ user.course }}</p>
+        <h3 class="profile-name">{{ user.name }}</h3>
+        <p class="profile-course">{{ user.course }}</p>
         
         <hr style="border: 0; border-top: 1px solid var(--border-glass); margin-bottom: 1.5rem;">
 
-        <p style="margin-bottom: 0.5rem;"><strong style="color: var(--primary-green);">Title:</strong> {{ user.title }}</p>
-        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">{{ user.bio }}</p>
+        <p style="margin-bottom: 0.5rem;"><strong class="profile-title-label">Title:</strong> {{ user.title }}</p>
+        <p class="profile-bio">{{ user.bio }}</p>
 
         <div class="profile-grid">
             <!-- Left Column: Skills -->
             <div>
-                <h3 style="color: var(--primary-green); margin-bottom: 0.8rem; font-size: 1.1rem;">Skills & Technologies</h3>
-                <ul style="line-height: 2; padding-left: 20px; color: var(--text-muted);">
+                <h3 class="profile-section-title">Skills & Technologies</h3>
+                <ul class="profile-list">
                     {% for skill in user.skills %}
                         <li>{{ skill }}</li>
                     {% endfor %}
@@ -66,8 +51,8 @@
 
             <!-- Right Column: Hobbies -->
             <div>
-                <h3 style="color: var(--primary-green); margin-bottom: 0.8rem; font-size: 1.1rem;">Hobbies & Interests</h3>
-                <ul style="line-height: 2; padding-left: 20px; color: var(--text-muted);">
+                <h3 class="profile-section-title">Hobbies & Interests</h3>
+                <ul class="profile-list">
                     <li>Playing ML, volleyball and more</li>
                     <li>Eating</li>
                     <li>Watching movies/series</li>

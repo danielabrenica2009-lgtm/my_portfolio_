@@ -3,206 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stack Operations & Visualization</title>
+    <title>Linked List Operations & Visualization</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
-    <style>
-        .ll-notification {
-            background-color: rgba(16, 185, 129, 0.15);
-            border-left: 4px solid #10b981;
-            color: #d1fae5;
-            padding: 10px 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-
-        .ll-input-grid {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 25px;
-            justify-content: center;
-        }
-
-        .ll-input-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            max-width: 400px;
-            width: 100%;
-            position: relative;
-        }
-
-        .ll-input-group label {
-            font-weight: 500;
-            color: var(--text-main);
-            white-space: nowrap;
-        }
-
-        .ll-input-group input {
-            flex: 1;
-            padding: 10px 12px;
-            background: rgba(2, 44, 34, 0.6);
-            border: 1px solid var(--border-glass);
-            border-radius: 6px;
-            color: #ffffff;
-            font-size: 0.95rem;
-        }
-
-        .ll-input-group input:focus {
-            outline: none;
-            border-color: #10b981;
-        }
-
-        /* CUSTOM SUGGESTIONS DROPDOWN */
-        .suggestions-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 65px;
-            right: 0;
-            background-color: #334155;
-            border: 1px solid var(--border-glass);
-            border-radius: 6px;
-            margin-top: 5px;
-            max-height: 150px;
-            overflow-y: auto;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            display: none;
-        }
-
-        .suggestion-item {
-            padding: 10px 12px;
-            color: #ffffff;
-            cursor: pointer;
-            font-size: 0.95rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .suggestion-item:hover {
-            background-color: #475569;
-        }
-
-        .ll-actions-flex {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-        }
-
-        /* Vertical & Centered Stack Visualization Styling */
-        .ll-visual-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-top: 15px;
-            padding: 20px 0;
-            max-height: 350px;
-            overflow-y: auto;
-        }
-
-        .ll-node-box {
-            background-color: #ef4444;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
-            text-align: center;
-            min-width: 200px;
-        }
-
-        .ll-stack-label {
-            color: #34d399;
-            font-weight: bold;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .ll-stack-base {
-            color: #a7f3d0;
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-top: 5px;
-            border-top: 2px dashed var(--border-glass);
-            padding-top: 8px;
-            width: 220px;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-brand">
-            <img src="{{ url_for('static', filename='profile.jpg') }}" 
-                 alt="Profile" 
-                 class="nav-profile-img"
-                 onclick="openImageModal()">
-            <a href="{{ url_for('index') }}" style="text-decoration: none;">
-                <span class="logo">MyPortfolio</span>
-            </a>
+            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
+            <a href="{{ url_for('index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
         </div>
-
         <ul>
             <li><a href="{{ url_for('index') }}">Home</a></li>
             <li><a href="{{ url_for('profile') }}">Profile</a></li>
-            <li><a href="{{ url_for('works') }}">Works</a></li>
+            <li><a href="{{ url_for('works') }}" class="active">Works</a></li>
             <li><a href="{{ url_for('contact') }}">Contact</a></li>
         </ul>
     </nav>
 
     <div class="main-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h1 style="margin: 0; font-size: 1.5rem;">Stack Operations & Visualization</h1>
-            <a href="{{ url_for('works') }}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: var(--text-muted); border: 1px solid var(--border-glass);">
-                &#8592; Back
-            </a>
+        <div class="calc-header-flex">
+            <h1 class="calc-title" style="font-size: 1.4rem;">Linked List Operations & Visualization</h1>
+            <a href="{{ url_for('works') }}" class="btn calc-back-btn">&#8592; Back</a>
         </div>
 
         {% if message %}
-            <div class="ll-notification">
-                {{ message }}
-            </div>
+            <div class="ll-notification">{{ message }}</div>
         {% endif %}
 
-        <form method="POST" onsubmit="saveToRecent()">
+        <form method="POST">
             <div class="ll-input-grid">
                 <div class="ll-input-group">
-                    <label for="value">Value:</label>
+                    <label for="value">Node Value:</label>
                     <input type="text" id="value" name="value" placeholder="Enter value (e.g. 42 or 'A')" autocomplete="off">
-                    <div id="suggestions-box" class="suggestions-dropdown"></div>
+                </div>
+                <div class="ll-input-group">
+                    <label for="index">Index (for Insert):</label>
+                    <input type="number" id="index" name="index" placeholder="Index e.g. 0" autocomplete="off">
                 </div>
             </div>
 
             <div class="ll-actions-flex">
-                <!-- Push Button - Red -->
-                <button type="submit" name="action" value="push" class="btn" style="background-color: #ef4444; color: white; padding: 10px 25px;">Push</button>
-                <!-- Pop Button - Blue -->
-                <button type="submit" name="action" value="pop" class="btn" style="background-color: #0284c7; color: white; padding: 10px 25px;">Pop</button>
-                <!-- Peek Button - Green -->
-                <button type="submit" name="action" value="peek" class="btn" style="background-color: #10b981; color: #022c22; padding: 10px 25px;">Peek</button>
+                <button type="submit" name="action" value="append" class="btn btn-append">Append (End)</button>
+                <button type="submit" name="action" value="prepend" class="btn btn-prepend">Prepend (Start)</button>
+                <button type="submit" name="action" value="insert" class="btn btn-insert">Insert at Index</button>
+                <button type="submit" name="action" value="search" class="btn btn-search">Search Value</button>
+                <button type="submit" name="action" value="delete" class="btn btn-delete">Delete Value</button>
+            </div>
+            <div class="ll-actions-flex" style="margin-top: 15px;">
+                <button type="submit" name="action" value="pop_head" class="btn btn-delete">Pop Head</button>
+                <button type="submit" name="action" value="pop_tail" class="btn btn-delete">Pop Tail</button>
+                <button type="submit" name="action" value="clear" class="btn btn-clear">Clear List</button>
             </div>
         </form>
 
-        <h3 style="color: #34d399; margin-bottom: 5px; text-align: center;">Stack Visualization (Total Items: {{ items|length }})</h3>
+        <h3 class="ll-heading">Linked List Visualization (Total Nodes: {{ items|length }})</h3>
         
-        <div class="ll-visual-container">
+        <div class="ll-visual-container ll-container-row">
             {% if items %}
-                <div class="ll-stack-label">▲ Top of Stack</div>
-                {% for item in items|reverse %}
-                    <div class="ll-node-box">{{ item }}</div>
+                {% for item in items %}
+                    <div class="ll-node-box ll-node-box-custom">{{ item }}</div>
+                    {% if not loop.last %}
+                        <span class="arrow">&rarr;</span>
+                    {% endif %}
                 {% endfor %}
-                <div class="ll-stack-base">Bottom of Stack (Base)</div>
             {% else %}
-                <p style="color: var(--text-muted); font-style: italic; text-align: center; margin-top: 20px;">The Stack is currently empty. Push some items above!</p>
+                <p style="color: var(--text-muted); font-style: italic; text-align: center; width: 100%; margin-top: 20px;">The Linked List is currently empty. Add some nodes above!</p>
             {% endif %}
         </div>
     </div>
@@ -222,76 +89,10 @@
     </footer>
 
     <script>
-        const inputField = document.getElementById('value');
-        const suggestionsBox = document.getElementById('suggestions-box');
-
-        inputField.addEventListener('focus', function() {
-            showSuggestions();
-        });
-
-        inputField.addEventListener('input', function() {
-            showSuggestions();
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.ll-input-group')) {
-                suggestionsBox.style.display = 'none';
-            }
-        });
-
-        function showSuggestions() {
-            const query = inputField.value.trim().toLowerCase();
-            const recent = JSON.parse(localStorage.getItem('stack_recent_values')) || [];
-            
-            // Filters the base that the user is selecting
-            const filtered = recent.filter(item => item.toLowerCase().includes(query));
-
-            // If there is no match or empty query, the box will disappear to avoid blocking the input field   
-            if (filtered.length === 0) {
-                suggestionsBox.style.display = 'none';
-                return;
-            }
-
-            suggestionsBox.innerHTML = '';
-            filtered.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'suggestion-item';
-                div.textContent = item;
-                div.addEventListener('click', function() {
-                    inputField.value = item;
-                    suggestionsBox.style.display = 'none';
-                });
-                suggestionsBox.appendChild(div);
-            });
-
-            suggestionsBox.style.display = 'block';
-        }
-
-        function saveToRecent() {
-            const val = inputField.value.trim();
-            if (!val) return;
-
-            let recent = JSON.parse(localStorage.getItem('stack_recent_values')) || [];
-            recent = recent.filter(item => item !== val);
-            recent.unshift(val);
-            
-            if (recent.length > 10) {
-                recent.pop();
-            }
-
-            localStorage.setItem('stack_recent_values', JSON.stringify(recent));
-        }
-
-        function openImageModal() {
-            document.getElementById('imageModal').style.display = 'flex';
-        }
-        function closeImageModalDirect() {
-            document.getElementById('imageModal').style.display = 'none';
-        }
+        function openImageModal() { document.getElementById('imageModal').style.display = 'flex'; }
+        function closeImageModalDirect() { document.getElementById('imageModal').style.display = 'none'; }
         function closeImageModal(event) {
-            if (event.target.id === 'imageModal') {
-                document.getElementById('imageModal').style.display = 'none';
-            }
+            if (event.target.id === 'imageModal') document.getElementById('imageModal').style.display = 'none';
         }
     </script>
 </body>

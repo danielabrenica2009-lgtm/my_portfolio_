@@ -6,71 +6,6 @@
     <title>Infix to Postfix Converter - Stacks & Shunting Yard</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
-    <style>
-        .converter-container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .output-box {
-            background: rgba(2, 44, 34, 0.9);
-            border-left: 4px solid var(--primary-green);
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 8px;
-            color: #d1fae5;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        .steps-box {
-            background: rgba(1, 22, 17, 0.8);
-            border: 1px solid var(--border-glass);
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 8px;
-            max-height: 250px;
-            overflow-y: auto;
-            font-family: monospace;
-            font-size: 0.85rem;
-            color: #a7f3d0;
-        }
-        .steps-box ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-        .steps-box li {
-            margin-bottom: 6px;
-        }
-
-        /* CUSTOM SUGGESTIONS DROPDOWN (Gray background, white text, sa ibaba ng input) */
-        .suggestions-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background-color: #334155; /* Gray background */
-            border: 1px solid var(--border-glass);
-            border-radius: 6px;
-            margin-top: 5px;
-            max-height: 150px;
-            overflow-y: auto;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            display: none;
-        }
-
-        .suggestion-item {
-            padding: 10px 12px;
-            color: #ffffff; /* White text font */
-            cursor: pointer;
-            font-size: 0.95rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .suggestion-item:hover {
-            background-color: #475569; /* gray color */
-        }
-    </style>
 </head>
 <body>
 
@@ -117,14 +52,14 @@
         </form>
 
         {% if result is not none %}
-            <div class="output-box">
-                <span style="display: block; font-size: 0.8rem; color: #9ca3af; margin-bottom: 2px;">Final Postfix Result:</span>
+            <div class="converter-output-box">
+                <span class="converter-output-label">Final Postfix Result:</span>
                 {{ result }}
             </div>
 
             {% if steps %}
-                <div style="margin-top: 20px;">
-                    <h4 style="color: var(--primary-green); margin-bottom: 8px; font-size: 0.95rem;">Stack Operation Steps (Shunting Yard Trace):</h4>
+                <div class="steps-wrapper">
+                    <h4 class="steps-heading">Stack Operation Steps (Shunting Yard Trace):</h4>
                     <div class="steps-box">
                         <ul>
                             {% for step in steps %}
@@ -173,10 +108,8 @@
             const query = inputField.value.trim().toLowerCase();
             const recent = JSON.parse(localStorage.getItem('infix_recent_searches')) || [];
             
-            // I-filter ang mga suggestions base sa input
             const filtered = recent.filter(item => item.toLowerCase().includes(query));
 
-            // If there is no match or empty query, it hides the dropdown to avoid blocking the input field
             if (filtered.length === 0) {
                 suggestionsBox.style.display = 'none';
                 return;
