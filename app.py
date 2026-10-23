@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mail import Mail, Message
-from node import Stack, LinkedList, infix_to_postfix
+from node import Stack, LinkedList, Queue, Deque, infix_to_postfix
 
 app = Flask(__name__)
 
@@ -166,6 +166,51 @@ def linkedlist():
             message = "Linked list cleared."
 
     return render_template('linkedlist.html', items=global_linked_list.get_all(), message=message)
+
+# Global instances for Queue and De-queue
+global_queue = Queue()
+global_deque = Deque()
+
+@app.route('/queue', methods=['GET', 'POST'])
+def queue_view():
+    message = ""
+    if request.method == 'POST':
+        action = request.form.get('action')
+        value = request.form.get('value')
+
+        if action == 'enqueue' and value:
+            global_queue.enqueue(value)
+            message = f"Successfully enqueued '{value}'."
+        elif action == 'dequeue':
+            popped = global_queue.dequeue()
+            message = f"Successfully dequeued '{popped}'." if popped is not None else "Queue is empty!"
+        elif action == 'peek':
+            top_val = global_queue.peek()
+            message = f"Front of queue: '{top_val}'" if top_val is not None else "Queue is empty!"
+
+    return render_template('queue.html', items=global_queue.get_all(), message=message)
+
+@app.route('/dequeue', methods=['GET', 'POST'])
+def dequeue_view():
+    message = ""
+    if request.method == 'POST':
+        action = request.form.get('action')
+        value = request.form.get('value')
+
+        if action == 'add_front' and value:
+            global_deque.add_front(value)
+            message = f"Successfully added '{value}' to Front."
+        elif action == 'add_rear' and value:
+            global_deque.add_rear(value)
+            message = f"Successfully added '{value}' to Rear."
+        elif action == 'remove_front':
+            popped = global_deque.remove_front()
+            message = f"Successfully removed '{popped}' from Front." if popped is not None else "Deque is empty!"
+        elif action == 'remove_rear':
+            popped = global_deque.remove_rear()
+            message = f"Successfully removed '{popped}' from Rear." if popped is not None else "Deque is empty!"
+
+    return render_template('dequeue.html', items=global_deque.get_all(), message=message)
 
 if __name__ == '__main__':
     app.run(debug=True)
