@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Algorithms - My Portfolio</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
+            <a href="{{ url_for('index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
+        </div>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('works') }}" class="active">Works</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container">
+        <div class="calc-header-flex">
+            <div>
+                <h1 style="margin: 0; font-size: 1.8rem;">Sorting Algorithms</h1>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 5px;">Select an algorithm below to view its step-by-step interactive visual experiment.</p>
+            </div>
+            <a href="{{ url_for('works') }}" class="btn calc-back-btn">&#8592; Back to Works</a>
+        </div>
+
+        <ul class="works-list-links" style="line-height: 2.5; font-size: 1.15rem; padding-left: 20px; margin-top: 2rem;">
+            <li><a href="{{ url_for('bubble_sort') }}">01 Bubble Sort Visualization</a></li>
+            <li><a href="{{ url_for('selection_sort') }}">02 Selection Sort Visualization</a></li>
+            <li><a href="{{ url_for('insertion_sort') }}">03 Insertion Sort Visualization</a></li>
+            <li><a href="{{ url_for('merge_sort') }}">04 Merge Sort Visualization</a></li>
+            <li><a href="{{ url_for('quick_sort') }}">05 Quick Sort Visualization</a></li>
+        </ul>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
+            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Photo">
+            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Student / Aspiring Developer</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Daniel Abrenica | My Personal Portfolio 
+    </footer>
+
+    <script>
+        function openImageModal() { document.getElementById('imageModal').style.display = 'flex'; }
+        function closeImageModalDirect() { document.getElementById('imageModal').style.display = 'none'; }
+        function closeImageModal(event) {
+            if (event.target.id === 'imageModal') document.getElementById('imageModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

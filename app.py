@@ -212,5 +212,32 @@ def dequeue_view():
 
     return render_template('dequeue.html', items=global_deque.get_all(), message=message)
 
+# Main Sorting Menu / Dashboard
+@app.route('/sorting')
+def sorting_dashboard():
+    return render_template('sorting_menu.html')
+
+# Individual Sorting Pages
+@app.route('/sorting/bubble')
+def bubble_sort():
+    return render_template('bubblesorting.html')
+
+@app.route('/sorting/selection')
+def selection_sort():
+    return render_template('selectionsorting.html')
+
+@app.route('/sorting/insertion')
+def insertion_sort():
+    return render_template('insertionsorting.html')
+
+@app.route('/sorting/merge')
+def merge_sort():
+    return render_template('mergesorting.html')
+
+@app.route('/sorting/quick')
+def quick_sort():
+    return render_template('quicksorting.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
