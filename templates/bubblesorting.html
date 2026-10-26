@@ -6,15 +6,6 @@
     <title>Bubble Sort - My Portfolio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .visualizer-card { background: rgba(2, 38, 30, 0.8); border: 1px solid var(--border-glass); border-radius: 16px; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-top: 1.5rem; }
-        .bars-container { display: flex; align-items: flex-end; justify-content: center; gap: 10px; height: 220px; margin: 2rem 0; padding: 10px; background: rgba(1, 22, 17, 0.6); border-radius: 12px; border: 1px solid var(--border-glass); }
-        .sort-bar { flex: 1; background: linear-gradient(to top, #059669, #34d399); border-radius: 6px 6px 0 0; display: flex; justify-content: center; align-items: flex-start; padding-top: 5px; font-size: 0.75rem; font-weight: bold; color: #022c22; }
-        .controls-grid { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
-        .stat-box { background: rgba(2, 44, 34, 0.6); border: 1px solid var(--border-glass); padding: 1rem; border-radius: 8px; text-align: center; }
-        .stat-value { font-size: 1.25rem; font-weight: bold; color: var(--primary-green); margin-top: 4px; }
-    </style>
 </head>
 <body>
     <nav>
@@ -29,7 +20,8 @@
             <li><a href="{{ url_for('contact') }}">Contact</a></li>
         </ul>
     </nav>
-    <div class="main-container" style="max-width: 900px;">
+
+    <div class="main-container" style="max-width: 950px;">
         <div class="calc-header-flex">
             <div>
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -40,65 +32,309 @@
             </div>
             <a href="{{ url_for('sorting_dashboard') }}" class="btn calc-back-btn">&#8592; Back to Sorting</a>
         </div>
+
         <div class="visualizer-card">
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Compare neighboring values and swap them continuously when they are out of order.</p>
-            <div class="bars-container" id="bars-container"></div>
-            <div class="controls-grid">
-                <button class="btn" onclick="startSorting()" style="background: var(--primary-green);">▶ Start sorting</button>
-                <button class="btn" onclick="resetData()" style="background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4);">↺ Reset</button>
-                <button class="btn" onclick="shuffleData()" style="background: rgba(255,255,255,0.1); color: white;">Shuffle data</button>
+            <div class="preset-row">
+                <button class="preset-btn" onclick="setPreset('random')">Random</button>
+                <button class="preset-btn" onclick="setPreset('sorted')">Sorted</button>
+                <button class="preset-btn" onclick="setPreset('nearly')">Nearly Sorted</button>
+                <button class="preset-btn" onclick="setPreset('duplicates')">Many Duplicates</button>
             </div>
-            <div style="font-size: 0.85rem; color: var(--text-muted);"><strong>Input values:</strong> <span id="input-values-text" style="font-family: monospace; color: #fff;"></span></div>
-            <div class="stats-grid">
-                <div class="stat-box"><div style="font-size: 0.75rem; color: var(--text-muted);">COMPARISONS</div><div class="stat-value" id="stat-comparisons">000</div></div>
-                <div class="stat-box"><div style="font-size: 0.75rem; color: var(--text-muted);">SWAPS / MOVES</div><div class="stat-value" id="stat-swaps">000</div></div>
-                <div class="stat-box"><div style="font-size: 0.75rem; color: var(--text-muted);">STEPS</div><div class="stat-value" id="stat-steps">000</div></div>
+
+            <div class="custom-row">
+                <input type="text" id="customInput" class="custom-input" placeholder="e.g. 42, 30, 47, 0, 33, 23">
+                <button class="btn" onclick="applyCustomArray()" style="background: var(--primary-green); padding: 8px 16px;">Go</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">
+                <span id="stepStatusText">Step 0 / 0</span>
+                <span id="sortStatusMsg">Ready to sort</span>
+            </div>
+
+            <!-- BARS CONTAINER -->
+            <div class="bars-container" id="bars-container"></div>
+
+            <div class="controls-row">
+                <button class="btn" onclick="prevStep()" style="background: rgba(255,255,255,0.1); color: #fff;">◄ Previous</button>
+                <button class="btn" onclick="togglePlay()" id="playBtn" style="background: var(--primary-green);">▶ Play</button>
+                <button class="btn" onclick="nextStep()" style="background: rgba(255,255,255,0.1); color: #fff;">Next ►</button>
+                <button class="btn" onclick="resetSorting()" style="background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4);">↺ Reset</button>
+            </div>
+
+            <!-- VISUALGO STYLE PANEL -->
+            <div class="visualgo-panel">
+                <div class="explanation-box" id="explanationText">
+                    Ready to start Bubble Sort. Click Play or Next to begin comparing elements.
+                </div>
+                <div class="code-box">
+                    <div id="code1" class="code-line">do</div>
+                    <div id="code2" class="code-line">    swapped = false</div>
+                    <div id="code3" class="code-line">    for i = 1 to indexOfLastUnsortedElement-1</div>
+                    <div id="code4" class="code-line">        if leftElement > rightElement</div>
+                    <div id="code5" class="code-line">            swap(leftElement, rightElement)</div>
+                    <div id="code6" class="code-line">            swapped = true; ++swapCounter</div>
+                    <div id="code7" class="code-line">while swapped</div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Speed:</span>
+                    <select id="speedSelect" onchange="changeSpeed(this.value)" style="background: rgba(2, 44, 34, 0.8); color: #fff; border: 1px solid var(--border-glass); padding: 6px 10px; border-radius: 6px; outline: none; cursor: pointer; font-size: 0.85rem;">
+                        <option value="800">Slow</option>
+                        <option value="400" selected>Moderate</option>
+                        <option value="150">Fast</option>
+                    </select>
+                </div>
+
+                <div class="legend-row">
+                    <div class="legend-item"><div class="legend-box" style="background: #f59e0b;"></div> Comparing</div>
+                    <div class="legend-item"><div class="legend-box" style="background: #ef4444;"></div> Swapping</div>
+                    <div class="legend-item"><div class="legend-box" style="background: #10b981;"></div> Sorted</div>
+                    <div class="legend-item"><div class="legend-box" style="background: #0ea5e9;"></div> Unsorted</div>
+                </div>
             </div>
         </div>
     </div>
+
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)"><div class="modal-content" onclick="event.stopPropagation()"><span class="modal-close" onclick="closeImageModalDirect()">&times;</span><img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Photo"><h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3><p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Student / Aspiring Developer</p></div></div>
     <footer>&copy; 2026 Daniel Abrenica | My Personal Portfolio</footer>
+
     <script>
-        let originalData = [42, 18, 65, 27, 91, 34, 56, 12, 73, 48];
-        let currentData = [...originalData];
-        let comparisons = 0, swaps = 0, steps = 0;
-        function renderBars() {
+        let originalArray = [42, 30, 47, 0, 33, 23, 35, 22, 41, 30];
+        let historySteps = [];
+        let currentStepIndex = 0;
+        let isPlaying = false;
+        let playInterval = null;
+        let animSpeed = 400;
+
+        function changeSpeed(val) { animSpeed = parseInt(val); if(isPlaying) { stopPlay(); startPlay(); } }
+
+        function initBubbleSort(arr) {
+            historySteps = [];
+            let workingArr = [...arr];
+            let n = workingArr.length;
+            let sortedSet = new Set();
+
+            historySteps.push({
+                arr: [...workingArr],
+                comparing: [],
+                swapping: [],
+                sorted: [],
+                translateX: {},
+                explanation: "Initial array loaded. Ready to begin sorting.",
+                activeCode: 1
+            });
+
+            let swapped = true;
+            let lastUnsorted = n;
+
+            while (swapped) {
+                historySteps.push({
+                    arr: [...workingArr],
+                    comparing: [],
+                    swapping: [],
+                    sorted: Array.from(sortedSet),
+                    translateX: {},
+                    explanation: "Executing 'do' loop: setting swapped = false.",
+                    activeCode: 1
+                });
+
+                swapped = false;
+                historySteps.push({
+                    arr: [...workingArr],
+                    comparing: [],
+                    swapping: [],
+                    sorted: Array.from(sortedSet),
+                    translateX: {},
+                    explanation: "swapped is set to false.",
+                    activeCode: 2
+                });
+
+                for (let j = 0; j < lastUnsorted - 1; j++) {
+                    historySteps.push({
+                        arr: [...workingArr],
+                        comparing: [j, j+1],
+                        swapping: [],
+                        sorted: Array.from(sortedSet),
+                        translateX: {},
+                        explanation: `Checking elements at index ${j} and ${j+1}.`,
+                        activeCode: 3
+                    });
+
+                    historySteps.push({
+                        arr: [...workingArr],
+                        comparing: [j, j+1],
+                        swapping: [],
+                        sorted: Array.from(sortedSet),
+                        translateX: {},
+                        explanation: `Comparing if leftElement (${workingArr[j]}) > rightElement (${workingArr[j+1]}).`,
+                        activeCode: 4
+                    });
+
+                    if (workingArr[j] > workingArr[j + 1]) {
+                        let translateX = {};
+                        translateX[j] = 76;   
+                        translateX[j+1] = -76; 
+
+                        historySteps.push({
+                            arr: [...workingArr],
+                            comparing: [],
+                            swapping: [j, j+1],
+                            sorted: Array.from(sortedSet),
+                            translateX: translateX,
+                            explanation: `Condition met! Swapping ${workingArr[j]} and ${workingArr[j+1]}.`,
+                            activeCode: 5
+                        });
+
+                        let temp = workingArr[j];
+                        workingArr[j] = workingArr[j + 1];
+                        workingArr[j + 1] = temp;
+                        swapped = true;
+
+                        historySteps.push({
+                            arr: [...workingArr],
+                            comparing: [],
+                            swapping: [j, j+1],
+                            sorted: Array.from(sortedSet),
+                            translateX: {},
+                            explanation: `Setting swapped = true and incrementing swapCounter.`,
+                            activeCode: 6
+                        });
+                    }
+                }
+                lastUnsorted--;
+                if(lastUnsorted > 0) {
+                    sortedSet.add(lastUnsorted);
+                }
+
+                historySteps.push({
+                    arr: [...workingArr],
+                    comparing: [],
+                    swapping: [],
+                    sorted: Array.from(sortedSet),
+                    translateX: {},
+                    explanation: `Checking 'while swapped' condition (swapped = ${swapped}).`,
+                    activeCode: 7
+                });
+
+                if (!swapped) break;
+            }
+
+            for(let i=0; i<n; i++) sortedSet.add(i);
+            historySteps.push({
+                arr: [...workingArr],
+                comparing: [],
+                swapping: [],
+                sorted: Array.from(sortedSet),
+                translateX: {},
+                explanation: "Bubble Sort completed! The array is now fully sorted.",
+                activeCode: 7
+            });
+
+            currentStepIndex = 0;
+            renderStep();
+        }
+
+        function renderStep() {
+            if(historySteps.length === 0) return;
+            let state = historySteps[currentStepIndex];
+
+            document.getElementById('explanationText').textContent = state.explanation;
+            for(let c = 1; c <= 7; c++) {
+                let lineEl = document.getElementById(`code${c}`);
+                if(lineEl) {
+                    lineEl.className = `code-line ${state.activeCode === c ? 'active' : ''}`;
+                }
+            }
+
             const container = document.getElementById('bars-container');
             container.innerHTML = '';
-            currentData.forEach(val => {
+
+            state.arr.forEach((val, idx) => {
                 const bar = document.createElement('div');
-                bar.className = 'sort-bar';
-                bar.style.height = `${val}%`;
+                bar.className = 'sort-bar unsorted';
+                
+                if(state.sorted.includes(idx)) bar.className = 'sort-bar sorted';
+                if(state.comparing.includes(idx)) bar.className = 'sort-bar comparing';
+                if(state.swapping.includes(idx)) bar.className = 'sort-bar swapping';
+
+                if(state.translateX && state.translateX[idx] !== undefined) {
+                    bar.style.transform = `translateX(${state.translateX[idx]}px)`;
+                } else {
+                    bar.style.transform = `translateX(0px)`;
+                }
+
+                bar.style.height = `${val === 0 ? 8 : val}%`;
                 bar.textContent = val;
                 container.appendChild(bar);
             });
-            document.getElementById('input-values-text').textContent = currentData.join(', ');
+
+            document.getElementById('stepStatusText').textContent = `Step ${currentStepIndex} / ${historySteps.length - 1}`;
+            document.getElementById('sortStatusMsg').textContent = currentStepIndex === historySteps.length - 1 ? "Sorted!" : "Sorting in progress...";
         }
-        function shuffleData() { currentData.sort(() => Math.random() - 0.5); resetStats(); renderBars(); }
-        function resetData() { currentData = [...originalData]; resetStats(); renderBars(); }
-        function resetStats() { comparisons = 0; swaps = 0; steps = 0; updateStats(); }
-        function updateStats() {
-            document.getElementById('stat-comparisons').textContent = String(comparisons).padStart(3, '0');
-            document.getElementById('stat-swaps').textContent = String(swaps).padStart(3, '0');
-            document.getElementById('stat-steps').textContent = String(steps).padStart(3, '0');
+
+        function nextStep() { if(currentStepIndex < historySteps.length - 1) { currentStepIndex++; renderStep(); } else { stopPlay(); } }
+        function prevStep() { if(currentStepIndex > 0) { currentStepIndex--; renderStep(); } }
+        function togglePlay() { if(isPlaying) { stopPlay(); } else { startPlay(); } }
+
+        function startPlay() {
+            isPlaying = true;
+            document.getElementById('playBtn').textContent = "❚❚ Pause";
+            playInterval = setInterval(() => {
+                if(currentStepIndex < historySteps.length - 1) { nextStep(); } else { stopPlay(); }
+            }, animSpeed);
         }
-        async function startSorting() {
-            let len = currentData.length;
-            let swapped;
-            for (let i = 0; i < len; i++) {
-                swapped = false;
-                for (let j = 0; j < len - i - 1; j++) {
-                    comparisons++; steps++; updateStats();
-                    if (currentData[j] > currentData[j + 1]) {
-                        let temp = currentData[j]; currentData[j] = currentData[j + 1]; currentData[j + 1] = temp;
-                        swaps++; swapped = true; renderBars();
-                        await new Promise(resolve => setTimeout(resolve, 250));
-                    }
-                }
-                if (!swapped) break;
+
+        function stopPlay() { isPlaying = false; document.getElementById('playBtn').textContent = "▶ Play"; clearInterval(playInterval); }
+        function resetSorting() { stopPlay(); currentStepIndex = 0; renderStep(); }
+
+        function setPreset(type) {
+            stopPlay();
+            if(type === 'random') originalArray = [42, 30, 47, 0, 33, 23, 35, 22, 41, 30];
+            if(type === 'sorted') originalArray = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+            if(type === 'nearly') originalArray = [20, 10, 30, 40, 50, 60, 70, 80, 100, 90];
+            if(type === 'duplicates') originalArray = [30, 10, 30, 20, 10, 40, 20, 50, 30, 10];
+            initBubbleSort(originalArray);
+        }
+
+        function applyCustomArray() {
+            stopPlay();
+            const inputVal = document.getElementById('customInput').value;
+            
+            if(!inputVal.trim()) {
+                alert("Mangyaring maglagay ng mga numero.");
+                return;
             }
+
+            let cleanedStr = inputVal.replace(/[\s]+/g, ',').replace(/,,+/g, ',');
+            let rawItems = cleanedStr.split(',');
+            let parsed = [];
+
+            for (let item of rawItems) {
+                let trimmed = item.trim();
+                if (trimmed === "") continue;
+                
+                let num = parseFloat(trimmed);
+                if (isNaN(num)) {
+                    alert(`Invalid input found: "${trimmed}". Please enter only numbers.`);
+                    return;
+                }
+                parsed.push(Math.round(num));
+            }
+
+            if(parsed.length < 2) {
+                alert("Enter two or more numbers to visualize sorting.");
+                return;
+            }
+
+            originalArray = parsed;
+            initBubbleSort(originalArray);
+            document.getElementById('sortStatusMsg').textContent = "Custom array loaded successfully!";
         }
-        renderBars();
+
+        initBubbleSort(originalArray);
+
         function openImageModal() { document.getElementById('imageModal').style.display = 'flex'; }
         function closeImageModalDirect() { document.getElementById('imageModal').style.display = 'none'; }
         function closeImageModal(event) { if (event.target.id === 'imageModal') document.getElementById('imageModal').style.display = 'none'; }
