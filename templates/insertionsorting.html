@@ -139,7 +139,7 @@
                 let key = workingArr[i];
                 let j = i - 1;
 
-                // Extract step: bumababa ang bar sa ibaba kasama ang tamang key value
+                // Extract step: Will go down the bar, together with the right key value
                 historySteps.push({
                     arr: [...workingArr],
                     sorted: Array.from({length: i}, (_, k) => k),
@@ -224,7 +224,7 @@
     const container = document.getElementById('bars-container');
     container.innerHTML = '';
 
-    // 1. Hanapin ang pinakamataas na value sa kasalukuyang array para sa scaling
+    // 1. Find the highest value in current array for scaling
     let maxVal = Math.max(...state.arr, 1);
 
     state.arr.forEach((val, idx) => {
@@ -245,7 +245,7 @@
             bar.style.transform = `translateX(${currentTranslateX}px)`;
         }
 
-        // 2. I-calculate ang height relative sa max value (minimum na 12% para hindi mawala kahit 0 o 1)
+        // 2. Calculate the height relative to the max value (minimum of 12% so it's always visible even if it's 0 or 1)
         let calculatedHeight = Math.max((val / maxVal) * 75, 12);
         bar.style.height = `${calculatedHeight}%`;
         bar.textContent = val;
@@ -285,7 +285,7 @@
             const inputVal = document.getElementById('customInput').value;
             
             if(!inputVal.trim()) {
-                alert("Mangyaring maglagay ng mga numero.");
+                alert("Please enter some numbers.");
                 return;
             }
 
@@ -299,14 +299,14 @@
                 
                 let num = parseFloat(trimmed);
                 if (isNaN(num)) {
-                    alert(`May nakitang invalid na input: "${trimmed}". Mangyaring mga numero lamang ang ilagay.`);
+                    alert(`The input is invalid: "${trimmed}". Please enter only a number.`);
                     return;
                 }
                 parsed.push(Math.round(num));
             }
 
             if(parsed.length < 2) {
-                alert("Maglagay ng dalawa o higit pang mga numero para ma-visualize ang sorting.");
+                alert("Please enter two or more numbers to visualize the sorting.");
                 return;
             }
 

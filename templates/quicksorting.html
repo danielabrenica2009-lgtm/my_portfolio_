@@ -336,14 +336,14 @@
                 
                 let num = parseFloat(trimmed);
                 if (isNaN(num)) {
-                    alert(`May nakitang invalid na input: "${trimmed}". Mangyaring mga numero lamang ang ilagay.`);
+                    alert(`The input is invalid: "${trimmed}". Please enter only a number.`);
                     return;
                 }
                 parsed.push(Math.round(num));
             }
 
             if(parsed.length < 2) {
-                alert("Maglagay ng dalawa o higit pang mga numero para ma-visualize ang sorting.");
+                alert("Please enter two or more numbers to visualize the sorting.");
                 return;
             }
 
