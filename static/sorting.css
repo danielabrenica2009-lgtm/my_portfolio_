@@ -1,0 +1,123 @@
+/* === GENERAL VISUALIZER CARD & BARS CONTAINER === */
+.visualizer-card { 
+    background: rgba(2, 38, 30, 0.8); 
+    border: 1px solid var(--border-glass); 
+    border-radius: 16px; 
+    padding: 2rem; 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
+    margin-top: 1.5rem; 
+}
+
+.bars-container { 
+    display: flex; 
+    align-items: flex-end; 
+    justify-content: center; 
+    height: 380px; 
+    margin: 1.5rem 0; 
+    padding: 25px 15px; 
+    background: rgba(1, 22, 17, 0.6); 
+    border-radius: 12px; 
+    border: 1px solid var(--border-glass); 
+    position: relative; 
+    overflow: hidden; 
+}
+
+.sort-bar { 
+    width: 65px; 
+    margin: 0 8px; 
+    background: #0ea5e9; 
+    border-radius: 8px 8px 0 0; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-start; 
+    align-items: center; 
+    padding-top: 8px; 
+    font-size: 0.85rem; 
+    font-weight: bold; 
+    color: #ffffff; 
+    transition: transform 0.4s ease-in-out, background 0.3s ease; 
+    position: relative; 
+}
+
+
+/* === COMMON & BUBBLE SORT STATES === */
+.sort-bar.comparing { background: #f59e0b !important; } /* Para sa Bubble, Selection, Insertion, at Quick Sort */
+.sort-bar.sorted { background: #10b981 !important; }    /* Pangkalahatan kapag tapos na i-sort */
+.sort-bar.swapping { background: #ef4444 !important; z-index: 10; } /* Bubble / General Swap */
+
+
+/* === SELECTION SORT SPECIFIC STATES === */
+.sort-bar.min-val { background: #a855f7 !important; } /* Kulay ube para sa Minimum Value */
+
+
+/* === INSERTION SORT SPECIFIC STATES === */
+.sort-bar.extracted { background: #e11d48 !important; transform: translateY(90px) !important; z-index: 20; } /* Inangat na bar */
+
+
+/* === QUICK SORT SPECIFIC STATES === */
+.sort-bar.pivot { background: #eab308 !important; }         /* Kulay dilaw para sa Pivot */
+.sort-bar.partitioning { background: #f43f5e !important; } /* Para sa Partition elements */
+
+
+/* === CONTROLS, INPUTS, & PRESETS STYLES === */
+.preset-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+.preset-btn { 
+    background: rgba(16, 185, 129, 0.2); 
+    border: 1px solid var(--border-glass); 
+    color: #fff; 
+    padding: 6px 12px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-size: 0.85rem; 
+    font-weight: 500; 
+}
+.preset-btn:hover { background: rgba(16, 185, 129, 0.4); }
+
+.custom-row { display: flex; gap: 10px; margin-bottom: 1.5rem; align-items: center; }
+.custom-input { 
+    flex: 1; 
+    background: rgba(1, 22, 17, 0.8); 
+    border: 1px solid var(--border-glass); 
+    padding: 8px 12px; 
+    border-radius: 8px; 
+    color: #fff; 
+    font-size: 0.9rem; 
+    outline: none; 
+}
+
+.controls-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center; margin-top: 1.5rem; }
+.legend-row { display: flex; justify-content: center; gap: 15px; margin-top: 1rem; font-size: 0.75rem; color: var(--text-muted); flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-box { width: 12px; height: 12px; border-radius: 3px; }
+
+
+/* === VISUALGO PANEL, EXPLANATIONS, & CODE BOXES === */
+.visualgo-panel { display: grid; grid-template-columns: 1fr 1.2fr; gap: 1rem; margin-top: 1.5rem; }
+@media(max-width: 768px) { .visualgo-panel { grid-template-columns: 1fr; } }
+
+.explanation-box { 
+    background: rgba(1, 22, 17, 0.85); 
+    border: 1px solid var(--border-glass); 
+    border-radius: 12px; 
+    padding: 1.25rem; 
+    font-size: 0.9rem; 
+    color: #34d399; 
+    min-height: 140px; 
+    display: flex; 
+    align-items: center; 
+}
+
+.code-box { 
+    background: rgba(2, 26, 20, 0.95); 
+    border: 1px solid var(--border-glass); 
+    border-radius: 12px; 
+    padding: 1.25rem; 
+    font-family: monospace; 
+    font-size: 0.8rem; 
+    color: #a7f3d0; 
+    line-height: 1.5; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
+}
+
+.code-line { padding: 3px 6px; border-radius: 4px; white-space: pre; }
+.code-line.active { background: #059669; color: #ffffff; font-weight: bold; }

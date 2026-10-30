@@ -1,0 +1,215 @@
+/* === STACK NOTIFICATION BANNER === */
+.ll-notification {
+    background-color: rgba(16, 185, 129, 0.15);
+    border-left: 4px solid #10b981;
+    color: #d1fae5;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+
+/* === STACK INPUTS & AUTOCOMPLETE SUGGESTIONS === */
+.ll-input-grid {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.ll-input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+}
+
+.ll-input-group label {
+    font-weight: 500;
+    color: var(--text-main);
+    white-space: nowrap;
+}
+
+.ll-input-group input {
+    flex: 1;
+    padding: 10px 12px;
+    background: rgba(2, 44, 34, 0.6);
+    border: 1px solid var(--border-glass);
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 0.95rem;
+}
+
+.ll-input-group input:focus {
+    outline: none;
+    border-color: #10b981;
+}
+
+.suggestions-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 65px;
+    right: 0;
+    background-color: #334155;
+    border: 1px solid var(--border-glass);
+    border-radius: 6px;
+    margin-top: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    display: none;
+}
+
+.suggestion-item {
+    padding: 10px 12px;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.suggestion-item:hover {
+    background-color: #475569;
+}
+
+
+/* === STACK ACTION BUTTONS (Push, Pop, Peek) === */
+.ll-actions-flex {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.btn-push {
+    background-color: #ef4444;
+    color: white;
+    padding: 10px 25px;
+}
+
+.btn-pop {
+    background-color: #0284c7;
+    color: white;
+    padding: 10px 25px;
+}
+
+.btn-peek {
+    background-color: #10b981;
+    color: #022c22;
+    padding: 10px 25px;
+}
+
+
+/* === STACK VISUALIZATION CONTAINER & NODES === */
+.ll-visual-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 20px 0;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.ll-node-box {
+    background-color: #ef4444;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+    text-align: center;
+    min-width: 200px;
+}
+
+.ll-stack-label {
+    color: #34d399;
+    font-weight: bold;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.ll-stack-base {
+    color: #a7f3d0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-top: 5px;
+    border-top: 2px dashed var(--border-glass);
+    padding-top: 8px;
+    width: 220px;
+    text-align: center;
+}
+
+.ll-heading {
+    color: #34d399;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+
+/* === INFIX-TO-POSTFIX CONVERTER & STEPS BOX STYLES === */
+.converter-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.converter-output-box {
+    background: rgba(2, 44, 34, 0.9);
+    border-left: 4px solid var(--primary-green);
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+    color: #d1fae5;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.converter-output-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-bottom: 2px;
+}
+
+.steps-wrapper {
+    margin-top: 20px;
+}
+
+.steps-heading {
+    color: var(--primary-green);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.steps-box {
+    background: rgba(1, 22, 17, 0.8);
+    border: 1px solid var(--border-glass);
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #a7f3d0;
+}
+
+.steps-box ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.steps-box li {
+    margin-bottom: 6px;
+}

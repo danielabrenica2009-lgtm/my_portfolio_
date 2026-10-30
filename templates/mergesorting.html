@@ -5,52 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Merge Sort - My Portfolio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sorting.css') }}">
     <style>
-        .visualizer-card { background: rgba(2, 38, 30, 0.8); border: 1px solid var(--border-glass); border-radius: 16px; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-top: 1.5rem; }
-        .bars-container { display: flex; align-items: flex-end; justify-content: center; gap: 10px; height: 220px; margin: 1.5rem 0; padding: 10px; background: rgba(1, 22, 17, 0.6); border-radius: 12px; border: 1px solid var(--border-glass); }
-        .sort-bar { flex: 1; background: #0ea5e9; border-radius: 6px 6px 0 0; display: flex; justify-content: center; align-items: flex-start; padding-top: 5px; font-size: 0.75rem; font-weight: bold; color: #ffffff; transition: background 0.2s; }
-        .sort-bar.comparing { background: #f59e0b !important; }
-        .sort-bar.sorted { background: #10b981 !important; }
-        .sort-bar.unsorted { background: #0ea5e9 !important; }
-        
-        .preset-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
-        .preset-btn { background: rgba(16, 185, 129, 0.2); border: 1px solid var(--border-glass); color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; }
-        .preset-btn:hover { background: rgba(16, 185, 129, 0.4); }
-        
-        .custom-row { display: flex; gap: 10px; margin-bottom: 1.5rem; align-items: center; }
-        .custom-input { flex: 1; background: rgba(1, 22, 17, 0.8); border: 1px solid var(--border-glass); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.9rem; outline: none; }
-        
-        .controls-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center; margin-top: 1.5rem; }
-        .legend-row { display: flex; justify-content: center; gap: 20px; margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); }
-        .legend-item { display: flex; align-items: center; gap: 6px; }
-        .legend-box { width: 12px; height: 12px; border-radius: 3px; }
+        /* Custom Back Button Styling para sa Glassmorphism at Hover state */
+        .custom-back-btn {
+            background: rgba(6, 78, 59, 0.45);
+            color: var(--text-main);
+            border: 1px solid var(--border-glass);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        }
+        .custom-back-btn:hover {
+            background: var(--primary-green);
+            color: #022c22;
+            border-color: var(--primary-green);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
     </style>
 </head>
 <body>
     <nav>
         <div class="nav-brand">
-            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
-            <a href="{{ url_for('index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
+            <a href="{{ url_for('main.index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
         </div>
         <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('profile') }}">Profile</a></li>
-            <li><a href="{{ url_for('works') }}" class="active">Works</a></li>
-            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('main.works') }}" class="active">Works</a></li>
+            <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
         </ul>
     </nav>
 
-    <div class="main-container" style="max-width: 900px;">
-        <div class="calc-header-flex">
+    <div class="main-container" style="max-width: 950px;">
+        <div class="calc-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <div>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 0.75rem; color: var(--primary-green); font-weight: 700;">04 / DIVIDE & CONQUER</span>
+                    <span style="font-size: 0.75rem; color: var(--primary-green); font-weight: 700;">05 / MERGE</span>
                     <span style="background: rgba(16,185,129,0.15); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; color: var(--primary-green); font-weight: 600;">AVG O(n log n)</span>
                 </div>
                 <h1 style="margin: 2px 0; font-size: 1.6rem;">Merge Sort Visualization</h1>
             </div>
-            <a href="{{ url_for('sorting_dashboard') }}" class="btn calc-back-btn">&#8592; Back to Sorting</a>
+            <a href="{{ url_for('sorting.sorting_dashboard') }}" class="custom-back-btn">&#8592; Back to Sorting</a>
         </div>
 
         <div class="visualizer-card">
@@ -62,7 +65,7 @@
             </div>
 
             <div class="custom-row">
-                <input type="text" id="customInput" class="custom-input" placeholder="e.g. 8, 3, 5, 1, 9, 2">
+                <input type="text" id="customInput" class="custom-input" placeholder="e.g. 42, 30, 47, 0, 33, 23">
                 <button class="btn" onclick="applyCustomArray()" style="background: var(--primary-green); padding: 8px 16px;">Go</button>
             </div>
 
@@ -71,6 +74,7 @@
                 <span id="sortStatusMsg">Ready to sort</span>
             </div>
 
+            <!-- BARS CONTAINER -->
             <div class="bars-container" id="bars-container"></div>
 
             <div class="controls-row">
@@ -78,6 +82,22 @@
                 <button class="btn" onclick="togglePlay()" id="playBtn" style="background: var(--primary-green);">▶ Play</button>
                 <button class="btn" onclick="nextStep()" style="background: rgba(255,255,255,0.1); color: #fff;">Next ►</button>
                 <button class="btn" onclick="resetSorting()" style="background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4);">↺ Reset</button>
+            </div>
+
+            <!-- VISUALGO STYLE MERGE SORT PANEL -->
+            <div class="visualgo-panel">
+                <div class="explanation-box" id="explanationText">
+                    Ready to start Merge Sort. Click Play or Next to begin dividing and merging.
+                </div>
+                <div class="code-box">
+                    <div id="code1" class="code-line">split each element into partitions of size 1</div>
+                    <div id="code2" class="code-line">recursively merge adjacent partitions</div>
+                    <div id="code3" class="code-line">&nbsp;&nbsp;for i = leftPartIdx to rightPartIdx</div>
+                    <div id="code4" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;if leftPartHeadValue &lt;= rightPartHeadValue</div>
+                    <div id="code5" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;copy leftPartHeadValue</div>
+                    <div id="code6" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;else: copy rightPartHeadValue; Increase InvIdx</div>
+                    <div id="code7" class="code-line">copy elements back to original array</div>
+                </div>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 10px;">
@@ -90,7 +110,7 @@
                     </select>
                 </div>
 
-                <div class="legend-row" style="margin-top: 0;">
+                <div class="legend-row">
                     <div class="legend-item"><div class="legend-box" style="background: #f59e0b;"></div> Comparing</div>
                     <div class="legend-item"><div class="legend-box" style="background: #10b981;"></div> Sorted</div>
                     <div class="legend-item"><div class="legend-box" style="background: #0ea5e9;"></div> Unsorted</div>
@@ -99,11 +119,18 @@
         </div>
     </div>
 
-    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)"><div class="modal-content" onclick="event.stopPropagation()"><span class="modal-close" onclick="closeImageModalDirect()">&times;</span><img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Photo"><h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3><p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Student / Aspiring Developer</p></div></div>
+    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
+            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Student / Aspiring Developer</p>
+        </div>
+    </div>
     <footer>&copy; 2026 Daniel Abrenica | My Personal Portfolio</footer>
 
     <script>
-        let originalArray = [42, 18, 65, 27, 91, 34, 56, 12, 73, 48];
+        let originalArray = [42, 30, 47, 0, 33, 23, 35, 22, 41, 30];
         let historySteps = [];
         let currentStepIndex = 0;
         let isPlaying = false;
@@ -115,9 +142,16 @@
         function initMergeSort(arr) {
             historySteps = [];
             let workingArr = [...arr];
+            let n = workingArr.length;
             let sortedSet = new Set();
 
-            historySteps.push({ arr: [...workingArr], comparing: [], sorted: [] });
+            historySteps.push({
+                arr: [...workingArr],
+                comparing: [],
+                sorted: [],
+                activeCode: 1,
+                explanation: "Initial array loaded. Preparing to split elements into partitions of size 1."
+            });
 
             function mergeHelper(start, mid, end) {
                 let left = workingArr.slice(start, mid + 1);
@@ -125,15 +159,79 @@
                 let i = 0, j = 0, k = start;
 
                 while (i < left.length && j < right.length) {
-                    historySteps.push({ arr: [...workingArr], comparing: [start + i, mid + 1 + j], sorted: Array.from(sortedSet) });
-                    if (left[i] <= right[j]) { workingArr[k] = left[i]; i++; } 
-                    else { workingArr[k] = right[j]; j++; }
+                    historySteps.push({
+                        arr: [...workingArr],
+                        comparing: [start + i, mid + 1 + j],
+                        sorted: Array.from(sortedSet),
+                        activeCode: 3,
+                        explanation: `Iterating partition from index ${start} to ${end}: comparing elements.`
+                    });
+
+                    historySteps.push({
+                        arr: [...workingArr],
+                        comparing: [start + i, mid + 1 + j],
+                        sorted: Array.from(sortedSet),
+                        activeCode: 4,
+                        explanation: `Checking if leftPartHeadValue (${left[i]}) <= rightPartHeadValue (${right[j]}).`
+                    });
+
+                    if (left[i] <= right[j]) {
+                        workingArr[k] = left[i];
+                        i++;
+                        historySteps.push({
+                            arr: [...workingArr],
+                            comparing: [k],
+                            sorted: Array.from(sortedSet),
+                            activeCode: 5,
+                            explanation: `Condition met: copying leftPartHeadValue into position ${k}.`
+                        });
+                    } else {
+                        workingArr[k] = right[j];
+                        j++;
+                        historySteps.push({
+                            arr: [...workingArr],
+                            comparing: [k],
+                            sorted: Array.from(sortedSet),
+                            activeCode: 6,
+                            explanation: `Condition false: copying rightPartHeadValue into position ${k}.`
+                        });
+                    }
                     k++;
-                    historySteps.push({ arr: [...workingArr], comparing: [k-1], sorted: Array.from(sortedSet) });
                 }
 
-                while (i < left.length) { workingArr[k] = left[i]; i++; k++; historySteps.push({ arr: [...workingArr], comparing: [k-1], sorted: Array.from(sortedSet) }); }
-                while (j < right.length) { workingArr[k] = right[j]; j++; k++; historySteps.push({ arr: [...workingArr], comparing: [k-1], sorted: Array.from(sortedSet) }); }
+                while (i < left.length) {
+                    workingArr[k] = left[i];
+                    i++;
+                    k++;
+                    historySteps.push({
+                        arr: [...workingArr],
+                        comparing: [k - 1],
+                        sorted: Array.from(sortedSet),
+                        activeCode: 6,
+                        explanation: `Copying remaining elements from left partition.`
+                    });
+                }
+
+                while (j < right.length) {
+                    workingArr[k] = right[j];
+                    j++;
+                    k++;
+                    historySteps.push({
+                        arr: [...workingArr],
+                        comparing: [k - 1],
+                        sorted: Array.from(sortedSet),
+                        activeCode: 6,
+                        explanation: `Copying remaining elements from right partition.`
+                    });
+                }
+
+                historySteps.push({
+                    arr: [...workingArr],
+                    comparing: [],
+                    sorted: Array.from(sortedSet),
+                    activeCode: 7,
+                    explanation: `Copying merged elements back to original array segment (${start} to ${end}).`
+                });
             }
 
             function mergeSortRecursive(start, end) {
@@ -141,14 +239,28 @@
                 let mid = Math.floor((start + end) / 2);
                 mergeSortRecursive(start, mid);
                 mergeSortRecursive(mid + 1, end);
+                
+                historySteps.push({
+                    arr: [...workingArr],
+                    comparing: [],
+                    sorted: Array.from(sortedSet),
+                    activeCode: 2,
+                    explanation: `Recursively merging adjacent partitions from index ${start} to ${end}.`
+                });
+
                 mergeHelper(start, mid, end);
             }
 
             mergeSortRecursive(0, workingArr.length - 1);
 
-            let n = workingArr.length;
-            for(let i=0; i<n; i++) sortedSet.add(i);
-            historySteps.push({ arr: [...workingArr], comparing: [], sorted: Array.from(sortedSet) });
+            for(let i = 0; i < n; i++) sortedSet.add(i);
+            historySteps.push({
+                arr: [...workingArr],
+                comparing: [],
+                sorted: Array.from(sortedSet),
+                activeCode: 7,
+                explanation: "Merge Sort completed! The array is fully sorted."
+            });
 
             currentStepIndex = 0;
             renderStep();
@@ -157,15 +269,29 @@
         function renderStep() {
             if(historySteps.length === 0) return;
             let state = historySteps[currentStepIndex];
+
+            document.getElementById('explanationText').textContent = state.explanation;
+            for(let c = 1; c <= 7; c++) {
+                let lineEl = document.getElementById(`code${c}`);
+                if(lineEl) {
+                    lineEl.className = `code-line ${state.activeCode === c ? 'active' : ''}`;
+                }
+            }
+
             const container = document.getElementById('bars-container');
             container.innerHTML = '';
+
+            let maxVal = Math.max(...state.arr, 1);
 
             state.arr.forEach((val, idx) => {
                 const bar = document.createElement('div');
                 bar.className = 'sort-bar unsorted';
-                if(state.sorted.includes(idx)) bar.className = 'sort-bar sorted';
-                if(state.comparing.includes(idx)) bar.className = 'sort-bar comparing';
-                bar.style.height = `${val}%`;
+                
+                if(state.sorted && state.sorted.includes(idx)) bar.className = 'sort-bar sorted';
+                if(state.comparing && state.comparing.includes(idx)) bar.className = 'sort-bar comparing';
+
+                let calculatedHeight = Math.max((val / maxVal) * 75, 12);
+                bar.style.height = `${calculatedHeight}%`;
                 bar.textContent = val;
                 container.appendChild(bar);
             });
@@ -191,9 +317,9 @@
 
         function setPreset(type) {
             stopPlay();
-            if(type === 'random') originalArray = [42, 18, 65, 27, 91, 34, 56, 12, 73, 48];
-            if(type === 'sorted') originalArray = [12, 18, 27, 34, 42, 48, 56, 65, 73, 91];
-            if(type === 'nearly') originalArray = [18, 12, 27, 34, 42, 48, 56, 65, 91, 73];
+            if(type === 'random') originalArray = [42, 30, 47, 0, 33, 23, 35, 22, 41, 30];
+            if(type === 'sorted') originalArray = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+            if(type === 'nearly') originalArray = [20, 10, 30, 40, 50, 60, 70, 80, 100, 90];
             if(type === 'duplicates') originalArray = [30, 10, 30, 20, 10, 40, 20, 50, 30, 10];
             initMergeSort(originalArray);
         }
@@ -201,9 +327,36 @@
         function applyCustomArray() {
             stopPlay();
             const inputVal = document.getElementById('customInput').value;
-            if(!inputVal.trim()) return;
-            let parsed = inputVal.split(',').map(item => parseInt(item.trim())).filter(num => !isNaN(num));
-            if(parsed.length > 0) { originalArray = parsed; initMergeSort(originalArray); }
+            
+            if(!inputVal.trim()) {
+                alert("Mangyaring maglagay ng mga numero.");
+                return;
+            }
+
+            let cleanedStr = inputVal.replace(/[\s]+/g, ',').replace(/,,+/g, ',');
+            let rawItems = cleanedStr.split(',');
+            let parsed = [];
+
+            for (let item of rawItems) {
+                let trimmed = item.trim();
+                if (trimmed === "") continue;
+                
+                let num = parseFloat(trimmed);
+                if (isNaN(num)) {
+                    alert(`May nakitang invalid na input: "${trimmed}". Mangyaring mga numero lamang ang ilagay.`);
+                    return;
+                }
+                parsed.push(Math.round(num));
+            }
+
+            if(parsed.length < 2) {
+                alert("Maglagay ng dalawa o higit pang mga numero para ma-visualize ang sorting.");
+                return;
+            }
+
+            originalArray = parsed;
+            initMergeSort(originalArray);
+            document.getElementById('sortStatusMsg').textContent = "Custom array loaded successfully!";
         }
 
         initMergeSort(originalArray);

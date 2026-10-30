@@ -1,0 +1,14 @@
+/* Queue / Deque specific alignment helpers (ginagamit ang mga common classes mula sa stack/linkedlist) */
+.queue-container {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    padding: 20px;
+    background: rgba(1, 22, 17, 0.6);
+    border-radius: 12px;
+    border: 1px solid var(--border-glass);
+    overflow-x: auto;
+}

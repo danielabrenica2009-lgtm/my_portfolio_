@@ -6,27 +6,28 @@
     <title>Home - Personal Portfolio</title>
     <!-- Professional Modern Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <!-- Modularized External CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Global External CSS - Naayos na ang pangalan ng CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
 </head>
 <body>
 
     <nav>
         <div class="nav-brand">
-            <img src="{{ url_for('static', filename='profile.jpg') }}" 
+            <!-- Idinagdag ang 'images/' sa path -->
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" 
                  alt="Profile" 
                  class="nav-profile-img"
                  onclick="openImageModal()">
-            <a href="{{ url_for('index') }}" style="text-decoration: none;">
+            <a href="{{ url_for('main.index') }}" style="text-decoration: none;">
                 <span class="logo">MyPortfolio</span>
             </a>
         </div>
 
         <ul>
-            <li><a href="{{ url_for('index') }}" class="active">Home</a></li>
-            <li><a href="{{ url_for('profile') }}">Profile</a></li>
-            <li><a href="{{ url_for('works') }}">Works</a></li>
-            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('main.index') }}" class="active">Home</a></li>
+            <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('main.works') }}">Works</a></li>
+            <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
         </ul>
     </nav>
 
@@ -43,25 +44,28 @@
             <!-- Card 1: View Profile -->
             <div class="feature-card">
                 <div class="card-img-box">
-                    <img src="{{ url_for('static', filename='profile_icon.png') }}" alt="Profile Icon">
+                    <!-- Idinagdag ang 'images/' sa path -->
+                    <img src="{{ url_for('static', filename='images/profile_icon.png') }}" alt="Profile Icon">
                 </div>
-                <a href="{{ url_for('profile') }}" class="btn card-btn">View Profile</a>
+                <a href="{{ url_for('main.profile') }}" class="btn card-btn">View Profile</a>
             </div>
 
             <!-- Card 2: Programming Works -->
             <div class="feature-card">
                 <div class="card-img-box">
-                    <img src="{{ url_for('static', filename='works_icon.jpg') }}" alt="Works Icon">
+                    <!-- Idinagdag ang 'images/' sa path -->
+                    <img src="{{ url_for('static', filename='images/works_icon.jpg') }}" alt="Works Icon">
                 </div>
-                <a href="{{ url_for('works') }}" class="btn card-btn">Programming Works</a>
+                <a href="{{ url_for('main.works') }}" class="btn card-btn">Programming Works</a>
             </div>
 
             <!-- Card 3: Contact Info -->
             <div class="feature-card">
                 <div class="card-img-box">
-                    <img src="{{ url_for('static', filename='contact_icon.jpg') }}" alt="Contact Icon">
+                    <!-- Idinagdag ang 'images/' sa path -->
+                    <img src="{{ url_for('static', filename='images/contact_icon.jpg') }}" alt="Contact Icon">
                 </div>
-                <a href="{{ url_for('contact') }}" class="btn card-btn">Contact Info</a>
+                <a href="{{ url_for('main.contact') }}" class="btn card-btn">Contact Info</a>
             </div>
 
         </div>
@@ -71,7 +75,8 @@
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
-            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Photo">
+            <!-- Idinagdag ang 'images/' sa path -->
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
             <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
             <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
         </div>

@@ -5,24 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Insertion Sort - My Portfolio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sorting.css') }}">
+    <style>
+        /* Custom Back Button Styling para sa Glassmorphism at Hover state */
+        .custom-back-btn {
+            background: rgba(6, 78, 59, 0.45);
+            color: var(--text-main);
+            border: 1px solid var(--border-glass);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        }
+        .custom-back-btn:hover {
+            background: var(--primary-green);
+            color: #022c22;
+            border-color: var(--primary-green);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+    </style>
 </head>
 <body>
     <nav>
         <div class="nav-brand">
-            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
-            <a href="{{ url_for('index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
+            <a href="{{ url_for('main.index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
         </div>
         <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('profile') }}">Profile</a></li>
-            <li><a href="{{ url_for('works') }}" class="active">Works</a></li>
-            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('main.works') }}" class="active">Works</a></li>
+            <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
         </ul>
     </nav>
 
     <div class="main-container" style="max-width: 950px;">
-        <div class="calc-header-flex">
+        <div class="calc-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 0.75rem; color: var(--primary-green); font-weight: 700;">03 / INSERTION</span>
@@ -30,7 +53,7 @@
                 </div>
                 <h1 style="margin: 2px 0; font-size: 1.6rem;">Insertion Sort Visualization</h1>
             </div>
-            <a href="{{ url_for('sorting_dashboard') }}" class="btn calc-back-btn">&#8592; Back to Sorting</a>
+            <a href="{{ url_for('sorting.sorting_dashboard') }}" class="custom-back-btn">&#8592; Back to Sorting</a>
         </div>
 
         <div class="visualizer-card">
@@ -97,7 +120,14 @@
         </div>
     </div>
 
-    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)"><div class="modal-content" onclick="event.stopPropagation()"><span class="modal-close" onclick="closeImageModalDirect()">&times;</span><img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Photo"><h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3><p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Student / Aspiring Developer</p></div></div>
+    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
+            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Student / Aspiring Developer</p>
+        </div>
+    </div>
     <footer>&copy; 2026 Daniel Abrenica | My Personal Portfolio</footer>
 
     <script>
@@ -139,7 +169,6 @@
                 let key = workingArr[i];
                 let j = i - 1;
 
-                // Extract step: Will go down the bar, together with the right key value
                 historySteps.push({
                     arr: [...workingArr],
                     sorted: Array.from({length: i}, (_, k) => k),
@@ -210,51 +239,49 @@
         }
 
         function renderStep() {
-    if(historySteps.length === 0) return;
-    let state = historySteps[currentStepIndex];
+            if(historySteps.length === 0) return;
+            let state = historySteps[currentStepIndex];
 
-    document.getElementById('explanationText').textContent = state.explanation;
-    for(let c = 1; c <= 7; c++) {
-        let lineEl = document.getElementById(`code${c}`);
-        if(lineEl) {
-            lineEl.className = `code-line ${state.activeCode === c ? 'active' : ''}`;
+            document.getElementById('explanationText').textContent = state.explanation;
+            for(let c = 1; c <= 7; c++) {
+                let lineEl = document.getElementById(`code${c}`);
+                if(lineEl) {
+                    lineEl.className = `code-line ${state.activeCode === c ? 'active' : ''}`;
+                }
+            }
+
+            const container = document.getElementById('bars-container');
+            container.innerHTML = '';
+
+            let maxVal = Math.max(...state.arr, 1);
+
+            state.arr.forEach((val, idx) => {
+                const bar = document.createElement('div');
+                bar.className = 'sort-bar unsorted';
+                
+                if(state.sorted && state.sorted.includes(idx)) bar.className = 'sort-bar sorted';
+                if(state.extractedIdx === idx) {
+                    bar.className = 'sort-bar extracted';
+                }
+                if(state.comparing && state.comparing.includes(idx)) bar.className = 'sort-bar comparing';
+
+                let currentTranslateX = (state.translateX && state.translateX[idx]) ? state.translateX[idx] : 0;
+                
+                if(state.extractedIdx === idx) {
+                    bar.style.transform = `translateX(${currentTranslateX}px) translateY(100px)`;
+                } else {
+                    bar.style.transform = `translateX(${currentTranslateX}px)`;
+                }
+
+                let calculatedHeight = Math.max((val / maxVal) * 75, 12);
+                bar.style.height = `${calculatedHeight}%`;
+                bar.textContent = val;
+                container.appendChild(bar);
+            });
+
+            document.getElementById('stepStatusText').textContent = `Step ${currentStepIndex} / ${historySteps.length - 1}`;
+            document.getElementById('sortStatusMsg').textContent = currentStepIndex === historySteps.length - 1 ? "Sorted!" : "Sorting in progress...";
         }
-    }
-
-    const container = document.getElementById('bars-container');
-    container.innerHTML = '';
-
-    // 1. Find the highest value in current array for scaling
-    let maxVal = Math.max(...state.arr, 1);
-
-    state.arr.forEach((val, idx) => {
-        const bar = document.createElement('div');
-        bar.className = 'sort-bar unsorted';
-        
-        if(state.sorted && state.sorted.includes(idx)) bar.className = 'sort-bar sorted';
-        if(state.extractedIdx === idx) {
-            bar.className = 'sort-bar extracted';
-        }
-        if(state.comparing && state.comparing.includes(idx)) bar.className = 'sort-bar comparing';
-
-        let currentTranslateX = (state.translateX && state.translateX[idx]) ? state.translateX[idx] : 0;
-        
-        if(state.extractedIdx === idx) {
-            bar.style.transform = `translateX(${currentTranslateX}px) translateY(100px)`;
-        } else {
-            bar.style.transform = `translateX(${currentTranslateX}px)`;
-        }
-
-        // 2. Calculate the height relative to the max value (minimum of 12% so it's always visible even if it's 0 or 1)
-        let calculatedHeight = Math.max((val / maxVal) * 75, 12);
-        bar.style.height = `${calculatedHeight}%`;
-        bar.textContent = val;
-        container.appendChild(bar);
-    });
-
-    document.getElementById('stepStatusText').textContent = `Step ${currentStepIndex} / ${historySteps.length - 1}`;
-    document.getElementById('sortStatusMsg').textContent = currentStepIndex === historySteps.length - 1 ? "Sorted!" : "Sorting in progress...";
-}
 
         function nextStep() { if(currentStepIndex < historySteps.length - 1) { currentStepIndex++; renderStep(); } else { stopPlay(); } }
         function prevStep() { if(currentStepIndex > 0) { currentStepIndex--; renderStep(); } }
@@ -285,7 +312,7 @@
             const inputVal = document.getElementById('customInput').value;
             
             if(!inputVal.trim()) {
-                alert("Please enter some numbers.");
+                alert("Mangyaring maglagay ng mga numero.");
                 return;
             }
 
@@ -299,14 +326,14 @@
                 
                 let num = parseFloat(trimmed);
                 if (isNaN(num)) {
-                    alert(`The input is invalid: "${trimmed}". Please enter only a number.`);
+                    alert(`May nakitang invalid na input: "${trimmed}". Mangyaring mga numero lamang ang ilagay.`);
                     return;
                 }
                 parsed.push(Math.round(num));
             }
 
             if(parsed.length < 2) {
-                alert("Please enter two or more numbers to visualize the sorting.");
+                alert("Maglagay ng dalawa o higit pang mga numero para ma-visualize ang sorting.");
                 return;
             }
 

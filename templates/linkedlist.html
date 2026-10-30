@@ -5,34 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Linked List Operations & Visualization</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stack.css') }}">
+    <style>
+        .custom-back-btn {
+            background: rgba(6, 78, 59, 0.45);
+            color: var(--text-main);
+            border: 1px solid var(--border-glass);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        }
+        .custom-back-btn:hover {
+            background: var(--primary-green);
+            color: #022c22;
+            border-color: var(--primary-green);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+    </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-brand">
-            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
-            <a href="{{ url_for('index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
+            <a href="{{ url_for('main.index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
         </div>
         <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('profile') }}">Profile</a></li>
-            <li><a href="{{ url_for('works') }}" class="active">Works</a></li>
-            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('main.works') }}" class="active">Works</a></li>
+            <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
         </ul>
     </nav>
 
     <div class="main-container">
-        <div class="calc-header-flex">
-            <h1 class="calc-title" style="font-size: 1.4rem;">Linked List Operations & Visualization</h1>
-            <a href="{{ url_for('works') }}" class="btn calc-back-btn">&#8592; Back</a>
+        <div class="calc-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; gap: 1.5rem;">
+            <h1 class="calc-title" style="font-size: 1.4rem; margin: 0;">Linked List Operations & Visualization</h1>
+            <a href="{{ url_for('main.works') }}" class="custom-back-btn" style="margin-left: auto;">&#8592; Back</a>
         </div>
 
         {% if message %}
-            <div class="ll-notification">{{ message }}</div>
+            <div class="ll-notification" style="margin-bottom: 1.25rem;">{{ message }}</div>
         {% endif %}
 
-        <form method="POST">
+        <form action="{{ url_for('linkedlist.linkedlist') }}" method="POST">
             <div class="ll-input-grid">
                 <div class="ll-input-group">
                     <label for="value">Node Value:</label>
@@ -44,17 +66,20 @@
                 </div>
             </div>
 
+            <!-- Iniba-iba natin ang kulay ng mga buttons para maganda at complementary -->
             <div class="ll-actions-flex">
                 <button type="submit" name="action" value="append" class="btn btn-append">Append (End)</button>
-                <button type="submit" name="action" value="prepend" class="btn btn-prepend">Prepend (Start)</button>
-                <button type="submit" name="action" value="insert" class="btn btn-insert">Insert at Index</button>
-                <button type="submit" name="action" value="search" class="btn btn-search">Search Value</button>
-                <button type="submit" name="action" value="delete" class="btn btn-delete">Delete Value</button>
+                <!-- Prepend: Ginawang sleek purple/indigo -->
+                <button type="submit" name="action" value="prepend" class="btn btn-prepend" style="background-color: #7c3aed; color: #ffffff;">Prepend (Start)</button>
+                <button type="submit" name="action" value="insert" class="btn btn-insert" style="background-color: #0284c7; color: #ffffff;">Insert at Index</button>
+                <button type="submit" name="action" value="search" class="btn btn-search" style="background-color: #d97706; color: #ffffff;">Search Value</button>
+                <button type="submit" name="action" value="delete" class="btn btn-delete" style="background-color: #ef4444; color: #ffffff;">Delete Value</button>
             </div>
             <div class="ll-actions-flex" style="margin-top: 15px;">
-                <button type="submit" name="action" value="pop_head" class="btn btn-delete">Pop Head</button>
-                <button type="submit" name="action" value="pop_tail" class="btn btn-delete">Pop Tail</button>
-                <button type="submit" name="action" value="clear" class="btn btn-clear">Clear List</button>
+                <!-- Pop Head & Pop Tail: Ginawang elegant pinkish/rose tone para maiba sa pulang delete -->
+                <button type="submit" name="action" value="pop_head" class="btn btn-delete" style="background-color: #db2777; color: #ffffff;">Pop Head</button>
+                <button type="submit" name="action" value="pop_tail" class="btn btn-delete" style="background-color: #be185d; color: #ffffff;">Pop Tail</button>
+                <button type="submit" name="action" value="clear" class="btn btn-clear" style="background-color: #475569; color: #ffffff;">Clear List</button>
             </div>
         </form>
 
@@ -65,7 +90,7 @@
                 {% for item in items %}
                     <div class="ll-node-box ll-node-box-custom">{{ item }}</div>
                     {% if not loop.last %}
-                        <span class="arrow">&rarr;</span>
+                        <span class="arrow" style="display: block; margin: 6px auto;">&darr;</span>
                     {% endif %}
                 {% endfor %}
             {% else %}
@@ -78,7 +103,7 @@
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
-            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Photo">
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
             <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
             <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
         </div>

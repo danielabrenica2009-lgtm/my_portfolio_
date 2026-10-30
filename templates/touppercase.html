@@ -7,38 +7,63 @@
     <!-- Professional Modern Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <!-- Modularized External CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='area.css') }}">
+    <style>
+        /* Istilo para sa Back button na may tamang kulay at hover effect */
+        .custom-back-btn {
+            background: rgba(6, 78, 59, 0.45);
+            color: var(--text-main);
+            border: 1px solid var(--border-glass);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        }
+        .custom-back-btn:hover {
+            background: var(--primary-green);
+            color: #022c22;
+            border-color: var(--primary-green);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+    </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-brand">
-            <img src="{{ url_for('static', filename='profile.jpg') }}" 
+            <!-- Inayos ang path papuntang images/ para lumabas ang mukha mo -->
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" 
                  alt="Profile" 
                  class="nav-profile-img"
                  onclick="openImageModal()">
-            <a href="{{ url_for('index') }}" style="text-decoration: none;">
+            <a href="{{ url_for('main.index') }}" style="text-decoration: none;">
                 <span class="logo">MyPortfolio</span>
             </a>
         </div>
 
         <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('profile') }}">Profile</a></li>
-            <li><a href="{{ url_for('works') }}" class="active">Works</a></li>
-            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('main.works') }}" class="active">Works</a></li>
+            <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
         </ul>
     </nav>
 
     <div class="main-container">
-        <div class="uppercase-header-flex">
-            <h1 class="uppercase-title">Text to Uppercase</h1>
-            <a href="{{ url_for('works') }}" class="btn uppercase-back-btn">
+        <div class="uppercase-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h1 class="uppercase-title" style="margin: 0;">Text to Uppercase</h1>
+            <!-- Inilipat sa kanan ang Back button at nilapatan ng tamang button style -->
+            <a href="{{ url_for('main.works') }}" class="custom-back-btn" style="margin-left: auto;">
                 &#8592; Back 
             </a>
         </div>
 
-        <form method="POST">
+        <form action="{{ url_for('area.touppercase') }}" method="POST">
             <div class="form-group">
                 <label for="inputString">Text Input:</label>
                 <textarea id="inputString" name="inputString" rows="4" required></textarea>
@@ -59,7 +84,8 @@
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
-            <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Photo">
+            <!-- Inayos din ang path sa loob ng modal -->
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
             <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
             <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
         </div>

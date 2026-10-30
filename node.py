@@ -172,6 +172,7 @@ def infix_to_postfix(expression):
 
     return "".join(output), steps
 
+
 class Queue:
     def __init__(self):
         self.items = []

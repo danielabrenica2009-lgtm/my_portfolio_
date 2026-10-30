@@ -1,0 +1,69 @@
+.btn-append {
+    background-color: #10b981;
+    color: #022c22;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.btn-prepend {
+    background-color: #059669;
+    color: white;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.btn-delete {
+    background-color: #ef4444;
+    color: white;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.btn-clear {
+    background-color: #b91c1c;
+    color: white;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.btn-insert {
+    background-color: #0284c7;
+    color: white;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.btn-search {
+    background-color: #f59e0b;
+    color: #022c22;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.ll-container-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: auto;
+    gap: 10px;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.ll-node-box-custom {
+    background-color: #10b981;
+    color: #022c22;
+    min-width: 120px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+}
+
+.arrow {
+    color: #34d399;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
