@@ -39,7 +39,7 @@ def contact():
         message_body = request.form.get('message')
 
         try:
-            # Gagamitin natin ang extensions mula sa current_app
+            # Uses an extensions from current_app
             mail = current_app.extensions['mail']
             msg = Message(
                 subject=f"Portfolio Message: {subject}",

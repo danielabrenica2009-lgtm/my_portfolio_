@@ -41,22 +41,22 @@
 
 
 /* === COMMON & BUBBLE SORT STATES === */
-.sort-bar.comparing { background: #f59e0b !important; } /* Para sa Bubble, Selection, Insertion, at Quick Sort */
-.sort-bar.sorted { background: #10b981 !important; }    /* Pangkalahatan kapag tapos na i-sort */
+.sort-bar.comparing { background: #f59e0b !important; } /* For Bubble, Selection, Insertion, and Quick Sort */
+.sort-bar.sorted { background: #10b981 !important; }    /* For overall sorting */
 .sort-bar.swapping { background: #ef4444 !important; z-index: 10; } /* Bubble / General Swap */
 
 
 /* === SELECTION SORT SPECIFIC STATES === */
-.sort-bar.min-val { background: #a855f7 !important; } /* Kulay ube para sa Minimum Value */
+.sort-bar.min-val { background: #a855f7 !important; } /* Purple for Minimum Value */
 
 
 /* === INSERTION SORT SPECIFIC STATES === */
-.sort-bar.extracted { background: #e11d48 !important; transform: translateY(90px) !important; z-index: 20; } /* Inangat na bar */
+.sort-bar.extracted { background: #e11d48 !important; transform: translateY(90px) !important; z-index: 20; } /* for bar */
 
 
 /* === QUICK SORT SPECIFIC STATES === */
-.sort-bar.pivot { background: #eab308 !important; }         /* Kulay dilaw para sa Pivot */
-.sort-bar.partitioning { background: #f43f5e !important; } /* Para sa Partition elements */
+.sort-bar.pivot { background: #eab308 !important; }         /* Color yellow for Pivot */
+.sort-bar.partitioning { background: #f43f5e !important; } /* For Partition elements */
 
 
 /* === CONTROLS, INPUTS, & PRESETS STYLES === */

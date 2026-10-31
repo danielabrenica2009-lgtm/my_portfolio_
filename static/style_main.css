@@ -133,7 +133,7 @@ h1, h2, h3 {
 .cards-grid {
     display: flex;
     justify-content: center;
-    gap: 1rem; /* Binawasan natin nang kaunti ang gap mula 1.5rem para magkasya */
+    gap: 1rem; /* reduce slightly the gap into 1.5rem for fixing */
     flex-wrap: wrap;
     margin-top: 2rem;
 }
@@ -144,7 +144,7 @@ h1, h2, h3 {
     border-radius: 16px;
     padding: 1.5rem 1rem; 
     text-align: center;
-    width: 175px; /* Ibinaba natin nang kaunti ang width para magkasya silang tatlo nang sabay-sabay */
+    width: 175px; /* For the width */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
 }
@@ -158,7 +158,7 @@ h1, h2, h3 {
 }
 
 .card-img-box {
-    width: 95px; /* Sakto lang ang laki para lumitaw nang maganda sa loob ng card */
+    width: 95px; /* For designing the card */
     height: 95px;
     margin: 0 auto 1rem auto;
     border-radius: 12px;
