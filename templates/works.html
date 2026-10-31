@@ -9,7 +9,7 @@
     <!-- Modularized External CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
     <style>
-        /* Custom Back Button Styling para sa Glassmorphism at Hover state */
+        /* Custom Back Button Styling for Glassmorphism and Hover state */
         .custom-back-btn {
             background: rgba(6, 78, 59, 0.45);
             color: var(--text-main);
@@ -32,7 +32,7 @@
 
         /* Responsive Works List Styling */
         .works-list {
-            list-style-type: none; /* Tinanggal ang lumang bullet para sa mas malinis na layout */
+            list-style-type: none; /* removes the old bullet for clean layout */
             padding-left: 0;
             margin-top: 1.5rem;
         }
@@ -41,7 +41,7 @@
             margin-bottom: 0.8rem;
         }
 
-        /* Text Glow & Slide Effect sa Hover */
+        /* Text Glow & Slide Effect in Hover */
         .works-list li a {
             color: #6ee7b7; /* Bright mint green base color */
             text-decoration: none;
@@ -55,7 +55,7 @@
             position: relative;
         }
 
-        /* Arrow indicator bago ang teksto */
+        /* Arrow indicator before the teksto */
         .works-list li a::before {
             content: "▹";
             margin-right: 10px;
@@ -63,10 +63,10 @@
             transition: transform 0.3s ease, color 0.3s ease;
         }
 
-        /* Umiilaw na Neon Text Effect at Movement */
+        /* Neon Text Effect and Movement */
         .works-list li a:hover {
-            color: #ffffff; /* Magiging kulay puti ang teksto para malinaw */
-            transform: translateX(8px); /* Aabante nang kaunti sa kanan */
+            color: #ffffff; /* Color white to be clear */
+            transform: translateX(8px); /* Moves to the right slightly */
             text-shadow: 0 0 8px rgba(52, 211, 153, 0.8), 
                          0 0 16px rgba(16, 185, 129, 0.6),
                          0 0 24px rgba(16, 185, 129, 0.4); /* Neon Glow Effect */
@@ -100,7 +100,7 @@
     </nav>
 
     <div class="main-container">
-        <!-- Header flex para sa Title at Back button papuntang Homepage -->
+        <!-- Header flex for Title and Back button to Homepage -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
             <h1 style="margin: 0; font-size: 1.5rem;">Programming Works & Tools</h1>
             <a href="{{ url_for('main.index') }}" class="custom-back-btn">
@@ -117,7 +117,7 @@
             <li><a href="{{ url_for('infix.infixtopostfix') }}">Infix to Postfix Converter (Stack)</a></li>
             <li><a href="{{ url_for('queue_dequeue.queue_view') }}">Queue Operations & Visualization</a></li>
             <li><a href="{{ url_for('queue_dequeue.dequeue_view') }}">Deque Operations & Visualization</a></li>
-            <!-- Naayos na ang link patungo sa sorting dashboard -->
+            <!-- For link to sorting dashboard -->
             <li><a href="{{ url_for('sorting.sorting_dashboard') }}">Sorting Algorithms</a></li>
         </ul>
     </div>

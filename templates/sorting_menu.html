@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
     <style>
-        /* Custom Back Button Styling para sa Glassmorphism at Hover state */
+        /* Custom Back Button Styling for Glassmorphism and Hover state */
         .custom-back-btn {
             background: rgba(6, 78, 59, 0.45);
             color: var(--text-main);
@@ -28,7 +28,7 @@
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
 
-        /* Neon Glow & Smooth Hover Effect sa Sorting Links */
+        /* Neon Glow & Smooth Hover Effect for Sorting Links */
         .works-list-links {
             list-style-type: none;
             padding-left: 0;
@@ -76,7 +76,7 @@
 
     <nav>
         <div class="nav-brand">
-            <!-- Naka-align sa images/profile.jpg para hindi maputol ang image path -->
+            <!-- Aligned to images/profile.jpg to avoid separating of image path -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
             <a href="{{ url_for('main.index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
         </div>
@@ -94,7 +94,7 @@
                 <h1 style="margin: 0; font-size: 1.8rem;">Sorting Algorithms</h1>
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 5px;">Select an algorithm below to view its step-by-step interactive visual experiment.</p>
             </div>
-            <!-- Ginamit ang custom-back-btn para sa parehong button styling -->
+            <!-- Uses custom-back-btn for the samebutton styling -->
             <a href="{{ url_for('main.works') }}" class="custom-back-btn">&#8592; Back to Works</a>
         </div>
 

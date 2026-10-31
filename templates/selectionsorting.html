@@ -53,7 +53,7 @@
                 </div>
                 <h1 style="margin: 2px 0; font-size: 1.6rem;">Selection Sort Visualization</h1>
             </div>
-            <!-- Ginamit na ang custom back button class -->
+            <!-- Uses custom back button class -->
             <a href="{{ url_for('sorting.sorting_dashboard') }}" class="custom-back-btn">&#8592; Back to Sorting</a>
         </div>
 
@@ -349,7 +349,7 @@
             const inputVal = document.getElementById('customInput').value;
             
             if(!inputVal.trim()) {
-                alert("Mangyaring maglagay ng mga numero.");
+                alert("Please enter two or more numbers to visualize the sorting.");
                 return;
             }
 
@@ -363,14 +363,14 @@
                 
                 let num = parseFloat(trimmed);
                 if (isNaN(num)) {
-                    alert(`May nakitang invalid na input: "${trimmed}". Mangyaring mga numero lamang ang ilagay.`);
+                    alert(`There is an invalid input: "${trimmed}". Please enter only numbers.`);
                     return;
                 }
                 parsed.push(Math.round(num));
             }
 
             if(parsed.length < 2) {
-                alert("Maglagay ng dalawa o higit pang mga numero para ma-visualize ang sorting.");
+                alert("Please enter two or more numbers to visualize the sorting.");
                 return;
             }
 

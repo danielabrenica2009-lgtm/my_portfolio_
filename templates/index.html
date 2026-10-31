@@ -6,7 +6,7 @@
     <title>Home - Personal Portfolio</title>
     <!-- Professional Modern Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <!-- Global External CSS - Naayos na ang pangalan ng CSS file -->
+    <!-- Global External CSS - fixes the name of CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
 </head>
 <body>
@@ -44,7 +44,7 @@
             <!-- Card 1: View Profile -->
             <div class="feature-card">
                 <div class="card-img-box">
-                    <!-- Idinagdag ang 'images/' sa path -->
+                    <!-- Added the 'images/' in the path -->
                     <img src="{{ url_for('static', filename='images/profile_icon.png') }}" alt="Profile Icon">
                 </div>
                 <a href="{{ url_for('main.profile') }}" class="btn card-btn">View Profile</a>
@@ -53,7 +53,7 @@
             <!-- Card 2: Programming Works -->
             <div class="feature-card">
                 <div class="card-img-box">
-                    <!-- Idinagdag ang 'images/' sa path -->
+                    <!-- Added the 'images/' in the path -->
                     <img src="{{ url_for('static', filename='images/works_icon.jpg') }}" alt="Works Icon">
                 </div>
                 <a href="{{ url_for('main.works') }}" class="btn card-btn">Programming Works</a>
@@ -62,7 +62,7 @@
             <!-- Card 3: Contact Info -->
             <div class="feature-card">
                 <div class="card-img-box">
-                    <!-- Idinagdag ang 'images/' sa path -->
+                    <!-- Added the 'images/' in the path -->
                     <img src="{{ url_for('static', filename='images/contact_icon.jpg') }}" alt="Contact Icon">
                 </div>
                 <a href="{{ url_for('main.contact') }}" class="btn card-btn">Contact Info</a>

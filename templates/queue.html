@@ -46,7 +46,7 @@
     </nav>
 
     <div class="main-container">
-        <!-- Inilipat sa kanan ang Back button at nilagyan ng tamang spacing -->
+        <!-- Made by (row) using an inline !important styles -->
         <div class="calc-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; gap: 1.5rem;">
             <h1 class="calc-title" style="font-size: 1.4rem; margin: 0;">Queue Operations & Visualization</h1>
             <a href="{{ url_for('main.works') }}" class="custom-back-btn" style="margin-left: auto;">&#8592; Back</a>
@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <!-- Binigyan ng iba't-ibang kulay ang Queue buttons -->
+            <!-- Made by (row) using an inline !important styles -->
             <div class="ll-actions-flex">
                 <button type="submit" name="action" value="enqueue" class="btn btn-append" style="background-color: #059669; color: #ffffff;">Enqueue</button>
                 <button type="submit" name="action" value="dequeue" class="btn btn-delete" style="background-color: #ef4444; color: #ffffff;">Dequeue</button>
@@ -74,7 +74,7 @@
 
         <h3 class="ll-heading" style="margin-top: 25px;">Queue Visualization (Total Items: {{ items|length }})</h3>
         
-        <!-- Pilit nating ginawang pahalang (row) gamit ang inline !important styles -->
+        <!-- Made by (row) using an inline !important styles -->
         <div class="ll-visual-container" style="display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; gap: 12px !important; padding: 20px !important;">
             {% if items %}
                 <span class="arrow" style="margin-right: 5px; white-space: nowrap;">&larr; FRONT</span>

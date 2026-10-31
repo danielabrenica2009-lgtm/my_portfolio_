@@ -34,7 +34,7 @@
 
     <nav>
         <div class="nav-brand">
-            <!-- Naayos ang path patungong images/ para lumabas ang larawan mo -->
+            <!-- Fixes the path to images/ for profile picture -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
             <a href="{{ url_for('main.index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
         </div>
@@ -47,7 +47,7 @@
     </nav>
 
     <div class="main-container">
-        <!-- Inilipat sa kanan ang Back button at nilagyan ng tamang spacing -->
+        <!-- Back button to the right and utilize proper spacing -->
         <div class="calc-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; gap: 1.5rem;">
             <h1 class="calc-title" style="font-size: 1.4rem; margin: 0;">Deque (Double-Ended Queue) Operations</h1>
             <a href="{{ url_for('main.works') }}" class="custom-back-btn" style="margin-left: auto;">&#8592; Back</a>
@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <!-- Binagyan ng natatanging kulay ang bawat Deque operation button -->
+            <!-- Colors for Deque operation button -->
             <div class="ll-actions-flex">
                 <button type="submit" name="action" value="add_front" class="btn btn-prepend" style="background-color: #7c3aed; color: #ffffff;">Add Front</button>
                 <button type="submit" name="action" value="add_rear" class="btn btn-append" style="background-color: #059669; color: #ffffff;">Add Rear</button>
@@ -76,7 +76,7 @@
 
         <h3 class="ll-heading" style="margin-top: 25px;">Deque Visualization (Total Items: {{ items|length }})</h3>
         
-        <!-- Pilit nating ginawang pahalang (row) gamit ang inline !important styles -->
+        <!-- Did  by (row) using an inline !important styles -->
         <div class="ll-visual-container" style="display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; gap: 12px !important; padding: 20px !important;">
             {% if items %}
                 <span class="arrow" style="margin-right: 5px; white-space: nowrap;">&larr; FRONT</span>

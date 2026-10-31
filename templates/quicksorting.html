@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='sorting.css') }}">
     <style>
-        /* Custom Back Button Styling para sa Glassmorphism at Hover state */
+        /* Custom Back Button Styling for Glassmorphism and Hover state */
         .custom-back-btn {
             background: rgba(6, 78, 59, 0.45);
             color: var(--text-main);
@@ -353,7 +353,7 @@
             const inputVal = document.getElementById('customInput').value;
             
             if(!inputVal.trim()) {
-                alert("Mangyaring maglagay ng mga numero.");
+                alert("Please enter two or more numbers to visualize the sorting.");
                 return;
             }
 
@@ -367,14 +367,14 @@
                 
                 let num = parseFloat(trimmed);
                 if (isNaN(num)) {
-                    alert(`May nakitang invalid na input: "${trimmed}". Mangyaring mga numero lamang ang ilagay.`);
+                    alert(`There is an invalid input: "${trimmed}". Please enter only numbers.`);
                     return;
                 }
                 parsed.push(Math.round(num));
             }
 
             if(parsed.length < 2) {
-                alert("Maglagay ng dalawa o higit pang mga numero para ma-visualize ang sorting.");
+                alert("Please enter two or more numbers to visualize the sorting.");
                 return;
             }
 

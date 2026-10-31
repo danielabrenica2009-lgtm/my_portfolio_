@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bubble Sort - My Portfolio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <!-- Naayos na CSS file path -->
+    <!-- Fix the CSS file path -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='sorting.css') }}">
     <style>
-        /* Custom Back Button Styling para sa Glassmorphism at Hover state */
+        /* Custom Back Button Styling for Glassmorphism and Hover state */
         .custom-back-btn {
             background: rgba(6, 78, 59, 0.45);
             color: var(--text-main);
@@ -34,7 +34,7 @@
 <body>
     <nav>
         <div class="nav-brand">
-            <!-- Naayos na profile image path -->
+            <!-- Fixes the profile image path -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
             <a href="{{ url_for('main.index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
         </div>
