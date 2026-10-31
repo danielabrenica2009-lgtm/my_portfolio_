@@ -13,7 +13,7 @@
 
     <nav>
         <div class="nav-brand">
-            <!-- Idinagdag ang 'images/' sa path -->
+            <!-- Added the 'images/' in the path -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" 
                  alt="Profile" 
                  class="nav-profile-img"
@@ -75,7 +75,7 @@
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
-            <!-- Idinagdag ang 'images/' sa path -->
+            <!-- Added the 'images/' in the path -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
             <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
             <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
