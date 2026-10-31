@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_mail import Mail
 
-# Narito ang tamang pag-import ng lahat ng Blueprints mula sa 'blueprints' folder
+# Imports of all Blueprints from the 'blueprints' folder
 from blueprints.main import main_bp
 from blueprints.area import area_bp
 from blueprints.stack import stack_bp
@@ -21,7 +21,7 @@ app.config['MAIL_PASSWORD'] = 'zdfcwbxyulnugzre'
 
 mail = Mail(app)
 
-# Pagre-register ng lahat ng Blueprints
+# Registration of all Blueprints
 app.register_blueprint(main_bp)
 app.register_blueprint(area_bp)
 app.register_blueprint(stack_bp)
