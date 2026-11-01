@@ -6,19 +6,18 @@
     <title>Home - Personal Portfolio</title>
     <!-- Professional Modern Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <!-- Global External CSS - fixes the name of CSS file -->
+    <!-- Global External CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
 </head>
 <body>
 
     <nav>
         <div class="nav-brand">
-            <!-- Added the 'images/' in the path -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" 
                  alt="Profile" 
                  class="nav-profile-img"
                  onclick="openImageModal()">
-            <a href="{{ url_for('main.index') }}" style="text-decoration: none;">
+            <a href="{{ url_for('main.index') }}">
                 <span class="logo">MyPortfolio</span>
             </a>
         </div>
@@ -44,7 +43,6 @@
             <!-- Card 1: View Profile -->
             <div class="feature-card">
                 <div class="card-img-box">
-                    <!-- Added the 'images/' in the path -->
                     <img src="{{ url_for('static', filename='images/profile_icon.png') }}" alt="Profile Icon">
                 </div>
                 <a href="{{ url_for('main.profile') }}" class="btn card-btn">View Profile</a>
@@ -53,7 +51,6 @@
             <!-- Card 2: Programming Works -->
             <div class="feature-card">
                 <div class="card-img-box">
-                    <!-- Added the 'images/' in the path -->
                     <img src="{{ url_for('static', filename='images/works_icon.jpg') }}" alt="Works Icon">
                 </div>
                 <a href="{{ url_for('main.works') }}" class="btn card-btn">Programming Works</a>
@@ -62,7 +59,6 @@
             <!-- Card 3: Contact Info -->
             <div class="feature-card">
                 <div class="card-img-box">
-                    <!-- Added the 'images/' in the path -->
                     <img src="{{ url_for('static', filename='images/contact_icon.jpg') }}" alt="Contact Icon">
                 </div>
                 <a href="{{ url_for('main.contact') }}" class="btn card-btn">Contact Info</a>
@@ -75,10 +71,9 @@
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
-            <!-- Added the 'images/' in the path -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
-            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
-            <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
+            <h3>Daniel Abrenica</h3>
+            <p>Student / Aspiring Developer</p>
         </div>
     </div>
 

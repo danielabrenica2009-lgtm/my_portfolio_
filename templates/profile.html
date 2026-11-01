@@ -6,73 +6,10 @@
     <title>Personal Profile - My Portfolio</title>
     <!-- Professional Modern Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <!-- Modularized External CSS -->
+    <!-- Global External CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
-    <style>
-        /* 2-Column Grid Layout for Profile Page */
-        .profile-grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        /* Card Widget for Right Column */
-        .contact-card-widget {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .contact-card-widget h3 {
-            margin-top: 0;
-            margin-bottom: 1rem;
-            color: var(--primary-green);
-            font-size: 1.1rem;
-            border-bottom: 1px solid var(--border-glass);
-            padding-bottom: 0.5rem;
-        }
-
-        .contact-info-list p {
-            margin: 0.8rem 0;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-
-        .contact-info-list strong {
-            color: #ffffff;
-        }
-
-        /* Custom Back Button Styling for Glassmorphism and Hover state */
-        .custom-back-btn {
-            background: rgba(6, 78, 59, 0.45);
-            color: var(--text-main);
-            border: 1px solid var(--border-glass);
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-        }
-        .custom-back-btn:hover {
-            background: var(--primary-green);
-            color: #022c22;
-            border-color: var(--primary-green);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        /* Responsive Behavior for mobile screen */
-        @media (max-width: 768px) {
-            .profile-grid-container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <!-- Area / Page Specific CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='area.css') }}">
 </head>
 <body>
 
@@ -82,7 +19,7 @@
                  alt="Profile" 
                  class="nav-profile-img"
                  onclick="openImageModal()">
-            <a href="{{ url_for('main.index') }}" style="text-decoration: none;">
+            <a href="{{ url_for('main.index') }}">
                 <span class="logo">MyPortfolio</span>
             </a>
         </div>
@@ -96,9 +33,9 @@
     </nav>
 
     <div class="main-container">
-        <!-- Header flex for Title at Back button to Homepage -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h1 style="margin: 0; font-size: 1.5rem;">Personal Profile</h1>
+        <!-- Header flex for Title and Back button to Homepage -->
+        <div class="profile-header-flex">
+            <h1 class="profile-main-title">Personal Profile</h1>
             <a href="{{ url_for('main.index') }}" class="custom-back-btn">
                 &#8592; Back to Home
             </a>
@@ -108,18 +45,18 @@
             
             <!-- LEFT COLUMN: Personal Info, Skills, & Hobbies -->
             <div class="profile-left-col">
-                <h2 style="margin: 0; font-size: 1.4rem; color: #ffffff;">Daniel Abrenica</h2>
-                <p style="color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 1.2rem; font-size: 0.95rem;">
+                <h2 class="profile-name-title">Daniel Abrenica</h2>
+                <p class="profile-subtitle">
                     Bachelor of Science in Computer Engineering - 2nd Year Student
                 </p>
 
-                <p style="margin-bottom: 0.5rem;"><strong>Title:</strong> Aspiring Software Developer and Web Developer</p>
-                <p style="margin-top: 0; color: var(--text-muted); font-size: 0.92rem; line-height: 1.5;">
+                <p><strong>Title:</strong> Aspiring Software Developer and Web Developer</p>
+                <p class="profile-text-muted">
                     I am a passionate student who loves web development and data structures.
                 </p>
 
-                <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.1rem; color: #ffffff;">Skills & Technologies</h3>
-                <ul style="margin-top: 0; padding-left: 1.2rem; color: var(--text-muted);">
+                <h3 class="profile-section-heading">Skills & Technologies</h3>
+                <ul class="profile-list-styled">
                     <li>Python</li>
                     <li>Flask</li>
                     <li>HTML/CSS</li>
@@ -127,8 +64,8 @@
                     <li>SQL</li>
                 </ul>
 
-                <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.1rem; color: #ffffff;">Hobbies & Interests</h3>
-                <ul style="margin-top: 0; padding-left: 1.2rem; color: var(--text-muted);">
+                <h3 class="profile-section-heading">Hobbies & Interests</h3>
+                <ul class="profile-list-styled">
                     <li>Playing ML, volleyball and more</li>
                     <li>Eating</li>
                     <li>Watching movies/series</li>
@@ -142,16 +79,16 @@
                 <div class="contact-card-widget">
                     <h3>Contact Information</h3>
                     <div class="contact-info-list">
-                        <p><strong>Location:</strong><br><span style="color: var(--text-muted);">Antipolo City, Rizal, Philippines</span></p>
-                        <p><strong>Cellphone No.:</strong><br><span style="color: var(--text-muted);">0960 504 5065</span></p>
-                        <p><strong>University:</strong><br><span style="color: var(--text-muted);">Polytechnic University of the Philippines (PUP)<br>(2025 - Present)</span></p>
-                        <p><strong>Email:</strong><br><a href="mailto:rodelioabrenica997@gmail.com" style="color: #a7f3d0; text-decoration: none;">rodelioabrenica997@gmail.com</a></p>
+                        <p><strong>Location:</strong><br><span class="profile-text-muted">Antipolo City, Rizal, Philippines</span></p>
+                        <p><strong>Cellphone No.:</strong><br><span class="profile-text-muted">0960 504 5065</span></p>
+                        <p><strong>University:</strong><br><span class="profile-text-muted">Polytechnic University of the Philippines (PUP)<br>(2025 - Present)</span></p>
+                        <p><strong>Email:</strong><br><a href="mailto:rodelioabrenica997@gmail.com" style="color: #a7f3d0; text-decoration: none;">danielabrenica997@gmail.com</a></p>
                     </div>
 
                     <h3 style="margin-top: 1.5rem;">Creative Outlets</h3>
                     <div class="contact-info-list">
-                        <p><strong>Musical Pursuits:</strong><br><span style="color: var(--text-muted);">Drummer (6 years of experience)</span></p>
-                        <p><strong>Visual Arts:</strong><br><span style="color: var(--text-muted);">Drawing Stickman & Character Coloring</span></p>
+                        <p><strong>Musical Pursuits:</strong><br><span class="profile-text-muted">Drummer (6 years of experience)</span></p>
+                        <p><strong>Visual Arts:</strong><br><span class="profile-text-muted">Drawing Stickman & Character Coloring</span></p>
                     </div>
                 </div>
             </div>
@@ -164,8 +101,8 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
-            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
-            <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
+            <h3>Daniel Abrenica</h3>
+            <p>Student / Aspiring Developer</p>
         </div>
     </div>
 

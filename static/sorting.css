@@ -1,4 +1,57 @@
-/* === GENERAL VISUALIZER CARD & BARS CONTAINER === */
+/* ==========================================================
+   MASTER SORTING ALGORITHMS SPECIFIC STYLES
+   ========================================================== */
+
+/* Wide Container Modifier */
+.visualizer-container-wide {
+    max-width: 950px;
+}
+
+/* Header Flex & Badge Layouts */
+.sort-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.sort-badge-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sort-badge-category {
+    font-size: 0.75rem;
+    color: var(--primary-green);
+    font-weight: 700;
+}
+
+.sort-badge-complexity {
+    background: rgba(16, 185, 129, 0.15);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--primary-green);
+    font-weight: 600;
+}
+
+.sort-main-title {
+    margin: 2px 0;
+    font-size: 1.6rem;
+}
+
+/* Status Bar Above Bars Container */
+.sort-status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+/* Main Visualizer Card */
 .visualizer-card { 
     background: rgba(2, 38, 30, 0.8); 
     border: 1px solid var(--border-glass); 
@@ -8,6 +61,7 @@
     margin-top: 1.5rem; 
 }
 
+/* Bars Container */
 .bars-container { 
     display: flex; 
     align-items: flex-end; 
@@ -22,6 +76,7 @@
     overflow: hidden; 
 }
 
+/* Individual Bar Styles */
 .sort-bar { 
     width: 65px; 
     margin: 0 8px; 
@@ -40,27 +95,61 @@
 }
 
 
-/* === COMMON & BUBBLE SORT STATES === */
-.sort-bar.comparing { background: #f59e0b !important; } /* For Bubble, Selection, Insertion, and Quick Sort */
-.sort-bar.sorted { background: #10b981 !important; }    /* For overall sorting */
-.sort-bar.swapping { background: #ef4444 !important; z-index: 10; } /* Bubble / General Swap */
+/* ==========================================
+   1. BUBBLE SORT STYLES & STATES
+   ========================================== */
+.sort-bar.unsorted { background: #0ea5e9; }
+.sort-bar.comparing { background: #f59e0b !important; } /* Orange for Comparison */
+.sort-bar.sorted { background: #10b981 !important; }    /* Green for Sorted Elements */
+.sort-bar.swapping { background: #ef4444 !important; z-index: 10; } /* Red for Swapping */
 
 
-/* === SELECTION SORT SPECIFIC STATES === */
+/* ==========================================
+   2. SELECTION SORT STYLES & STATES
+   ========================================== */
 .sort-bar.min-val { background: #a855f7 !important; } /* Purple for Minimum Value */
 
 
-/* === INSERTION SORT SPECIFIC STATES === */
-.sort-bar.extracted { background: #e11d48 !important; transform: translateY(90px) !important; z-index: 20; } /* for bar */
+/* ==========================================
+   3. INSERTION SORT STYLES & STATES
+   ========================================== */
+.sort-bar.extracted { 
+    background: #e11d48 !important; 
+    transform: translateY(90px) !important; 
+    z-index: 20; 
+} /* Rose/Red for Extracted Key Element (X) */
+
+.legend-extracted { background: #e11d48; }
 
 
-/* === QUICK SORT SPECIFIC STATES === */
-.sort-bar.pivot { background: #eab308 !important; }         /* Color yellow for Pivot */
-.sort-bar.partitioning { background: #f43f5e !important; } /* For Partition elements */
+/* ==========================================
+   4. MERGE SORT STYLES & STATES
+   ========================================== */
+.sort-bar.merging { 
+    background: #0284c7 !important; 
+    z-index: 15; 
+} /* Blue tone for Merge Sort active partitions */
+
+.legend-merging { background: #0284c7; }
 
 
-/* === CONTROLS, INPUTS, & PRESETS STYLES === */
-.preset-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+/* ==========================================
+   5. QUICK SORT STYLES & STATES
+   ========================================== */
+.sort-bar.pivot { background: #eab308 !important; }         /* Yellow for Pivot */
+.sort-bar.partitioning { background: #f43f5e !important; } /* Pink/Red for Partition */
+
+
+/* ==========================================
+   6. CONTROLS, INPUTS, & PRESETS
+   ========================================== */
+.preset-row { 
+    display: flex; 
+    gap: 8px; 
+    flex-wrap: wrap; 
+    margin-bottom: 1rem; 
+}
+
 .preset-btn { 
     background: rgba(16, 185, 129, 0.2); 
     border: 1px solid var(--border-glass); 
@@ -70,10 +159,20 @@
     cursor: pointer; 
     font-size: 0.85rem; 
     font-weight: 500; 
+    transition: background 0.2s ease;
 }
-.preset-btn:hover { background: rgba(16, 185, 129, 0.4); }
 
-.custom-row { display: flex; gap: 10px; margin-bottom: 1.5rem; align-items: center; }
+.preset-btn:hover { 
+    background: rgba(16, 185, 129, 0.4); 
+}
+
+.custom-row { 
+    display: flex; 
+    gap: 10px; 
+    margin-bottom: 1.5rem; 
+    align-items: center; 
+}
+
 .custom-input { 
     flex: 1; 
     background: rgba(1, 22, 17, 0.8); 
@@ -85,15 +184,55 @@
     outline: none; 
 }
 
-.controls-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center; margin-top: 1.5rem; }
-.legend-row { display: flex; justify-content: center; gap: 15px; margin-top: 1rem; font-size: 0.75rem; color: var(--text-muted); flex-wrap: wrap; }
-.legend-item { display: flex; align-items: center; gap: 5px; }
-.legend-box { width: 12px; height: 12px; border-radius: 3px; }
+.custom-input:focus {
+    border-color: var(--primary-green);
+}
+
+.btn-go {
+    background: var(--primary-green); 
+    padding: 8px 16px;
+}
+
+.controls-row { 
+    display: flex; 
+    gap: 10px; 
+    flex-wrap: wrap; 
+    align-items: center; 
+    justify-content: center; 
+    margin-top: 1.5rem; 
+}
+
+.btn-control-sec {
+    background: rgba(255, 255, 255, 0.1); 
+    color: #ffffff;
+}
+
+.btn-control-main {
+    background: var(--primary-green);
+}
+
+.btn-control-reset {
+    background: rgba(239, 68, 68, 0.2); 
+    color: #fca5a5; 
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
 
 
-/* === VISUALGO PANEL, EXPLANATIONS, & CODE BOXES === */
-.visualgo-panel { display: grid; grid-template-columns: 1fr 1.2fr; gap: 1rem; margin-top: 1.5rem; }
-@media(max-width: 768px) { .visualgo-panel { grid-template-columns: 1fr; } }
+/* ==========================================
+   7. VISUALGO PANEL, CODE BOXES & FOOTER
+   ========================================== */
+.visualgo-panel { 
+    display: grid; 
+    grid-template-columns: 1fr 1.2fr; 
+    gap: 1rem; 
+    margin-top: 1.5rem; 
+}
+
+@media(max-width: 768px) { 
+    .visualgo-panel { 
+        grid-template-columns: 1fr; 
+    } 
+}
 
 .explanation-box { 
     background: rgba(1, 22, 17, 0.85); 
@@ -116,8 +255,89 @@
     font-size: 0.8rem; 
     color: #a7f3d0; 
     line-height: 1.5; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); 
 }
 
-.code-line { padding: 3px 6px; border-radius: 4px; white-space: pre; }
-.code-line.active { background: #059669; color: #ffffff; font-weight: bold; }
+.code-line { 
+    padding: 3px 6px; 
+    border-radius: 4px; 
+    white-space: pre; 
+}
+
+.code-line.active { 
+    background: #059669; 
+    color: #ffffff; 
+    font-weight: bold; 
+}
+
+/* Footer Section Inside Visualizer (Speed & Legend) */
+.sort-footer-flex {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: 1.5rem; 
+    flex-wrap: wrap; 
+    gap: 10px;
+}
+
+.speed-control-group {
+    display: flex; 
+    align-items: center; 
+    gap: 6px;
+}
+
+.speed-label {
+    font-size: 0.8rem; 
+    color: var(--text-muted); 
+    font-weight: 600;
+}
+
+.speed-select {
+    background: rgba(2, 44, 34, 0.8); 
+    color: #ffffff; 
+    border: 1px solid var(--border-glass); 
+    padding: 6px 10px; 
+    border-radius: 6px; 
+    outline: none; 
+    cursor: pointer; 
+    font-size: 0.85rem;
+}
+
+.legend-row { 
+    display: flex; 
+    justify-content: center; 
+    gap: 15px; 
+    font-size: 0.75rem; 
+    color: var(--text-muted); 
+    flex-wrap: wrap; 
+}
+
+.legend-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+}
+
+.legend-box { 
+    width: 12px; 
+    height: 12px; 
+    border-radius: 3px; 
+}
+
+.legend-comparing { background: #f59e0b; }
+.legend-swapping { background: #ef4444; }
+.legend-sorted { background: #10b981; }
+.legend-unsorted { background: #0ea5e9; }
+
+/* Profile Modal Typography Styles */
+.modal-profile-name {
+    margin-top: 1rem; 
+    margin-bottom: 0.2rem; 
+    color: #ffffff;
+}
+
+.modal-profile-title {
+    margin: 0; 
+    font-size: 0.85rem; 
+    color: var(--text-muted);
+}

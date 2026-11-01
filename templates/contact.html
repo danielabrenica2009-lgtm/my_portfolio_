@@ -6,55 +6,10 @@
     <title>Contact Information - My Portfolio</title>
     <!-- Professional Modern Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <!-- Modularized External CSS -->
+    <!-- Global External CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
-    <style>
-        /* Custom Back Button Styling the same in other pages */
-        .custom-back-btn {
-            background: rgba(6, 78, 59, 0.45);
-            color: var(--text-main);
-            border: 1px solid var(--border-glass);
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-        }
-        .custom-back-btn:hover {
-            background: var(--primary-green);
-            color: #022c22;
-            border-color: var(--primary-green);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .contact-detail-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
-
-        /* Styling for green SVG icons */
-        .contact-icon {
-            width: 20px;
-            height: 20px;
-            fill: #10b981;
-            flex-shrink: 0;
-        }
-
-        .contact-detail-item a {
-            color: #a7f3d0;
-            text-decoration: none;
-        }
-
-        .contact-detail-item a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <!-- Area / Page Specific CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='area.css') }}">
 </head>
 <body>
 
@@ -64,7 +19,7 @@
                  alt="Profile" 
                  class="nav-profile-img"
                  onclick="openImageModal()">
-            <a href="{{ url_for('main.index') }}" style="text-decoration: none;">
+            <a href="{{ url_for('main.index') }}">
                 <span class="logo">MyPortfolio</span>
             </a>
         </div>
@@ -78,16 +33,16 @@
     </nav>
 
     <div class="main-container">
-        <!-- Header flex for Title at Back button to Homepage -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h1 style="margin: 0; font-size: 1.5rem;">Contact Information</h1>
+        <!-- Header flex for Title and Back button to Homepage -->
+        <div class="works-header-flex">
+            <h1 class="works-title">Contact Information</h1>
             <a href="{{ url_for('main.index') }}" class="custom-back-btn">
-                &#8592; Back to Home
+                &#8592; Back
             </a>
         </div>
 
-        <div class="contact-info-section" style="margin-bottom: 2rem;">
-            <!-- Email Icon -->
+        <div class="contact-info-section">
+            <!-- Email Icon Item -->
             <div class="contact-detail-item">
                 <svg class="contact-icon" viewBox="0 0 24 24">
                     <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
@@ -96,7 +51,7 @@
                 <a href="mailto:danielabrenica2009@gmail.com">danielabrenica2009@gmail.com</a>
             </div>
 
-            <!-- Phone Icon -->
+            <!-- Phone Icon Item -->
             <div class="contact-detail-item">
                 <svg class="contact-icon" viewBox="0 0 24 24">
                     <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
@@ -105,7 +60,7 @@
                 <span style="color: var(--text-muted);">+63 960 504 5065</span>
             </div>
 
-            <!-- Location Icon -->
+            <!-- Location Icon Item -->
             <div class="contact-detail-item">
                 <svg class="contact-icon" viewBox="0 0 24 24">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
@@ -114,7 +69,7 @@
                 <span style="color: var(--text-muted);">Antipolo City Rizal, Philippines</span>
             </div>
 
-            <!-- GitHub Icon (Updates by correct URL) -->
+            <!-- GitHub Icon Item -->
             <div class="contact-detail-item">
                 <svg class="contact-icon" viewBox="0 0 24 24">
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
@@ -123,7 +78,7 @@
                 <a href="https://github.com/danielabrenica2009-lgtm" target="_blank">https://github.com/danielabrenica2009-lgtm</a>
             </div>
 
-            <!-- LinkedIn Icon -->
+            <!-- LinkedIn Icon Item -->
             <div class="contact-detail-item">
                 <svg class="contact-icon" viewBox="0 0 24 24">
                     <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.72a1.47 1.47 0 1 0 0 2.94 1.47 1.47 0 0 0 0-2.94z"/>
@@ -133,38 +88,37 @@
             </div>
         </div>
 
-        <hr style="border: none; border-top: 1px solid var(--border-glass); margin: 2rem 0;">
+        <hr class="contact-divider">
 
-        <h2 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Send Me a Message</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
-            If you cannot reach me through my social media accounts or email, you can contact me using the form below.
-        </p>
+        <!-- Message Form Section -->
+        <div class="message-form-section">
+            <h2>Send Me a Message</h2>
+            <p>If you cannot reach me through my social media accounts or email, you can contact me using the form below.</p>
 
-        <form action="{{ url_for('main.contact') }}" method="POST">
-            <div class="form-group" style="margin-bottom: 1.2rem;">
-                <label for="fullName" style="display: block; margin-bottom: 0.4rem; font-weight: 500;">Full Name</label>
-                <!-- Changes the name="fullName" into name="name" to read by the Flask -->
-                <input type="text" id="fullName" name="name" placeholder="Enter your name" required style="width: 100%; padding: 0.8rem; background: rgba(2, 44, 34, 0.6); border: 1px solid var(--border-glass); border-radius: 6px; color: white;">
-            </div>
+            <form action="{{ url_for('main.contact') }}" method="POST">
+                <div class="contact-form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="name" placeholder="Enter your name" required>
+                </div>
 
-            <div class="form-group" style="margin-bottom: 1.2rem;">
-                <label for="email" style="display: block; margin-bottom: 0.4rem; font-weight: 500;">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required style="width: 100%; padding: 0.8rem; background: rgba(2, 44, 34, 0.6); border: 1px solid var(--border-glass); border-radius: 6px; color: white;">
-            </div>
+                <div class="contact-form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
 
-            <!-- Idinagdag natin ang Subject input field para hindi na mag-None -->
-            <div class="form-group" style="margin-bottom: 1.2rem;">
-                <label for="subject" style="display: block; margin-bottom: 0.4rem; font-weight: 500;">Subject</label>
-                <input type="text" id="subject" name="subject" placeholder="Enter subject" required style="width: 100%; padding: 0.8rem; background: rgba(2, 44, 34, 0.6); border: 1px solid var(--border-glass); border-radius: 6px; color: white;">
-            </div>
+                <div class="contact-form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="Enter the subject" required>
+                </div>
 
-            <div class="form-group" style="margin-bottom: 1.5rem;">
-                <label for="message" style="display: block; margin-bottom: 0.4rem; font-weight: 500;">Message</label>
-                <textarea id="message" name="message" rows="4" placeholder="Enter your message" required style="width: 100%; padding: 0.8rem; background: rgba(2, 44, 34, 0.6); border: 1px solid var(--border-glass); border-radius: 6px; color: white; resize: vertical;"></textarea>
-            </div>
+                <div class="contact-form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Write your message here..." required></textarea>
+                </div>
 
-            <button type="submit" class="btn" style="background-color: var(--primary-green); color: #022c22; padding: 0.8rem 1.5rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer;">Send Message</button>
-        </form>
+                <button type="submit" class="send-btn">Send Message</button>
+            </form>
+        </div>
     </div>
 
     <!-- PROFILE IMAGE POPUP MODAL -->
@@ -172,8 +126,8 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
-            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
-            <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
+            <h3>Daniel Abrenica</h3>
+            <p>Student / Aspiring Developer</p>
         </div>
     </div>
 

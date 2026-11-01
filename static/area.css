@@ -46,6 +46,230 @@
 }
 
 
+/* === PROFILE PAGE NEW LAYOUT & WIDGET STYLES === */
+.profile-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .profile-grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contact-card-widget {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.contact-card-widget h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--primary-green);
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 0.5rem;
+}
+
+.contact-info-list p {
+    margin: 0.8rem 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.contact-info-list strong {
+    color: #ffffff;
+}
+
+.profile-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.profile-main-title {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.profile-name-title {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #ffffff;
+}
+
+.profile-subtitle {
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.95rem;
+}
+
+.profile-section-heading {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #ffffff;
+}
+
+.profile-text-muted {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.profile-list-styled {
+    margin-top: 0;
+    padding-left: 1.2rem;
+    color: var(--text-muted);
+}
+
+/* Custom Back Button Styling to match other buttons */
+.custom-back-btn {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--text-muted);
+    border: 1px solid var(--border-glass);
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.custom-back-btn:hover {
+    background: var(--primary-green);
+    color: #022c22;
+    border-color: var(--primary-green);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+
+/* ==========================================================
+   CONTACT PAGE STYLES
+   ========================================================== */
+.contact-info-section {
+    margin-bottom: 2rem;
+}
+
+.contact-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+/* Styling for green SVG contact icons */
+.contact-icon {
+    width: 20px;
+    height: 20px;
+    fill: #10b981;
+    flex-shrink: 0;
+}
+
+.contact-detail-item a {
+    color: #a7f3d0;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.contact-detail-item a:hover {
+    text-decoration: underline;
+    color: #ffffff;
+}
+
+.contact-divider {
+    border: none;
+    border-top: 1px solid var(--border-glass);
+    margin: 2rem 0;
+}
+
+/* Section heading styled back to original h2 appearance */
+.message-form-section h2 {
+    color: #ffffff;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.message-form-section p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.contact-form-group {
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.contact-form-group label {
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.contact-form-group input,
+.contact-form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(2, 44, 34, 0.6);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.contact-form-group input:focus,
+.contact-form-group textarea:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+}
+
+.contact-form-group textarea {
+    resize: vertical;
+}
+
+/* Full width send button matching original design */
+.send-btn {
+    display: inline-block;
+    background: var(--primary-green);
+    color: #022c22;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    width: 100%;
+    text-align: center;
+}
+
+.send-btn:hover {
+    background: #34d399;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+
 /* === HOME HERO SECTION STYLES === */
 .home-hero-section {
     text-align: center;
@@ -172,4 +396,63 @@
     background: rgba(16, 185, 129, 0.2);
     color: var(--text-muted);
     border: 1px solid var(--border-glass);
+}
+
+
+/* ==========================================================
+   WORKS PAGE STYLES
+   ========================================================== */
+.works-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 1.5rem;
+}
+
+.works-list li {
+    margin-bottom: 0.8rem;
+}
+
+.works-list li a {
+    color: #6ee7b7;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.works-list li a::before {
+    content: "▹";
+    margin-right: 10px;
+    color: #10b981;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.works-list li a:hover {
+    color: #ffffff;
+    transform: translateX(8px);
+    text-shadow: 0 0 8px rgba(52, 211, 153, 0.8), 
+                 0 0 16px rgba(16, 185, 129, 0.6),
+                 0 0 24px rgba(16, 185, 129, 0.4);
+}
+
+.works-list li a:hover::before {
+    color: #34d399;
+    transform: scale(1.3);
+}
+
+.works-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.works-title {
+    margin: 0;
+    font-size: 1.5rem;
 }

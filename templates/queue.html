@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Queue Operations & Visualization</title>
+    <title>Queue Operations & Visualization - My Portfolio</title>
+    <!-- Professional Modern Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <!-- Global and Component Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stack.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='area.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='queue_dequeue.css') }}">
     <style>
         /* Custom Back Button Styling for Glassmorphism & Hover state */
         .custom-back-btn {
@@ -32,8 +35,10 @@
 </head>
 <body>
 
+    <!-- Sticky Navigation Bar -->
     <nav>
         <div class="nav-brand">
+            <!-- Profile image with click event to open the profile modal -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
             <a href="{{ url_for('main.index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
         </div>
@@ -45,49 +50,54 @@
         </ul>
     </nav>
 
+    <!-- Main Content Container -->
     <div class="main-container">
-        <!-- Made by (row) using an inline !important styles -->
-        <div class="calc-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; gap: 1.5rem;">
-            <h1 class="calc-title" style="font-size: 1.4rem; margin: 0;">Queue Operations & Visualization</h1>
-            <a href="{{ url_for('main.works') }}" class="custom-back-btn" style="margin-left: auto;">&#8592; Back</a>
+        <!-- Header Section with Title and Back Button -->
+        <div class="calc-header-flex">
+            <h1 class="calc-title">Queue Operations & Visualization</h1>
+            <a href="{{ url_for('main.works') }}" class="custom-back-btn">&#8592; Back</a>
         </div>
 
+        <!-- Notification Banner for Backend Messages -->
         {% if message %}
-            <div class="ll-notification" style="margin-bottom: 1.25rem;">{{ message }}</div>
+            <div class="ll-notification">{{ message }}</div>
         {% endif %}
 
+        <!-- Queue Form for Handling Actions -->
         <form action="{{ url_for('queue_dequeue.queue_view') }}" method="POST">
-            <div class="ll-input-grid" style="justify-content: center;">
-                <div class="ll-input-group" style="max-width: 450px;">
+            <div class="ll-input-grid">
+                <div class="ll-input-group">
                     <label for="value">Value:</label>
                     <input type="text" id="value" name="value" placeholder="Enter value (e.g. 42 or 'A')" autocomplete="off">
                 </div>
             </div>
 
-            <!-- Made by (row) using an inline !important styles -->
+            <!-- Action Buttons for Queue Manipulation -->
             <div class="ll-actions-flex">
-                <button type="submit" name="action" value="enqueue" class="btn btn-append" style="background-color: #059669; color: #ffffff;">Enqueue</button>
-                <button type="submit" name="action" value="dequeue" class="btn btn-delete" style="background-color: #ef4444; color: #ffffff;">Dequeue</button>
-                <button type="submit" name="action" value="peek" class="btn btn-search" style="background-color: #d97706; color: #ffffff;">Peek (Front)</button>
+                <button type="submit" name="action" value="enqueue" class="btn btn-enqueue">Enqueue</button>
+                <button type="submit" name="action" value="dequeue" id="dequeueBtn" class="btn btn-dequeue">Dequeue</button>
+                <button type="submit" name="action" value="peek" class="btn btn-peek">Peek (Front)</button>
             </div>
         </form>
 
-        <h3 class="ll-heading" style="margin-top: 25px;">Queue Visualization (Total Items: {{ items|length }})</h3>
+        <!-- Visualization Section Header -->
+        <h3 class="ll-heading">Queue Visualization (Total Items: {{ items|length }})</h3>
         
-        <!-- Made by (row) using an inline !important styles -->
-        <div class="ll-visual-container" style="display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; gap: 12px !important; padding: 20px !important;">
+        <!-- Queue Visual Items Container -->
+        <div class="ll-visual-container">
             {% if items %}
-                <span class="arrow" style="margin-right: 5px; white-space: nowrap;">&larr; FRONT</span>
+                <span class="qd-arrow">&larr; FRONT</span>
                 {% for item in items %}
-                    <div class="ll-node-box ll-node-box-custom" style="margin: 0 !important; min-width: 50px; text-align: center;">{{ item }}</div>
+                    <div class="ll-node-box">{{ item }}</div>
                 {% endfor %}
-                <span class="arrow" style="margin-left: 5px; white-space: nowrap;">REAR &rarr;</span>
+                <span class="qd-arrow">REAR &rarr;</span>
             {% else %}
                 <p style="color: var(--text-muted); font-style: italic; text-align: center; width: 100%; margin-top: 20px;">The Queue is currently empty. Enqueue some values above!</p>
             {% endif %}
         </div>
     </div>
 
+    <!-- Profile Image Popup Modal -->
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
@@ -97,11 +107,30 @@
         </div>
     </div>
 
+    <!-- Footer Section -->
     <footer>
         &copy; 2026 Daniel Abrenica | My Personal Portfolio 
     </footer>
 
+    <!-- JavaScript for Modal Control and Input Validation on Dequeue -->
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dequeueBtn = document.getElementById('dequeueBtn');
+            const inputField = document.getElementById('value');
+
+            if (dequeueBtn) {
+                dequeueBtn.addEventListener('click', function(e) {
+                    const val = inputField.value.trim();
+                    // Prevent form submission if text exists in the input field without enqueuing
+                    if (val !== "") {
+                        e.preventDefault(); 
+                        alert(`Please clear or enqueue first "${val}" before performing dequeue.`);
+                        inputField.focus();
+                    }
+                });
+            }
+        });
+
         function openImageModal() { document.getElementById('imageModal').style.display = 'flex'; }
         function closeImageModalDirect() { document.getElementById('imageModal').style.display = 'none'; }
         function closeImageModal(event) {

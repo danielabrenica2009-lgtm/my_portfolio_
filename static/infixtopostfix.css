@@ -1,0 +1,90 @@
+/* ==========================================================
+   INFIX TO POSTFIX CONVERTER SPECIFIC STYLES
+   ========================================================== */
+
+/* Converter Container Layout */
+.converter-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Suggestions Dropdown (Autocomplete para sa Recent Searches) */
+.suggestions-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #334155;
+    border: 1px solid var(--border-glass);
+    border-radius: 6px;
+    margin-top: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    display: none;
+}
+
+.suggestion-item {
+    padding: 10px 12px;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.suggestion-item:hover {
+    background-color: #475569;
+}
+
+/* Converter Output Box */
+.converter-output-box {
+    background: rgba(2, 44, 34, 0.9);
+    border-left: 4px solid var(--primary-green);
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+    color: #d1fae5;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.converter-output-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-bottom: 2px;
+}
+
+/* Steps Box & Shunting Yard Trace Styles */
+.steps-wrapper {
+    margin-top: 20px;
+}
+
+.steps-heading {
+    color: var(--primary-green);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.steps-box {
+    background: rgba(1, 22, 17, 0.8);
+    border: 1px solid var(--border-glass);
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #a7f3d0;
+}
+
+.steps-box ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.steps-box li {
+    margin-bottom: 6px;
+}

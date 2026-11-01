@@ -3,45 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Converter</title>
+    <title>Text Converter - My Portfolio</title>
     <!-- Professional Modern Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <!-- Modularized External CSS -->
+    <!-- Global External CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
+    <!-- Area / Page Specific CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='area.css') }}">
-    <style>
-        /* Style for Back button that has hover effect */
-        .custom-back-btn {
-            background: rgba(6, 78, 59, 0.45);
-            color: var(--text-main);
-            border: 1px solid var(--border-glass);
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-        }
-        .custom-back-btn:hover {
-            background: var(--primary-green);
-            color: #022c22;
-            border-color: var(--primary-green);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-    </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-brand">
-            <!-- Fixes the path to images/ for profile picture -->
+            <!-- Profile image with click event to open the modal -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" 
                  alt="Profile" 
                  class="nav-profile-img"
                  onclick="openImageModal()">
-            <a href="{{ url_for('main.index') }}" style="text-decoration: none;">
+            <a href="{{ url_for('main.index') }}">
                 <span class="logo">MyPortfolio</span>
             </a>
         </div>
@@ -55,14 +34,16 @@
     </nav>
 
     <div class="main-container">
-        <div class="uppercase-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-            <h1 class="uppercase-title" style="margin: 0;">Text to Uppercase</h1>
-            <!-- For Back button and correct button style -->
-            <a href="{{ url_for('main.works') }}" class="custom-back-btn" style="margin-left: auto;">
+        <!-- Header flex container for title and back button -->
+        <div class="uppercase-header-flex">
+            <h1 class="uppercase-title">Text to Uppercase</h1>
+            <!-- Back button linked to works page -->
+            <a href="{{ url_for('main.works') }}" class="custom-back-btn">
                 &#8592; Back 
             </a>
         </div>
 
+        <!-- Uppercase conversion form -->
         <form action="{{ url_for('area.touppercase') }}" method="POST">
             <div class="form-group">
                 <label for="inputString">Text Input:</label>
@@ -71,6 +52,7 @@
             <button type="submit" class="btn">Convert</button>
         </form>
 
+        <!-- Result display section -->
         {% if result %}
             <div class="output-box">
                 <h3>Result:</h3>
@@ -84,10 +66,9 @@
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
-            <!-- Fixes the path inside the modal -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
-            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
-            <p style="margin: 0; font-size: 0.85rem; color: #a7f3d0;">Student / Aspiring Developer</p>
+            <h3>Daniel Abrenica</h3>
+            <p>Student / Aspiring Developer</p>
         </div>
     </div>
 

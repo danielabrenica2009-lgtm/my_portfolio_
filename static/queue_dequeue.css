@@ -1,14 +1,146 @@
-/* Queue / Deque specific alignment helpers (Uses common classes from the stack/linkedlist) */
-.queue-container {
+/* ==========================================================
+   QUEUE & DEQUE SPECIFIC STYLES
+   ========================================================== */
+
+/* Notification Banner */
+.ll-notification {
+    background-color: rgba(16, 185, 129, 0.15);
+    border-left: 4px solid #10b981;
+    color: #d1fae5;
+    padding: 10px 15px;
+    margin-bottom: 1.25rem;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* Input Grid & Groups */
+.ll-input-grid {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.ll-input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 450px;
+    width: 100%;
+    position: relative;
+}
+
+.ll-input-group label {
+    font-weight: 500;
+    color: var(--text-main);
+    white-space: nowrap;
+}
+
+.ll-input-group input {
+    flex: 1;
+    padding: 10px 12px;
+    background: rgba(2, 44, 34, 0.6);
+    border: 1px solid var(--border-glass);
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.ll-input-group input:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+}
+
+/* Action Buttons Flex Layout */
+.ll-actions-flex {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+/* Custom Button Variant Styles */
+.btn-enqueue, .btn-append {
+    background-color: #059669;
+    color: #ffffff;
+    padding: 10px 25px;
+    font-weight: 600;
+}
+
+.btn-dequeue, .btn-delete {
+    background-color: #ef4444;
+    color: #ffffff;
+    padding: 10px 25px;
+    font-weight: 600;
+}
+
+.btn-peek, .btn-search {
+    background-color: #d97706;
+    color: #ffffff;
+    padding: 10px 25px;
+    font-weight: 600;
+}
+
+.btn-prepend {
+    background-color: #7c3aed;
+    color: #ffffff;
+    padding: 10px 25px;
+    font-weight: 600;
+}
+
+.btn-remove-front {
+    background-color: #db2777;
+    color: #ffffff;
+    padding: 10px 25px;
+    font-weight: 600;
+}
+
+/* Visualization Container & Horizontal Row Layout for Queue/Deque */
+.ll-visual-container, .queue-container {
     display: flex;
     flex-direction: row;
-    gap: 12px;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
     margin-top: 15px;
     padding: 20px;
     background: rgba(1, 22, 17, 0.6);
     border-radius: 12px;
     border: 1px solid var(--border-glass);
     overflow-x: auto;
+    max-height: 350px;
+}
+
+/* Node Box Styling */
+.ll-node-box, .ll-node-box-custom {
+    background-color: #059669;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(5, 150, 105, 0.4);
+    text-align: center;
+    min-width: 60px;
+    margin: 0;
+}
+
+/* Queue/Deque Labels & Arrows */
+.ll-heading {
+    color: #34d399;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.qd-arrow {
+    color: #34d399;
+    font-weight: bold;
+    font-size: 1rem;
+    white-space: nowrap;
+    margin: 0 5px;
 }

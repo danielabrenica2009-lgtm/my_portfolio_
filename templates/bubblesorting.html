@@ -4,37 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bubble Sort - My Portfolio</title>
+    <!-- Professional Modern Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <!-- Fix the CSS file path -->
+    <!-- Global and Component External Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='area.css') }}">
+    <!-- Shared Master CSS for All 5 Sorting Algorithms -->
     <link rel="stylesheet" href="{{ url_for('static', filename='sorting.css') }}">
-    <style>
-        /* Custom Back Button Styling for Glassmorphism and Hover state */
-        .custom-back-btn {
-            background: rgba(6, 78, 59, 0.45);
-            color: var(--text-main);
-            border: 1px solid var(--border-glass);
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-        }
-        .custom-back-btn:hover {
-            background: var(--primary-green);
-            color: #022c22;
-            border-color: var(--primary-green);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-    </style>
 </head>
 <body>
+    <!-- Navigation Bar -->
     <nav>
         <div class="nav-brand">
-            <!-- Fixes the profile image path -->
+            <!-- Profile image with click event to open the modal -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
             <a href="{{ url_for('main.index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
         </div>
@@ -46,19 +28,24 @@
         </ul>
     </nav>
 
-    <div class="main-container" style="max-width: 950px;">
-        <div class="calc-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <!-- Main Visualizer Container -->
+    <div class="main-container visualizer-container-wide">
+        <!-- Header Section -->
+        <div class="calc-header-flex sort-header-flex">
             <div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 0.75rem; color: var(--primary-green); font-weight: 700;">01 / EXCHANGE</span>
-                    <span style="background: rgba(16,185,129,0.15); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; color: var(--primary-green); font-weight: 600;">AVG O(n²)</span>
+                <div class="sort-badge-group">
+                    <span class="sort-badge-category">01 / EXCHANGE</span>
+                    <span class="sort-badge-complexity">AVG O(n²)</span>
                 </div>
-                <h1 style="margin: 2px 0; font-size: 1.6rem;">Bubble Sort Visualization</h1>
+                <h1 class="sort-main-title">Bubble Sort Visualization</h1>
             </div>
+            <!-- Back button pointing to sorting dashboard menu -->
             <a href="{{ url_for('sorting.sorting_dashboard') }}" class="custom-back-btn">&#8592; Back to Sorting</a>
         </div>
 
+        <!-- Main Visualizer Card -->
         <div class="visualizer-card">
+            <!-- Preset Array Selection Buttons -->
             <div class="preset-row">
                 <button class="preset-btn" onclick="setPreset('random')">Random</button>
                 <button class="preset-btn" onclick="setPreset('sorted')">Sorted</button>
@@ -66,27 +53,30 @@
                 <button class="preset-btn" onclick="setPreset('duplicates')">Many Duplicates</button>
             </div>
 
+            <!-- Custom Input Row -->
             <div class="custom-row">
                 <input type="text" id="customInput" class="custom-input" placeholder="e.g. 42, 30, 47, 0, 33, 23">
-                <button class="btn" onclick="applyCustomArray()" style="background: var(--primary-green); padding: 8px 16px;">Go</button>
+                <button class="btn btn-go" onclick="applyCustomArray()">Go</button>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">
+            <!-- Step and Status Counter -->
+            <div class="sort-status-bar">
                 <span id="stepStatusText">Step 0 / 0</span>
                 <span id="sortStatusMsg">Ready to sort</span>
             </div>
 
-            <!-- BARS CONTAINER -->
+            <!-- Dynamic Bars Container -->
             <div class="bars-container" id="bars-container"></div>
 
+            <!-- Execution Control Buttons -->
             <div class="controls-row">
-                <button class="btn" onclick="prevStep()" style="background: rgba(255,255,255,0.1); color: #fff;">◄ Previous</button>
-                <button class="btn" onclick="togglePlay()" id="playBtn" style="background: var(--primary-green);">▶ Play</button>
-                <button class="btn" onclick="nextStep()" style="background: rgba(255,255,255,0.1); color: #fff;">Next ►</button>
-                <button class="btn" onclick="resetSorting()" style="background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4);">↺ Reset</button>
+                <button class="btn btn-control-sec" onclick="prevStep()">◄ Previous</button>
+                <button class="btn btn-control-main" onclick="togglePlay()" id="playBtn">▶ Play</button>
+                <button class="btn btn-control-sec" onclick="nextStep()">Next ►</button>
+                <button class="btn btn-control-reset" onclick="resetSorting()">↺ Reset</button>
             </div>
 
-            <!-- VISUALGO STYLE PANEL -->
+            <!-- Visualgo Panel (Explanation Box and Pseudo-code Execution) -->
             <div class="visualgo-panel">
                 <div class="explanation-box" id="explanationText">
                     Ready to start Bubble Sort. Click Play or Next to begin comparing elements.
@@ -102,10 +92,11 @@
                 </div>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 10px;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Speed:</span>
-                    <select id="speedSelect" onchange="changeSpeed(this.value)" style="background: rgba(2, 44, 34, 0.8); color: #fff; border: 1px solid var(--border-glass); padding: 6px 10px; border-radius: 6px; outline: none; cursor: pointer; font-size: 0.85rem;">
+            <!-- Speed Selector and Color Legends -->
+            <div class="sort-footer-flex">
+                <div class="speed-control-group">
+                    <span class="speed-label">Speed:</span>
+                    <select id="speedSelect" onchange="changeSpeed(this.value)" class="speed-select">
                         <option value="800">Slow</option>
                         <option value="400" selected>Moderate</option>
                         <option value="150">Fast</option>
@@ -113,27 +104,28 @@
                 </div>
 
                 <div class="legend-row">
-                    <div class="legend-item"><div class="legend-box" style="background: #f59e0b;"></div> Comparing</div>
-                    <div class="legend-item"><div class="legend-box" style="background: #ef4444;"></div> Swapping</div>
-                    <div class="legend-item"><div class="legend-box" style="background: #10b981;"></div> Sorted</div>
-                    <div class="legend-item"><div class="legend-box" style="background: #0ea5e9;"></div> Unsorted</div>
+                    <div class="legend-item"><div class="legend-box legend-comparing"></div> Comparing</div>
+                    <div class="legend-item"><div class="legend-box legend-swapping"></div> Swapping</div>
+                    <div class="legend-item"><div class="legend-box legend-sorted"></div> Sorted</div>
+                    <div class="legend-item"><div class="legend-box legend-unsorted"></div> Unsorted</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PROFILE MODAL -->
+    <!-- Profile Image Popup Modal -->
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile Photo">
-            <h3 style="margin-top: 1rem; margin-bottom: 0.2rem; color: #ffffff;">Daniel Abrenica</h3>
-            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Student / Aspiring Developer</p>
+            <h3 class="modal-profile-name">Daniel Abrenica</h3>
+            <p class="modal-profile-title">Student / Aspiring Developer</p>
         </div>
     </div>
 
     <footer>&copy; 2026 Daniel Abrenica | My Personal Portfolio</footer>
 
+    <!-- Bubble Sort Logic Script -->
     <script>
         let originalArray = [42, 30, 47, 0, 33, 23, 35, 22, 41, 30];
         let historySteps = [];
@@ -142,7 +134,10 @@
         let playInterval = null;
         let animSpeed = 400;
 
-        function changeSpeed(val) { animSpeed = parseInt(val); if(isPlaying) { stopPlay(); startPlay(); } }
+        function changeSpeed(val) { 
+            animSpeed = parseInt(val); 
+            if(isPlaying) { stopPlay(); startPlay(); } 
+        }
 
         function initBubbleSort(arr) {
             historySteps = [];
@@ -285,6 +280,8 @@
             const container = document.getElementById('bars-container');
             container.innerHTML = '';
 
+            let maxVal = Math.max(...state.arr, 1);
+
             state.arr.forEach((val, idx) => {
                 const bar = document.createElement('div');
                 bar.className = 'sort-bar unsorted';
@@ -299,7 +296,8 @@
                     bar.style.transform = `translateX(0px)`;
                 }
 
-                bar.style.height = `${val === 0 ? 8 : val}%`;
+                let calculatedHeight = Math.max((val / maxVal) * 75, 12);
+                bar.style.height = `${calculatedHeight}%`;
                 bar.textContent = val;
                 container.appendChild(bar);
             });
@@ -351,14 +349,14 @@
                 
                 let num = parseFloat(trimmed);
                 if (isNaN(num)) {
-                    alert(`Invalid input found: "${trimmed}". Please enter only numbers.`);
+                    alert(`May nakitang invalid na input: "${trimmed}". Mangyaring mga numero lamang ang ilagay.`);
                     return;
                 }
                 parsed.push(Math.round(num));
             }
 
             if(parsed.length < 2) {
-                alert("Enter two or more numbers to visualize sorting.");
+                alert("Maglagay ng dalawa o higit pang mga numero para ma-visualize ang sorting.");
                 return;
             }
 

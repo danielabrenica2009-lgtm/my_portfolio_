@@ -398,3 +398,22 @@ footer {
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
+
+/* ==========================================================
+   9. INDEX & MODAL ADDITIONAL CLEANUP STYLES
+   ========================================================== */
+.nav-brand a {
+    text-decoration: none;
+}
+
+.modal-content h3 {
+    margin-top: 1rem;
+    margin-bottom: 0.2rem;
+    color: #ffffff;
+}
+
+.modal-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #a7f3d0;
+}
