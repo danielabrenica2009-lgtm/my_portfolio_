@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selection Sort - My Portfolio</title>
+    <title>Insertion Sort - My Portfolio</title>
     <!-- Professional Modern Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <!-- Global and Component External Stylesheets -->
@@ -34,10 +34,10 @@
         <div class="calc-header-flex sort-header-flex">
             <div>
                 <div class="sort-badge-group">
-                    <span class="sort-badge-category">02 / SELECTION</span>
+                    <span class="sort-badge-category">03 / INSERTION</span>
                     <span class="sort-badge-complexity">AVG O(n²)</span>
                 </div>
-                <h1 class="sort-main-title">Selection Sort Visualization</h1>
+                <h1 class="sort-main-title">Insertion Sort Visualization</h1>
             </div>
             <!-- Back button pointing to sorting dashboard menu -->
             <a href="{{ url_for('sorting.sorting_dashboard') }}" class="custom-back-btn">&#8592; Back to Sorting</a>
@@ -79,15 +79,16 @@
             <!-- Visualgo Panel (Explanation Box and Pseudo-code Execution) -->
             <div class="visualgo-panel">
                 <div class="explanation-box" id="explanationText">
-                    Ready to start Selection Sort. Click Play or Next to begin.
+                    Ready to start Insertion Sort. Click Play or Next to begin.
                 </div>
                 <div class="code-box">
-                    <div id="code1" class="code-line">for i = 0 to n-1</div>
-                    <div id="code2" class="code-line">&nbsp;&nbsp;min_idx = i</div>
-                    <div id="code3" class="code-line">&nbsp;&nbsp;for j = i+1 to n</div>
-                    <div id="code4" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;if array[j] &lt; array[min_idx]</div>
-                    <div id="code5" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min_idx = j</div>
-                    <div id="code6" class="code-line">&nbsp;&nbsp;swap(array[i], array[min_idx])</div>
+                    <div id="code1" class="code-line">mark first element as sorted</div>
+                    <div id="code2" class="code-line">for each unsorted element X</div>
+                    <div id="code3" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;'extract' the element X</div>
+                    <div id="code4" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;for j = lastSortedIndex down to 0</div>
+                    <div id="code5" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if current element j > X</div>
+                    <div id="code6" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;move sorted element to the right by 1</div>
+                    <div id="code7" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;break loop and insert X here</div>
                 </div>
             </div>
 
@@ -103,10 +104,10 @@
                 </div>
 
                 <div class="legend-row">
-                    <div class="legend-item"><div class="legend-box" style="background: #a855f7;"></div> Min Value</div>
+                    <div class="legend-item"><div class="legend-box legend-extracted"></div> Extracted (X)</div>
                     <div class="legend-item"><div class="legend-box legend-comparing"></div> Comparing</div>
-                    <div class="legend-item"><div class="legend-box legend-swapping"></div> Swapping</div>
                     <div class="legend-item"><div class="legend-box legend-sorted"></div> Sorted</div>
+                    <div class="legend-item"><div class="legend-box legend-unsorted"></div> Unsorted</div>
                 </div>
             </div>
         </div>
@@ -124,7 +125,7 @@
 
     <footer>&copy; 2026 Daniel Abrenica | My Personal Portfolio</footer>
 
-    <!-- Selection Sort Logic Script -->
+    <!-- Insertion Sort Logic Script -->
     <script>
         let originalArray = [42, 30, 47, 0, 33, 23, 35, 22, 41, 30];
         let historySteps = [];
@@ -138,119 +139,98 @@
             if(isPlaying) { stopPlay(); startPlay(); } 
         }
 
-        function initSelectionSort(arr) {
+        function initInsertionSort(arr) {
             historySteps = [];
             let workingArr = [...arr];
             let n = workingArr.length;
-            let sortedSet = new Set();
-
+            
+            // Dito natin binago: ginawa nating [] para hindi pa naka-green sa Step 0 bago mag-play
             historySteps.push({
                 arr: [...workingArr],
-                minIdx: -1,
+                sorted: [],
+                extractedIdx: -1,
                 comparing: [],
-                swapping: [],
-                sorted: [0],
                 translateX: {},
-                explanation: "Initial array loaded. Ready to begin Selection Sort.",
+                explanation: "Initial array loaded. Click Play or Next to begin Insertion Sort.",
                 activeCode: 1
             });
 
-            for (let i = 0; i < n - 1; i++) {
-                let min_idx = i;
-
+            for (let i = 1; i < n; i++) {
                 historySteps.push({
                     arr: [...workingArr],
-                    minIdx: min_idx,
+                    sorted: Array.from({length: i}, (_, k) => k),
+                    extractedIdx: -1,
                     comparing: [],
-                    swapping: [],
-                    sorted: Array.from(sortedSet),
                     translateX: {},
-                    explanation: `Outer loop i = ${i}: setting current minimum index to ${i} (${workingArr[i]}).`,
+                    explanation: `Starting loop for unsorted element X at index ${i} (${workingArr[i]}).`,
                     activeCode: 2
                 });
 
-                for (let j = i + 1; j < n; j++) {
-                    historySteps.push({
-                        arr: [...workingArr],
-                        minIdx: min_idx,
-                        comparing: [j],
-                        swapping: [],
-                        sorted: Array.from(sortedSet),
-                        translateX: {},
-                        explanation: `Comparing element at index ${j} (${workingArr[j]}) with current minimum (${workingArr[min_idx]}).`,
-                        activeCode: 3
-                    });
+                let key = workingArr[i];
+                let j = i - 1;
 
+                historySteps.push({
+                    arr: [...workingArr],
+                    sorted: Array.from({length: i}, (_, k) => k),
+                    extractedIdx: i,
+                    comparing: [],
+                    translateX: {},
+                    explanation: `Extracting element X (${key}) down to evaluate its correct position.`,
+                    activeCode: 3
+                });
+
+                let translateX = {};
+
+                while (j >= 0) {
                     historySteps.push({
                         arr: [...workingArr],
-                        minIdx: min_idx,
-                        comparing: [j, min_idx],
-                        swapping: [],
-                        sorted: Array.from(sortedSet),
-                        translateX: {},
-                        explanation: `Checking if array[${j}] (${workingArr[j]}) &lt; array[min_idx] (${workingArr[min_idx]}).`,
+                        sorted: Array.from({length: i}, (_, k) => k),
+                        extractedIdx: i,
+                        comparing: [j],
+                        translateX: {...translateX},
+                        explanation: `For j = ${j}: comparing current element (${workingArr[j]}) > X (${key}).`,
                         activeCode: 4
                     });
 
-                    if (workingArr[j] < workingArr[min_idx]) {
-                        min_idx = j;
+                    if (workingArr[j] > key) {
                         historySteps.push({
                             arr: [...workingArr],
-                            minIdx: min_idx,
-                            comparing: [min_idx],
-                            swapping: [],
-                            sorted: Array.from(sortedSet),
-                            translateX: {},
-                            explanation: `New minimum found at index ${min_idx} with value ${workingArr[min_idx]}.`,
-                            activeCode: 5
+                            sorted: Array.from({length: i}, (_, k) => k),
+                            extractedIdx: i,
+                            comparing: [j],
+                            translateX: {...translateX},
+                            explanation: `Condition met! Moving sorted element (${workingArr[j]}) to the right by 1 position.`,
+                            activeCode: 6
                         });
+
+                        translateX[j] = (translateX[j] || 0) + 76;
+                        workingArr[j + 1] = workingArr[j];
+                        j--;
+                    } else {
+                        break;
                     }
                 }
 
-                if (min_idx !== i) {
-                    let translateX = {};
-                    translateX[i] = (min_idx - i) * 81; 
-                    translateX[min_idx] = (i - min_idx) * 81;
+                workingArr[j + 1] = key;
 
-                    historySteps.push({
-                        arr: [...workingArr],
-                        minIdx: min_idx,
-                        comparing: [],
-                        swapping: [i, min_idx],
-                        sorted: Array.from(sortedSet),
-                        translateX: translateX,
-                        explanation: `Swapping minimum element (${workingArr[min_idx]}) with the first unsorted element (${workingArr[i]}).`,
-                        activeCode: 6
-                    });
-
-                    let temp = workingArr[i];
-                    workingArr[i] = workingArr[min_idx];
-                    workingArr[min_idx] = temp;
-                } else {
-                    historySteps.push({
-                        arr: [...workingArr],
-                        minIdx: min_idx,
-                        comparing: [],
-                        swapping: [],
-                        sorted: Array.from(sortedSet),
-                        translateX: {},
-                        explanation: `Element at index ${i} is already the minimum. No swap needed.`,
-                        activeCode: 6
-                    });
-                }
-
-                sortedSet.add(i);
+                historySteps.push({
+                    arr: [...workingArr],
+                    sorted: Array.from({length: i + 1}, (_, k) => k),
+                    extractedIdx: -1,
+                    comparing: [],
+                    translateX: {},
+                    explanation: `Break loop and insert X (${key}) into its correct sorted position.`,
+                    activeCode: 7
+                });
             }
 
-            for (let k = 0; k < n; k++) sortedSet.add(k);
             historySteps.push({
                 arr: [...workingArr],
-                minIdx: -1,
+                sorted: Array.from({length: n}, (_, k) => k),
+                extractedIdx: -1,
                 comparing: [],
-                swapping: [],
-                sorted: Array.from(sortedSet),
                 translateX: {},
-                explanation: "Selection Sort completed! The array is now fully sorted.",
+                explanation: "Insertion Sort completed! The array is fully sorted.",
                 activeCode: 1
             });
 
@@ -263,7 +243,7 @@
             let state = historySteps[currentStepIndex];
 
             document.getElementById('explanationText').textContent = state.explanation;
-            for(let c = 1; c <= 6; c++) {
+            for(let c = 1; c <= 7; c++) {
                 let lineEl = document.getElementById(`code${c}`);
                 if(lineEl) {
                     lineEl.className = `code-line ${state.activeCode === c ? 'active' : ''}`;
@@ -279,15 +259,18 @@
                 const bar = document.createElement('div');
                 bar.className = 'sort-bar unsorted';
                 
-                if(state.sorted.includes(idx)) bar.className = 'sort-bar sorted';
-                if(state.minIdx === idx) bar.className = 'sort-bar min-val';
-                if(state.comparing.includes(idx)) bar.className = 'sort-bar comparing';
-                if(state.swapping.includes(idx)) bar.className = 'sort-bar swapping';
+                if(state.sorted && state.sorted.includes(idx)) bar.className = 'sort-bar sorted';
+                if(state.extractedIdx === idx) {
+                    bar.className = 'sort-bar extracted';
+                }
+                if(state.comparing && state.comparing.includes(idx)) bar.className = 'sort-bar comparing';
 
-                if(state.translateX && state.translateX[idx] !== undefined) {
-                    bar.style.transform = `translateX(${state.translateX[idx]}px)`;
+                let currentTranslateX = (state.translateX && state.translateX[idx]) ? state.translateX[idx] : 0;
+                
+                if(state.extractedIdx === idx) {
+                    bar.style.transform = `translateX(${currentTranslateX}px) translateY(100px)`;
                 } else {
-                    bar.style.transform = `translateX(0px)`;
+                    bar.style.transform = `translateX(${currentTranslateX}px)`;
                 }
 
                 let calculatedHeight = Math.max((val / maxVal) * 75, 12);
@@ -321,7 +304,7 @@
             if(type === 'sorted') originalArray = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
             if(type === 'nearly') originalArray = [20, 10, 30, 40, 50, 60, 70, 80, 100, 90];
             if(type === 'duplicates') originalArray = [30, 10, 30, 20, 10, 40, 20, 50, 30, 10];
-            initSelectionSort(originalArray);
+            initInsertionSort(originalArray);
         }
 
         function applyCustomArray() {
@@ -355,11 +338,11 @@
             }
 
             originalArray = parsed;
-            initSelectionSort(originalArray);
+            initInsertionSort(originalArray);
             document.getElementById('sortStatusMsg').textContent = "Custom array loaded successfully!";
         }
 
-        initSelectionSort(originalArray);
+        initInsertionSort(originalArray);
 
         function openImageModal() { document.getElementById('imageModal').style.display = 'flex'; }
         function closeImageModalDirect() { document.getElementById('imageModal').style.display = 'none'; }
