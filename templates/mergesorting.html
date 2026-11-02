@@ -328,7 +328,7 @@
             const inputVal = document.getElementById('customInput').value;
             
             if(!inputVal.trim()) {
-                alert("Mangyaring maglagay ng mga numero.");
+                alert("Please enter some numbers.");
                 return;
             }
 
@@ -342,14 +342,14 @@
                 
                 let num = parseFloat(trimmed);
                 if (isNaN(num)) {
-                    alert(`May nakitang invalid na input: "${trimmed}". Mangyaring mga numero lamang ang ilagay.`);
+                    alert(`Invalid input found: "${trimmed}". Please enter only numbers.`);
                     return;
                 }
                 parsed.push(Math.round(num));
             }
 
             if(parsed.length < 2) {
-                alert("Maglagay ng dalawa o higit pang mga numero para ma-visualize ang sorting.");
+                alert("Enter two or more numbers to visualize the sorting.");
                 return;
             }
 
