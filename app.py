@@ -9,6 +9,7 @@ from blueprints.linkedlist import linkedlist_bp
 from blueprints.queue_dequeue import queue_dequeue_bp
 from blueprints.infix_to_postfix_route import infix_bp
 from blueprints.sorting import sorting_bp
+from blueprints.binary_tree import binary_tree_bp
 
 app = Flask(__name__)
 
@@ -29,6 +30,7 @@ app.register_blueprint(linkedlist_bp)
 app.register_blueprint(queue_dequeue_bp)
 app.register_blueprint(infix_bp)
 app.register_blueprint(sorting_bp)
+app.register_blueprint(binary_tree_bp)
 
 if __name__ == '__main__':
     app.run(debug=True)

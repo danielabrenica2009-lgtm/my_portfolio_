@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Tree Interactive Visualizer - My Portfolio</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='area.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='binary_tree.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
+            <a href="{{ url_for('main.index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
+        </div>
+        <ul>
+            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('main.works') }}" class="active">Works</a></li>
+            <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container visualizer-container-wide" style="max-width: 1000px; margin: 30px auto; padding: 20px;">
+        <!-- Header with Back Button at Upper Right -->
+        <div class="tree-header-flex">
+            <div>
+                <h1 class="tree-main-title">Binary Tree Interactive Visualizer</h1>
+                <p class="tree-subtitle">Custom roots, center nodes, level tracking, undo/redo, and comprehensive tree results summary.</p>
+            </div>
+            <!-- Back to Works button on Upper Right -->
+            <a href="{{ url_for('main.works') }}" class="custom-back-btn">&#8592; Back to Works</a>
+        </div>
+
+        <!-- Node Input Control Panel with Clear Buttons on Right -->
+        <div class="tree-control-panel">
+            <div class="control-row" style="justify-content: space-between; align-items: center;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <input type="text" id="nodeValue" class="tree-input" placeholder="Node Name (e.g., Daniel)" style="width: 170px;">
+                    <select id="parentSelect" class="tree-select" style="width: 190px;">
+                        <option value="ROOT">Select Parent / Root</option>
+                    </select>
+                    <select id="childPosition" class="tree-select" style="width: 140px;">
+                        <option value="center">Center (Root)</option>
+                        <option value="left">Left Child</option>
+                        <option value="right">Right Child</option>
+                    </select>
+                    <button class="btn-tree" onclick="addNode()">+ Add Node</button>
+                    <button class="btn-tree btn-tree-danger" onclick="resetDefaultTree()">Load Default</button>
+                </div>
+                <!-- Clear Action Buttons (Undo, Redo, Result) turning green on hover -->
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-action-clear" onclick="undoAction()" title="Undo last action">↺ Undo</button>
+                    <button class="btn-action-clear" onclick="redoAction()" title="Redo action">Redo ↻</button>
+                    <button class="btn-action-clear" onclick="showTreeResult()" title="Show full tree summary result">📊 Result</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Tree Graph Canvas Display with Arrows -->
+        <div class="graph-card">
+            <canvas id="treeCanvas" width="900" height="400"></canvas>
+        </div>
+
+        <!-- Traversal Selector & Output Panel -->
+        <div class="traversal-result-card">
+            <div class="traversal-btn-group">
+                <button class="traversal-btn" onclick="runTraversal('preorder')">Preorder Traversal (Root, Left, Right)</button>
+                <button class="traversal-btn" onclick="runTraversal('inorder')">Inorder Traversal (Left, Root, Right)</button>
+                <button class="traversal-btn" onclick="runTraversal('postorder')">Postorder Traversal (Left, Right, Root)</button>
+            </div>
+            <div class="output-display" id="traversalOutput">
+                Select a traversal button or click '📊 Result' above to display summary.
+            </div>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 Daniel Abrenica | My Personal Portfolio</footer>
+
+    <script>
+        class TreeNode {
+            constructor(value, level = 1) {
+                this.value = value;
+                this.level = level; 
+                this.left = null;
+                this.right = null;
+            }
+        }
+
+        let rootNode = null;
+        let undoStack = [];
+        let redoStack = [];
+
+        function saveState() {
+            undoStack.push(JSON.stringify(rootNode));
+            redoStack = []; 
+        }
+
+        function restoreTree(obj) {
+            if (!obj) return null;
+            const node = new TreeNode(obj.value, obj.level);
+            node.left = restoreTree(obj.left);
+            node.right = restoreTree(obj.right);
+            return node;
+        }
+
+        function undoAction() {
+            if (undoStack.length === 0) {
+                alert("No more actions to undo!");
+                return;
+            }
+            redoStack.push(JSON.stringify(rootNode));
+            const prevState = JSON.parse(undoStack.pop());
+            rootNode = restoreTree(prevState);
+            updateParentDropdown();
+            drawTree();
+            document.getElementById('traversalOutput').textContent = "Performed Undo.";
+        }
+
+        function redoAction() {
+            if (redoStack.length === 0) {
+                alert("No more actions to redo!");
+                return;
+            }
+            undoStack.push(JSON.stringify(rootNode));
+            const nextState = JSON.parse(redoStack.pop());
+            rootNode = restoreTree(nextState);
+            updateParentDropdown();
+            drawTree();
+            document.getElementById('traversalOutput').textContent = "Performed Redo.";
+        }
+
+        // Default setup matching classroom graph
+        function loadDefaultTree() {
+            saveState();
+            rootNode = new TreeNode("Zenaida", 1);
+            rootNode.left = new TreeNode("Mario", 2);
+            rootNode.right = new TreeNode("Policarpio", 2);
+            rootNode.left.left = new TreeNode("Hannah", 3);
+            rootNode.left.right = new TreeNode("Daniel", 3);
+            rootNode.right.left = new TreeNode("James", 3);
+            rootNode.right.right = new TreeNode("Pollyvien", 3);
+
+            updateParentDropdown();
+            drawTree();
+        }
+
+        function resetDefaultTree() {
+            loadDefaultTree();
+            document.getElementById('traversalOutput').textContent = "Loaded default family tree model.";
+        }
+
+        function getNodesWithLevel(node, list = []) {
+            if (!node) return list;
+            list.push({ value: node.value, level: node.level });
+            getNodesWithLevel(node.left, list);
+            getNodesWithLevel(node.right, list);
+            return list;
+        }
+
+        function updateParentDropdown() {
+            const select = document.getElementById('parentSelect');
+            select.innerHTML = '';
+            
+            const rootOpt = document.createElement('option');
+            rootOpt.value = "ROOT";
+            rootOpt.textContent = rootNode ? `Change Root / Center (${rootNode.value})` : "Set Root / Center (Level 1)";
+            select.appendChild(rootOpt);
+            
+            if (rootNode) {
+                const nodes = getNodesWithLevel(rootNode);
+                nodes.forEach(item => {
+                    const opt = document.createElement('option');
+                    opt.value = item.value;
+                    opt.textContent = `Parent: ${item.value} (L${item.level} → L${item.level + 1})`;
+                    select.appendChild(opt);
+                });
+            }
+        }
+
+        function findNode(node, val) {
+            if (!node) return null;
+            if (node.value === val) return node;
+            return findNode(node.left, val) || findNode(node.right, val);
+        }
+
+        function addNode() {
+            const valInput = document.getElementById('nodeValue');
+            const val = valInput.value.trim();
+            const parentVal = document.getElementById('parentSelect').value;
+            const pos = document.getElementById('childPosition').value;
+
+            if (!val) {
+                alert("Please enter a node name or value.");
+                return;
+            }
+
+            saveState();
+
+            if (pos === "center" || parentVal === "ROOT" || !rootNode) {
+                rootNode = new TreeNode(val, 1);
+            } else {
+                const parent = findNode(rootNode, parentVal);
+                if (parent) {
+                    const nextLevel = parent.level + 1;
+                    if (pos === "left") {
+                        parent.left = new TreeNode(val, nextLevel);
+                    } else if (pos === "right") {
+                        parent.right = new TreeNode(val, nextLevel);
+                    }
+                }
+            }
+
+            valInput.value = '';
+            updateParentDropdown();
+            drawTree();
+            document.getElementById('traversalOutput').textContent = `Added node '${val}' successfully.`;
+        }
+
+        // Comprehensive Tree Summary Result Function
+        function showTreeResult() {
+            if (!rootNode) {
+                document.getElementById('traversalOutput').textContent = "Tree is empty. Please add nodes first.";
+                return;
+            }
+
+            let summary = [];
+            summary.push(`👑 Root (Level 1): ${rootNode.value}`);
+
+            function collectRelationships(node) {
+                if (!node) return;
+                let details = [];
+                if (node.left) details.push(`Left Child: ${node.left.value}`);
+                if (node.right) details.push(`Right Child: ${node.right.value}`);
+                
+                if (details.length > 0) {
+                    summary.push(`|-- Parent: ${node.value} (L${node.level}) ➔ ${details.join(' | ')}`);
+                }
+                collectRelationships(node.left);
+                collectRelationships(node.right);
+            }
+
+            collectRelationships(rootNode);
+            document.getElementById('traversalOutput').innerHTML = summary.join('<br>');
+        }
+
+        function drawArrow(ctx, fromX, fromY, toX, toY, radius) {
+            const angle = Math.atan2(toY - fromY, toX - fromX);
+            const startX = fromX + radius * Math.cos(angle);
+            const startY = fromY + radius * Math.sin(angle);
+            const endX = toX - radius * Math.cos(angle);
+            const endY = toY - radius * Math.sin(angle);
+
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = "#10b981";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            const headLength = 10;
+            ctx.beginPath();
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(endX - headLength * Math.cos(angle - Math.PI / 6), endY - headLength * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(endX - headLength * Math.cos(angle + Math.PI / 6), endY - headLength * Math.sin(angle + Math.PI / 6));
+            ctx.lineTo(endX, endY);
+            ctx.fillStyle = "#10b981";
+            ctx.fill();
+        }
+
+        function drawTree() {
+            const canvas = document.getElementById('treeCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (!rootNode) return;
+
+            const radius = 22;
+
+            function drawSubtree(node, x, y, distance) {
+                if (!node) return;
+
+                if (node.left) {
+                    const nextX = x - distance;
+                    const nextY = y + 75;
+                    drawArrow(ctx, x, y, nextX, nextY, radius);
+                    drawSubtree(node.left, nextX, nextY, distance / 2);
+                }
+
+                if (node.right) {
+                    const nextX = x + distance;
+                    const nextY = y + 75;
+                    drawArrow(ctx, x, y, nextX, nextY, radius);
+                    drawSubtree(node.right, nextX, nextY, distance / 2);
+                }
+
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, 2 * Math.PI);
+                ctx.fillStyle = "#02261e";
+                ctx.fill();
+                ctx.strokeStyle = "#10b981";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 12px Inter, sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(node.value, x, y);
+
+                ctx.fillStyle = "#34d399";
+                ctx.font = "10px Inter, sans-serif";
+                ctx.fillText(`Level ${node.level}`, x, y + 33);
+            }
+
+            drawSubtree(rootNode, canvas.width / 2, 45, 200);
+        }
+
+        function runTraversal(type) {
+            let result = [];
+
+            function preorder(node) {
+                if (!node) return;
+                result.push(node.value);
+                preorder(node.left);
+                preorder(node.right);
+            }
+
+            function inorder(node) {
+                if (!node) return;
+                inorder(node.left);
+                result.push(node.value);
+                inorder(node.right);
+            }
+
+            function postorder(node) {
+                if (!node) return;
+                postorder(node.left);
+                postorder(node.right);
+                result.push(node.value);
+            }
+
+            if (type === 'preorder') preorder(rootNode);
+            if (type === 'inorder') inorder(rootNode);
+            if (type === 'postorder') postorder(rootNode);
+
+            document.getElementById('traversalOutput').textContent = result.join(' ');
+        }
+
+        loadDefaultTree();
+    </script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+/* Custom Header Layout with Upper-Right Back Button */
+.tree-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.tree-main-title {
+    color: #10b981;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.tree-subtitle {
+    color: #9ca3af;
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+/* Control Panel for Node Insertion */
+.tree-control-panel {
+    background: rgba(2, 38, 30, 0.85);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.control-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.control-row:last-child {
+    margin-bottom: 0;
+}
+
+.tree-input, .tree-select {
+    background: #011611;
+    border: 1px solid #10b981;
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.tree-input:focus, .tree-select:focus {
+    border-color: #34d399;
+    box-shadow: 0 0 5px rgba(52, 211, 153, 0.5);
+}
+
+.btn-tree {
+    background: #10b981;
+    color: #011611;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-tree:hover {
+    background: #34d399;
+    transform: translateY(-1px);
+}
+
+.btn-tree-danger {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.btn-tree-danger:hover {
+    background: #f87171;
+}
+
+/* Clear / Outline Action Buttons (Undo, Redo, Result) */
+.btn-action-clear {
+    background: transparent;
+    color: #34d399;
+    border: 1px solid #10b981;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-action-clear:hover {
+    background: #10b981;
+    color: #011611;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Canvas Graph Visualizer Area */
+.graph-card {
+    background: rgba(2, 38, 30, 0.8);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+#treeCanvas {
+    background: #011611;
+    border-radius: 10px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    width: 100%;
+    height: 380px;
+}
+
+/* Traversal Output Displays */
+.traversal-result-card {
+    background: rgba(2, 38, 30, 0.85);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.traversal-btn-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.traversal-btn {
+    flex: 1;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid #10b981;
+    color: #34d399;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.traversal-btn.active, .traversal-btn:hover {
+    background: #10b981;
+    color: #011611;
+}
+
+.output-display {
+    background: #011611;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #10b981;
+    color: #ffffff;
+    font-family: monospace;
+    font-size: 1.1rem;
+    min-height: 24px;
+}
