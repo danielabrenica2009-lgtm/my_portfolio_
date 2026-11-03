@@ -56,7 +56,7 @@
             </div>
 
             <div class="sort-status-bar">
-                <span id="stepStatusText">Step 0 / 70</span>
+                <span id="stepStatusText">Step 0 / 0</span>
                 <span id="sortStatusMsg">Ready to sort</span>
             </div>
 
@@ -129,110 +129,119 @@
 
         const C_CYAN = '#7dd3fc';
         const C_RED = '#ef4444';
-        const C_LIGHT_RED = '#fca5a5';
-        const C_DARK_RED = '#b91c1c';
-        const C_ORANGE = '#f97316';
-        const C_AMBER = '#f59e0b';
         const C_YELLOW = '#fef08a';
-        const C_LIME = '#a3e635';
         const C_GREEN = '#22c55e';
-        const C_LIGHT_GREEN = '#86efac';
-        const C_DARK_GREEN = '#15803d';
-        const C_BLUE_GREEN = '#99f6e4';
 
         function initMergeSort(arr) {
             historySteps = [];
-            
-            function addFrame(arrState, translateYMap, translateXMap, colorMap, opacityMap, activeCode, explanation) {
+            let workingArr = [...arr];
+            let n = workingArr.length;
+
+            // Helper to record each discrete animation frame
+            function pushState(arrState, translateYMap, colorMap, activeCode, explanation) {
+                let yCopy = {};
+                let cCopy = {};
+                for(let i = 0; i < n; i++) {
+                    yCopy[i] = translateYMap[i] !== undefined ? translateYMap[i] : -220;
+                    cCopy[i] = colorMap[i] !== undefined ? colorMap[i] : C_CYAN;
+                }
                 historySteps.push({
                     arr: [...arrState],
-                    translateY: {...translateYMap},
-                    translateX: translateXMap ? {...translateXMap} : {},
-                    colors: {...colorMap},
-                    opacity: opacityMap ? {...opacityMap} : {},
+                    translateY: yCopy,
+                    colors: cCopy,
                     activeCode: activeCode,
                     explanation: explanation
                 });
             }
 
-            let curArr = [45, 4, 33, 35, 7, 43, 30, 15, 48, 30];
-            let yMap = {}, xMap = {}, cMap = {}, oMap = {};
-            
-            for(let i = 0; i < 10; i++) {
-                yMap[i] = -220;
-                xMap[i] = 0;
-                cMap[i] = C_CYAN;
-                oMap[i] = 1.0;
-            }
+            // Initial State (Step 0)
+            let base_y = {};
+            let base_c = {};
+            workingArr.forEach((_, i) => {
+                base_y[i] = -220;
+                base_c[i] = C_CYAN;
+            });
+            pushState(workingArr, base_y, base_c, 1, "Initial array loaded. Preparing to split elements into partitions of size 1.");
 
-            // Step 1
-            addFrame(curArr, yMap, xMap, cMap, oMap, 1, "Step 1/70: Initial array loaded. Preparing to split.");
+            // Color coding synchronization
+            let palette = [C_RED, '#f97316', '#f59e0b', C_YELLOW, '#facc15', '#a3e635', C_GREEN, '#86efac', '#99f6e4', '#10b981'];
+            let sync_c = {};
+            workingArr.forEach((_, i) => {
+                sync_c[i] = palette[i % palette.length];
+            });
+            pushState(workingArr, base_y, sync_c, 1, "Partition color-coding synchronized across all elements.");
 
-            // Step 2
-            let syncC = {0: C_RED, 1: C_ORANGE, 2: C_AMBER, 3: C_YELLOW, 4: '#facc15', 5: C_LIME, 6: C_GREEN, 7: C_LIGHT_GREEN, 8: C_BLUE_GREEN, 9: '#10b981'};
-            addFrame(curArr, yMap, xMap, syncC, oMap, 1, "Step 2/70: Partition color-coding synchronized across all 10 bars.");
+            // Algorithmic Merge Sort Simulator generating step-by-step workspace actions
+            function mergeSortSim(start, end) {
+                if (start >= end) return;
+                let mid = Math.floor((start + end) / 2);
+                mergeSortSim(start, mid);
+                mergeSortSim(mid + 1, end);
 
-            let cY = {...yMap}, cX = {...xMap}, cColors = {...syncC}, cOp = {...oMap};
+                // Frame: Sub-array dropping into workspace
+                let drop_y = {...base_y};
+                let sub_c = {...sync_c};
+                for (let i = start; i <= end; i++) {
+                    drop_y[i] = 160; // Workspace level
+                }
+                pushState(workingArr, drop_y, sub_c, 2, `Recursively merging segment from index ${start} to ${end}. Sub-array moves to workspace.`);
 
-            // Steps 3 to 10: Clean discrete steps for Left sub-array
-            for(let s = 3; s <= 10; s++) {
-                if(s === 3) for(let i = 0; i < 5; i++) cY[i] = 160; // Isang bagsak na baba
-                if(s === 6) cY[1] = 200; // Comparing
-                if(s === 8) cOp[0] = 0.45; // Transparent
-                if(s === 10) { curArr = [4, 45, 33, 35, 7, 43, 30, 15, 48, 30]; cOp[0] = 1.0; }
-                addFrame(curArr, cY, cX, cColors, cOp, 3, `Step ${s}/70: Left sub-array [45, 4, 33, 35, 7] workspace action.`);
-            }
+                // Merge helper simulation
+                let left = workingArr.slice(start, mid + 1);
+                let right = workingArr.slice(mid + 1, end + 1);
+                let i = 0, j = 0, k = start;
+                let tempArr = [...workingArr];
 
-            // Steps 11 to 30: Left sub-array sorting and rising back
-            for(let s = 11; s <= 30; s++) {
-                if(s === 15) curArr = [4, 7, 33, 35, 45, 43, 30, 15, 48, 30];
-                if(s === 25) {
-                    for(let i = 0; i < 5; i++) {
-                        cY[i] = -220; // Isang bagsak na pag-akyat sa taas
-                        cColors[i] = C_RED;
+                while (i < left.length && j < right.length) {
+                    // Comparing state
+                    let comp_y = {...drop_y};
+                    pushState(tempArr, comp_y, sub_c, 3, `Comparing elements in partition segment (${start} to ${end}).`);
+
+                    if (left[i] <= right[j]) {
+                        tempArr[k] = left[i];
+                        i++;
+                    } else {
+                        tempArr[k] = right[j];
+                        j++;
                     }
+                    let move_y = {...drop_y};
+                    pushState(tempArr, move_y, sub_c, 5, `Placing smaller element into sorted position ${k}.`);
+                    k++;
                 }
-                addFrame(curArr, cY, cX, cColors, cOp, 7, `Step ${s}/70: Merging left sub-array into [4, 7, 33, 35, 45] and returning to top.`);
-            }
 
-            // Steps 31 to 40: Right sub-array drops to workspace
-            for(let s = 31; s <= 40; s++) {
-                if(s === 31) for(let i = 5; i < 10; i++) cY[i] = 160; // Isang bagsak na baba
-                if(s === 35) { cY[5] = 200; cY[6] = 200; cColors[5] = C_YELLOW; cColors[6] = C_YELLOW; cOp[5] = 0.5; cOp[6] = 0.5; }
-                if(s === 38) { curArr = [4, 7, 33, 35, 45, 15, 30, 43, 48, 30]; }
-                addFrame(curArr, cY, cX, cColors, cOp, 4, `Step ${s}/70: Right sub-array [43, 30, 15, 48, 30] descending to workspace.`);
-            }
-
-            // Steps 41 to 50: Right sub-array sorting adjustments
-            for(let s = 41; s <= 50; s++) {
-                if(s === 42) { cY[5] = 160; cY[6] = 160; cY[7] = 160; cOp[5] = 1.0; cOp[6] = 1.0; }
-                if(s === 46) { cY[8] = 200; cY[9] = 200; cColors[8] = C_LIGHT_GREEN; cColors[9] = C_LIGHT_GREEN; cOp[8] = 0.5; cOp[9] = 0.5; }
-                if(s === 49) { curArr = [4, 7, 33, 35, 45, 15, 30, 43, 30, 48]; cOp[8] = 1.0; cOp[9] = 1.0; }
-                addFrame(curArr, cY, cX, cColors, cOp, 5, `Step ${s}/70: Right sub-array internal sorting swaps and position changes.`);
-            }
-
-            // Steps 51 to 60: Right sub-array final alignment and rising
-            for(let s = 51; s <= 60; s++) {
-                if(s === 52) { curArr = [4, 7, 33, 35, 45, 15, 30, 30, 43, 48]; for(let i = 5; i < 10; i++) cY[i] = 180; }
-                if(s === 56) {
-                    for(let i = 5; i < 10; i++) { cY[i] = -220; cColors[i] = C_GREEN; } // Isang bagsak na pag-akyat
+                while (i < left.length) {
+                    tempArr[k] = left[i];
+                    i++;
+                    k++;
+                    pushState(tempArr, drop_y, sub_c, 6, `Copying remaining elements from left partition.`);
                 }
-                addFrame(curArr, cY, cX, cColors, cOp, 6, `Step ${s}/70: Right sub-array sorted and rising back to top level.`);
+
+                while (j < right.length) {
+                    tempArr[k] = right[j];
+                    j++;
+                    k++;
+                    pushState(tempArr, drop_y, sub_c, 6, `Copying remaining elements from right partition.`);
+                }
+
+                workingArr = [...tempArr];
+
+                // Frame: Segment rising back to main baseline, turning sorted color (Green/Red)
+                let rise_y = {...base_y};
+                let sorted_c = {...sync_c};
+                for (let idx = start; idx <= end; idx++) {
+                    rise_y[idx] = -220;
+                    sorted_c[idx] = C_GREEN;
+                }
+                pushState(workingArr, rise_y, sorted_c, 7, `Segment from index ${start} to ${end} successfully merged and returned to main level.`);
             }
 
-            // Steps 61 to 70: Final master merge & final sorted ascension
-            for(let s = 61; s <= 70; s++) {
-                if(s === 62) { cY[2] = 180; cColors[2] = C_DARK_RED; cColors[3] = C_LIGHT_RED; }
-                if(s === 64) { curArr = [4, 7, 15, 30, 33, 35, 45, 30, 43, 48]; cY[3] = 180; cColors[3] = C_DARK_RED; }
-                if(s === 66) { curArr = [4, 7, 15, 30, 30, 33, 35, 43, 45, 48]; cY[7] = 180; cColors[7] = C_DARK_RED; }
-                if(s === 67) { cY[8] = 180; cColors[8] = C_DARK_RED; }
-                if(s === 68) { cY[9] = 180; cColors[9] = C_DARK_RED; }
-                if(s >= 69) { 
-                    curArr = [4, 7, 15, 30, 30, 33, 35, 43, 45, 48]; 
-                    for(let i = 0; i < 10; i++) cY[i] = -220; 
-                }
-                addFrame(curArr, cY, cX, cColors, cOp, 7, `Step ${s}/70: Final master merge comparison and sorted array ascension.`);
-            }
+            mergeSortSim(0, workingArr.length - 1);
+
+            // Final Completed State
+            let final_y = {...base_y};
+            let final_c = {};
+            workingArr.forEach((_, i) => { final_c[i] = C_RED; });
+            pushState(workingArr, final_y, final_c, 7, "Merge Sort completed! The array is fully sorted.");
 
             currentStepIndex = 0;
             renderStep();
@@ -260,13 +269,10 @@
                 bar.className = 'sort-bar';
                 
                 let translateY = (state.translateY && state.translateY[idx] !== undefined) ? state.translateY[idx] : -220;
-                let translateX = (state.translateX && state.translateX[idx] !== undefined) ? state.translateX[idx] : 0;
                 let barColor = (state.colors && state.colors[idx]) ? state.colors[idx] : C_CYAN;
-                let barOpacity = (state.opacity && state.opacity[idx] !== undefined) ? state.opacity[idx] : 1.0;
 
-                bar.style.transform = `translate(${translateX}px, ${translateY}px)`;
+                bar.style.transform = `translateY(${translateY}px)`;
                 bar.style.backgroundColor = barColor;
-                bar.style.opacity = barOpacity;
 
                 let calculatedHeight = Math.max((val / maxVal) * 45, 12);
                 bar.style.height = `${calculatedHeight}%`;
