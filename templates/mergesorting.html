@@ -11,6 +11,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='area.css') }}">
     <!-- Shared Master CSS for All 5 Sorting Algorithms -->
     <link rel="stylesheet" href="{{ url_for('static', filename='sorting.css') }}">
+    <style>
+        /* Karagdagang CSS para sa active code highlighting na sumasabay sa paggalaw */
+        .code-line {
+            padding: 3px 6px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .code-line.active {
+            background-color: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border-left: 3px solid #22c55e;
+        }
+    </style>
 </head>
 <body class="merge-sort-page">
     <!-- Navigation Bar -->
@@ -81,7 +94,7 @@
                     <div id="code3" class="code-line">&nbsp;&nbsp;for i = leftPartIdx to rightPartIdx</div>
                     <div id="code4" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;if leftPartHeadValue &lt;= rightPartHeadValue</div>
                     <div id="code5" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;copy leftPartHeadValue</div>
-                    <div id="code6" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;else: copy rightPartHeadValue; Increase InvIdx</div>
+                    <div id="code6" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;else: copy rightPartHeadValue</div>
                     <div id="code7" class="code-line">copy elements back to original array</div>
                 </div>
             </div>
@@ -166,11 +179,12 @@
                     color: "normal"
                 }));
 
-                function record(text, status) {
+                function record(text, status, codeLine = 1) {
                     steps.push({
                         items: bars.map(bar => ({ ...bar })),
                         message: text,
-                        status
+                        status,
+                        activeCode: codeLine
                     });
                 }
 
@@ -201,7 +215,8 @@
 
                     record(
                         `Compare the groups [${left.map(b => b.value).join(", ")}] and [${right.map(b => b.value).join(", ")}].`,
-                        "Preparing to merge"
+                        "Preparing to merge",
+                        2
                     );
 
                     while (i < left.length && j < right.length) {
@@ -213,16 +228,19 @@
 
                         record(
                             `Compare ${leftBar.value} and ${rightBar.value}.`,
-                            "Comparing"
+                            "Comparing",
+                            3
                         );
 
                         let selected;
                         if (leftBar.value <= rightBar.value) {
                             selected = leftBar;
                             i++;
+                            record(`Compare ${leftBar.value} <= ${rightBar.value}: True.`, "Comparing", 4);
                         } else {
                             selected = rightBar;
                             j++;
+                            record(`Compare ${leftBar.value} <= ${rightBar.value}: False.`, "Comparing", 6);
                         }
 
                         selected.x = start + merged.length;
@@ -233,7 +251,8 @@
 
                         record(
                             `${selected.value} moves into position ${merged.length} of the merged group.`,
-                            "Merging"
+                            "Merging",
+                            5
                         );
 
                         left.forEach(bar => {
@@ -250,7 +269,7 @@
                         selected.y = 2;
                         selected.color = "merging";
                         merged.push(selected);
-                        record(`Move ${selected.value} into the merged group.`, "Merging");
+                        record(`Move remaining ${selected.value} from left partition.`, "Merging", 5);
                     }
 
                     while (j < right.length) {
@@ -259,11 +278,11 @@
                         selected.y = 2;
                         selected.color = "merging";
                         merged.push(selected);
-                        record(`Move ${selected.value} into the merged group.`, "Merging");
+                        record(`Move remaining ${selected.value} from right partition.`, "Merging", 6);
                     }
 
                     arrangeGroup(merged, start, lane, "sorted");
-                    record(`Merged group: [${merged.map(b => b.value).join(", ")}].`, "Merged");
+                    record(`Merged group: [${merged.map(b => b.value).join(", ")}].`, "Merged", 7);
 
                     return merged;
                 }
@@ -276,7 +295,7 @@
                     const length = section.length;
                     setGroup(start, end, 1, "normal");
 
-                    record(`Now sorting the section: [${section.map(b => b.value).join(", ")}].`, "Sorting section");
+                    record(`Now sorting the section: [${section.map(b => b.value).join(", ")}].`, "Sorting section", 1);
 
                     let current = section;
 
@@ -299,16 +318,16 @@
 
                         current = nextPass;
                         arrangeGroup(current, start, 1, "sorted");
-                        record(`The current section is now [${current.map(b => b.value).join(", ")}].`, "Section progress");
+                        record(`The current section is now [${current.map(b => b.value).join(", ")}].`, "Section progress", 2);
                     }
 
                     arrangeGroup(current, start, 0, "sorted");
-                    record(`Section completed: [${current.map(b => b.value).join(", ")}].`, "Section sorted");
+                    record(`Section completed: [${current.map(b => b.value).join(", ")}].`, "Section sorted", 7);
 
                     return current;
                 }
 
-                record("Starting array. The numbers are together before sorting begins.", "Original array");
+                record("Starting array. The numbers are together before sorting begins.", "Original array", 1);
 
                 const middle = Math.ceil(n / 2);
                 const firstHalf = sortSection(0, middle - 1);
@@ -317,12 +336,12 @@
                 arrangeGroup(firstHalf, 0, 1, "normal");
                 arrangeGroup(secondHalf, middle, 1, "normal");
 
-                record(`Both sections are sorted. Now merge [${firstHalf.map(b => b.value).join(", ")}] and [${secondHalf.map(b => b.value).join(", ")}].`, "Final merge");
+                record(`Both sections are sorted. Now merge [${firstHalf.map(b => b.value).join(", ")}] and [${secondHalf.map(b => b.value).join(", ")}].`, "Final merge", 2);
 
                 const finalResult = mergeGroups(firstHalf, secondHalf, 0, 1);
                 arrangeGroup(finalResult, 0, 0, "sorted");
 
-                record(`Merge Sort complete! [${finalResult.map(b => b.value).join(", ")}].`, "Completed");
+                record(`Merge Sort complete! [${finalResult.map(b => b.value).join(", ")}].`, "Completed", 7);
 
                 return steps;
             }
@@ -331,8 +350,19 @@
                 const step = history[currentStep];
                 barsContainer.innerHTML = "";
 
-                const rowGap = 200;
-                const baselineOffsetFromTop = 220; // Inusog pababa para hindi nakasadsad sa itaas pero sapat ang espasyo
+                for (let i = 1; i <= 7; i++) {
+                    const lineEl = document.getElementById(`code${i}`);
+                    if (lineEl) {
+                        if (i === step.activeCode) {
+                            lineEl.classList.add("active");
+                        } else {
+                            lineEl.classList.remove("active");
+                        }
+                    }
+                }
+
+                const rowGap = 210; 
+                const baselineOffsetFromTop = 340; // Mas inusog pababa para nasa gitna talaga ng box ang mga bar
 
                 const minValue = Math.min(...startingArray);
                 const maxValue = Math.max(...startingArray);
@@ -342,23 +372,21 @@
                 barsContainer.style.position = "relative";
                 barsContainer.style.display = "block";
                 barsContainer.style.width = "100%";
-                barsContainer.style.height = `${(maxRow + 1) * rowGap + 160}px`;
+                barsContainer.style.height = `${(maxRow + 1) * rowGap + 240}px`;
                 barsContainer.style.overflow = "hidden";
 
                 const totalBars = startingArray.length;
-                const containerWidthPercent = 88; 
-                const leftOffsetPercent = 6;
+                const containerWidthPercent = 78; 
+                const leftOffsetPercent = 11; 
 
                 step.items.forEach(item => {
                     const bar = document.createElement("div");
                     bar.className = 'sort-bar';
 
-                    // Mas mahaba / mas mataas na bar proportions para punuin ang box spaces
-                    const height = Math.max(65, ((item.value - minValue) / range) * 140 + 65);
+                    const height = Math.max(70, ((item.value - minValue) / range) * 140 + 70);
                     
-                    // Bottom alignment batay sa row baseline
                     const rowBaseline = baselineOffsetFromTop + (item.y * rowGap);
-                    const topPos = rowBaseline - height;
+                    const topPos = rowBaseline - height; // Bottom-aligned sa row baseline
 
                     bar.style.position = "absolute";
                     const itemWidthPercent = containerWidthPercent / totalBars;
@@ -368,34 +396,32 @@
                     bar.style.top = `${topPos}px`;
                     bar.style.transform = "translateX(-50%)";
                     
-                    // Eksaktong makapal / malapad na lapad ng bawat bar (~1 inch / ~76px)
-                    bar.style.width = `76px`;
+                    bar.style.width = `95px`;
                     bar.style.height = `${height}px`;
                     bar.style.display = "flex";
                     bar.style.flexDirection = "column";
                     bar.style.justifyContent = "flex-end";
                     bar.style.alignItems = "center";
                     bar.style.paddingBottom = "12px";
-                    bar.style.borderRadius = "10px";
+                    bar.style.borderRadius = "12px";
                     bar.style.boxSizing = "border-box";
                     bar.style.transition = "left 0.35s ease-in-out, top 0.35s ease-in-out, background-color 0.25s ease";
-                    bar.style.fontSize = "16px";
-                    bar.style.fontWeight = "600";
+                    bar.style.fontSize = "17px";
+                    bar.style.fontWeight = "700";
                     bar.textContent = item.value;
 
-                    // Kulay batay sa state
                     if (item.color === "compare") {
-                        bar.style.backgroundColor = "#f59e0b"; // Comparing amber
+                        bar.style.backgroundColor = "#f59e0b";
                         bar.style.color = "#ffffff";
                     } else if (item.color === "merging") {
-                        bar.style.backgroundColor = "#ef4444"; // Merging red
+                        bar.style.backgroundColor = "#ef4444";
                         bar.style.color = "#ffffff";
                         bar.style.zIndex = "10";
                     } else if (item.color === "sorted") {
-                        bar.style.backgroundColor = "#10b981"; // Sorted green
+                        bar.style.backgroundColor = "#10b981";
                         bar.style.color = "#ffffff";
                     } else {
-                        bar.style.backgroundColor = "#7dd3fc"; // Unsorted cyan
+                        bar.style.backgroundColor = "#7dd3fc";
                         bar.style.color = "#0f172a";
                     }
 
