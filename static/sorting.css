@@ -1,10 +1,10 @@
-/* ==========================================================
+/* ==========================================
    MASTER SORTING ALGORITHMS SPECIFIC STYLES
-   ========================================================== */
+   ========================================== */
 
 /* Wide Container Modifier */
 .visualizer-container-wide {
-    max-width: 950px;
+    max-width: 1150px;
 }
 
 /* Header Flex & Badge Layouts */
@@ -56,19 +56,19 @@
     background: rgba(2, 38, 30, 0.8); 
     border: 1px solid var(--border-glass); 
     border-radius: 16px; 
-    padding: 2rem; 
+    padding: 2.5rem; 
     box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
     margin-top: 1.5rem; 
 }
 
-/* Bars Container */
+/* Bars Container - Aligned to bottom baseline so all bars share the exact same floor */
 .bars-container { 
     display: flex; 
-    align-items: flex-end; 
+    align-items: flex-end; /* Lahat ng bar ay lapat at pantay ang ilalim sa iisang linya */
     justify-content: center; 
-    height: 380px; 
+    height: 750px; 
     margin: 1.5rem 0; 
-    padding: 25px 15px; 
+    padding: 30px 20px; 
     background: rgba(1, 22, 17, 0.6); 
     border-radius: 12px; 
     border: 1px solid var(--border-glass); 
@@ -76,21 +76,22 @@
     overflow: hidden; 
 }
 
-/* Individual Bar Styles */
+
+/* Individual Bar Styles - Numbers at the bottom inside the bar, growing upwards */
 .sort-bar { 
-    width: 65px; 
-    margin: 0 8px; 
-    background: #0ea5e9; 
-    border-radius: 8px 8px 0 0; 
+    width: 52px; 
+    margin: 0 6px; 
+    background: #7dd3fc; 
+    border-radius: 8px 8px 8px 8px; 
     display: flex; 
     flex-direction: column; 
-    justify-content: flex-start; 
+    justify-content: flex-end; /* Pinapanatili ang numero sa loob malapit sa ilalim */
     align-items: center; 
-    padding-top: 8px; 
+    padding-bottom: 10px;      
     font-size: 0.85rem; 
     font-weight: bold; 
-    color: #ffffff; 
-    transition: transform 0.4s ease-in-out, background 0.3s ease; 
+    color: #0f172a; 
+    transition: transform 0.35s ease-in-out, background-color 0.35s ease, opacity 0.35s ease; 
     position: relative; 
 }
 
@@ -98,16 +99,16 @@
 /* ==========================================
    1. BUBBLE SORT STYLES & STATES
    ========================================== */
-.sort-bar.unsorted { background: #0ea5e9; }
-.sort-bar.comparing { background: #f59e0b !important; } /* Orange for Comparison */
-.sort-bar.sorted { background: #10b981 !important; }    /* Green for Sorted Elements */
-.sort-bar.swapping { background: #ef4444 !important; z-index: 10; } /* Red for Swapping */
+.sort-bar.unsorted { background: #7dd3fc; color: #0f172a; }
+.sort-bar.comparing { background: #f59e0b !important; color: #ffffff !important; } 
+.sort-bar.sorted { background: #10b981 !important; color: #ffffff !important; }    
+.sort-bar.swapping { background: #ef4444 !important; color: #ffffff !important; z-index: 10; } 
 
 
 /* ==========================================
    2. SELECTION SORT STYLES & STATES
    ========================================== */
-.sort-bar.min-val { background: #a855f7 !important; } /* Purple for Minimum Value */
+.sort-bar.min-val { background: #a855f7 !important; color: #ffffff !important; } 
 
 
 /* ==========================================
@@ -115,29 +116,61 @@
    ========================================== */
 .sort-bar.extracted { 
     background: #e11d48 !important; 
-    transform: translateY(90px) !important; 
+    color: #ffffff !important;
     z-index: 20; 
-} /* Rose/Red for Extracted Key Element (X) */
+} 
 
 .legend-extracted { background: #e11d48; }
 
+/* Custom layout specifically for Insertion Sort mode */
+.bars-container.insertion-mode {
+    height: 750px !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    padding-bottom: 220px !important; /* Binigyan ng sapat na kwarto sa ibaba para hindi maputol ang extracted bar */
+}
+
+.bars-container.insertion-mode .sort-bar {
+    width: 52px !important;
+    margin: 0 6px !important;
+    font-size: 0.85rem !important;
+    bottom: 0px !important;
+}
 
 /* ==========================================
    4. MERGE SORT STYLES & STATES
    ========================================== */
 .sort-bar.merging { 
     background: #0284c7 !important; 
+    color: #ffffff !important;
     z-index: 15; 
-} /* Blue tone for Merge Sort active partitions */
+} 
 
 .legend-merging { background: #0284c7; }
+
+/* Custom layout specifically for Merge Sort mode */
+.bars-container.merge-mode {
+    height: 750px !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    padding-bottom: 220px !important;
+    position: relative;
+}
+
+.bars-container.merge-mode .sort-bar {
+    width: 48px !important;
+    margin: 0 5px !important;
+    font-size: 0.85rem !important;
+    font-weight: bold;
+    bottom: 0px !important;
+}
 
 
 /* ==========================================
    5. QUICK SORT STYLES & STATES
    ========================================== */
-.sort-bar.pivot { background: #eab308 !important; }         /* Yellow for Pivot */
-.sort-bar.partitioning { background: #f43f5e !important; } /* Pink/Red for Partition */
+.sort-bar.pivot { background: #eab308 !important; color: #ffffff !important; }         
+.sort-bar.partitioning { background: #f43f5e !important; color: #ffffff !important; } 
 
 
 /* ==========================================
@@ -327,7 +360,7 @@
 .legend-comparing { background: #f59e0b; }
 .legend-swapping { background: #ef4444; }
 .legend-sorted { background: #10b981; }
-.legend-unsorted { background: #0ea5e9; }
+.legend-unsorted { background: #7dd3fc; }
 
 /* Profile Modal Typography Styles */
 .modal-profile-name {

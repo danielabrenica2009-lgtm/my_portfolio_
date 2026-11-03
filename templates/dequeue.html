@@ -10,28 +10,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style_main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='area.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='queue_dequeue.css') }}">
-    <style>
-        /* Custom Back Button Styling for Glassmorphism & Hover state */
-        .custom-back-btn {
-            background: rgba(6, 78, 59, 0.45);
-            color: var(--text-main);
-            border: 1px solid var(--border-glass);
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-        }
-        .custom-back-btn:hover {
-            background: var(--primary-green);
-            color: #022c22;
-            border-color: var(--primary-green);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-    </style>
 </head>
 <body>
 
@@ -125,7 +103,7 @@
                 // Prevent form submission if text exists in the input field without adding
                 if (val !== "") {
                     e.preventDefault();
-                    alert(`Please clear or add first "${val}" before performing removal.`);
+                    alert(`Warning: Please clear or add first "${val}" before performing removal.`);
                     inputField.focus();
                 }
             }

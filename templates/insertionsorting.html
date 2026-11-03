@@ -55,7 +55,7 @@
 
             <!-- Custom Input Row -->
             <div class="custom-row">
-                <input type="text" id="customInput" class="custom-input" placeholder="e.g. 42, 30, 47, 0, 33, 23">
+                <input type="text" id="customInput" class="custom-input" placeholder="e.g. 14, 50, 26, 17, 18, 20, 15, 21, 0, 28">
                 <button class="btn btn-go" onclick="applyCustomArray()">Go</button>
             </div>
 
@@ -65,8 +65,8 @@
                 <span id="sortStatusMsg">Ready to sort</span>
             </div>
 
-            <!-- Dynamic Bars Container -->
-            <div class="bars-container" id="bars-container"></div>
+            <!-- Dynamic Bars Container with insertion-mode class -->
+            <div class="bars-container insertion-mode" id="bars-container"></div>
 
             <!-- Execution Control Buttons -->
             <div class="controls-row">
@@ -84,11 +84,11 @@
                 <div class="code-box">
                     <div id="code1" class="code-line">mark first element as sorted</div>
                     <div id="code2" class="code-line">for each unsorted element X</div>
-                    <div id="code3" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;'extract' the element X</div>
+                    <div id="code3" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;'extract' the element X downward</div>
                     <div id="code4" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;for j = lastSortedIndex down to 0</div>
                     <div id="code5" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if current element j > X</div>
                     <div id="code6" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;move sorted element to the right by 1</div>
-                    <div id="code7" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;break loop and insert X here</div>
+                    <div id="code7" class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;break loop and insert X back upward</div>
                 </div>
             </div>
 
@@ -125,9 +125,9 @@
 
     <footer>&copy; 2026 Daniel Abrenica | My Personal Portfolio</footer>
 
-    <!-- Insertion Sort Logic Script -->
-    <script>
-        let originalArray = [42, 30, 47, 0, 33, 23, 35, 22, 41, 30];
+    <!-- Insertion Sort Logic Script with Downward Extraction Animation -->
+   <script>
+        let originalArray = [14, 50, 26, 17, 18, 20, 15, 21, 0, 28];
         let historySteps = [];
         let currentStepIndex = 0;
         let isPlaying = false;
@@ -144,13 +144,15 @@
             let workingArr = [...arr];
             let n = workingArr.length;
             
-            // We did it to [] so that the Step 0 is not green before clicking the play button 
+            // Step 0: Initial state
             historySteps.push({
                 arr: [...workingArr],
                 sorted: [],
                 extractedIdx: -1,
+                extractedVal: null,
                 comparing: [],
                 translateX: {},
+                extraTranslateX: 0,
                 explanation: "Initial array loaded. Click Play or Next to begin Insertion Sort.",
                 activeCode: 1
             });
@@ -160,8 +162,10 @@
                     arr: [...workingArr],
                     sorted: Array.from({length: i}, (_, k) => k),
                     extractedIdx: -1,
+                    extractedVal: null,
                     comparing: [],
                     translateX: {},
+                    extraTranslateX: 0,
                     explanation: `Starting loop for unsorted element X at index ${i} (${workingArr[i]}).`,
                     activeCode: 2
                 });
@@ -169,25 +173,31 @@
                 let key = workingArr[i];
                 let j = i - 1;
 
+                // Downward extraction step - we explicitly save extractedVal = key so it never changes dynamically
                 historySteps.push({
                     arr: [...workingArr],
                     sorted: Array.from({length: i}, (_, k) => k),
                     extractedIdx: i,
+                    extractedVal: key,
                     comparing: [],
                     translateX: {},
-                    explanation: `Extracting element X (${key}) down to evaluate its correct position.`,
+                    extraTranslateX: 0,
+                    explanation: `Extracting element X (${key}) downward into the workspace area.`,
                     activeCode: 3
                 });
 
                 let translateX = {};
+                let currentExtraX = 0;
 
                 while (j >= 0) {
                     historySteps.push({
                         arr: [...workingArr],
                         sorted: Array.from({length: i}, (_, k) => k),
                         extractedIdx: i,
+                        extractedVal: key,
                         comparing: [j],
                         translateX: {...translateX},
+                        extraTranslateX: currentExtraX,
                         explanation: `For j = ${j}: comparing current element (${workingArr[j]}) > X (${key}).`,
                         activeCode: 4
                     });
@@ -197,13 +207,16 @@
                             arr: [...workingArr],
                             sorted: Array.from({length: i}, (_, k) => k),
                             extractedIdx: i,
+                            extractedVal: key,
                             comparing: [j],
                             translateX: {...translateX},
-                            explanation: `Condition met! Moving sorted element (${workingArr[j]}) to the right by 1 position.`,
+                            extraTranslateX: currentExtraX,
+                            explanation: `Condition met! Moving sorted element (${workingArr[j]}) to the right and sliding X left.`,
                             activeCode: 6
                         });
 
-                        translateX[j] = (translateX[j] || 0) + 76;
+                        translateX[j] = (translateX[j] || 0) + 64;
+                        currentExtraX -= 64; 
                         workingArr[j + 1] = workingArr[j];
                         j--;
                     } else {
@@ -213,13 +226,16 @@
 
                 workingArr[j + 1] = key;
 
+                // Insertion step: inserting X back upward
                 historySteps.push({
                     arr: [...workingArr],
                     sorted: Array.from({length: i + 1}, (_, k) => k),
                     extractedIdx: -1,
+                    extractedVal: null,
                     comparing: [],
                     translateX: {},
-                    explanation: `Break loop and insert X (${key}) into its correct sorted position.`,
+                    extraTranslateX: 0,
+                    explanation: `Inserting X (${key}) back upward into its correct sorted position.`,
                     activeCode: 7
                 });
             }
@@ -228,8 +244,10 @@
                 arr: [...workingArr],
                 sorted: Array.from({length: n}, (_, k) => k),
                 extractedIdx: -1,
+                extractedVal: null,
                 comparing: [],
                 translateX: {},
+                extraTranslateX: 0,
                 explanation: "Insertion Sort completed! The array is fully sorted.",
                 activeCode: 1
             });
@@ -260,22 +278,35 @@
                 bar.className = 'sort-bar unsorted';
                 
                 if(state.sorted && state.sorted.includes(idx)) bar.className = 'sort-bar sorted';
+                
+                let displayVal = val;
+                let displayHeightVal = val;
+
                 if(state.extractedIdx === idx) {
                     bar.className = 'sort-bar extracted';
+                    if(state.extractedVal !== null) {
+                        displayVal = state.extractedVal;
+                        displayHeightVal = state.extractedVal;
+                    }
                 }
+
                 if(state.comparing && state.comparing.includes(idx)) bar.className = 'sort-bar comparing';
 
                 let currentTranslateX = (state.translateX && state.translateX[idx]) ? state.translateX[idx] : 0;
                 
+                // INAYOS: 
+                // 1. Inangat sa itaas (red circle area) ang baseline ng mga bar (translateY -220px).
+                // 2. Inayos ang drop ng extracted bar (translateY 160px) para kitang-kita at HINDI MAPUTOL sa ibaba.
                 if(state.extractedIdx === idx) {
-                    bar.style.transform = `translateX(${currentTranslateX}px) translateY(100px)`;
+                    let totalX = currentTranslateX + (state.extraTranslateX || 0);
+                    bar.style.transform = `translateX(${totalX}px) translateY(160px)`;
                 } else {
-                    bar.style.transform = `translateX(${currentTranslateX}px)`;
+                    bar.style.transform = `translateX(${currentTranslateX}px) translateY(-220px)`;
                 }
 
-                let calculatedHeight = Math.max((val / maxVal) * 75, 12);
+                let calculatedHeight = Math.max((displayHeightVal / maxVal) * 45, 12);
                 bar.style.height = `${calculatedHeight}%`;
-                bar.textContent = val;
+                bar.textContent = displayVal;
                 container.appendChild(bar);
             });
 
@@ -300,7 +331,7 @@
 
         function setPreset(type) {
             stopPlay();
-            if(type === 'random') originalArray = [42, 30, 47, 0, 33, 23, 35, 22, 41, 30];
+            if(type === 'random') originalArray = [14, 50, 26, 17, 18, 20, 15, 21, 0, 28];
             if(type === 'sorted') originalArray = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
             if(type === 'nearly') originalArray = [20, 10, 30, 40, 50, 60, 70, 80, 100, 90];
             if(type === 'duplicates') originalArray = [30, 10, 30, 20, 10, 40, 20, 50, 30, 10];
@@ -312,7 +343,7 @@
             const inputVal = document.getElementById('customInput').value;
             
             if(!inputVal.trim()) {
-                alert("Please enter some numbers.");
+                alert("Warning: Please enter some numbers before clicking Go.");
                 return;
             }
 
@@ -326,14 +357,14 @@
                 
                 let num = parseFloat(trimmed);
                 if (isNaN(num)) {
-                    alert(`Invalid input found: "${trimmed}". Please enter only numbers.`);
+                    alert(`Warning: Invalid input found: "${trimmed}". Please enter only numeric values.`);
                     return;
                 }
                 parsed.push(Math.round(num));
             }
 
             if(parsed.length < 2) {
-                alert("Enter two or more numbers to visualize the sorting.");
+                alert("Warning: Please enter at least two numbers to visualize the sorting process.");
                 return;
             }
 

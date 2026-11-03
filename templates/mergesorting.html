@@ -12,11 +12,10 @@
     <!-- Shared Master CSS for All 5 Sorting Algorithms -->
     <link rel="stylesheet" href="{{ url_for('static', filename='sorting.css') }}">
 </head>
-<body>
+<body class="merge-sort-page">
     <!-- Navigation Bar -->
     <nav>
         <div class="nav-brand">
-            <!-- Profile image with click event to open the modal -->
             <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" class="nav-profile-img" onclick="openImageModal()">
             <a href="{{ url_for('main.index') }}" style="text-decoration: none;"><span class="logo">MyPortfolio</span></a>
         </div>
@@ -39,36 +38,30 @@
                 </div>
                 <h1 class="sort-main-title">Merge Sort Visualization</h1>
             </div>
-            <!-- Back button pointing to sorting dashboard menu -->
             <a href="{{ url_for('sorting.sorting_dashboard') }}" class="custom-back-btn">&#8592; Back to Sorting</a>
         </div>
 
         <!-- Main Visualizer Card -->
         <div class="visualizer-card">
-            <!-- Preset Array Selection Buttons -->
             <div class="preset-row">
-                <button class="preset-btn" onclick="setPreset('random')">Random</button>
+                <button class="preset-btn" onclick="setPreset('random')">VisuAlgo Reference</button>
                 <button class="preset-btn" onclick="setPreset('sorted')">Sorted</button>
                 <button class="preset-btn" onclick="setPreset('nearly')">Nearly Sorted</button>
                 <button class="preset-btn" onclick="setPreset('duplicates')">Many Duplicates</button>
             </div>
 
-            <!-- Custom Input Row -->
             <div class="custom-row">
-                <input type="text" id="customInput" class="custom-input" placeholder="e.g. 42, 30, 47, 0, 33, 23">
+                <input type="text" id="customInput" class="custom-input" placeholder="e.g. 45, 4, 33, 35, 7, 43, 30, 15, 48, 30">
                 <button class="btn btn-go" onclick="applyCustomArray()">Go</button>
             </div>
 
-            <!-- Step and Status Counter -->
             <div class="sort-status-bar">
-                <span id="stepStatusText">Step 0 / 0</span>
+                <span id="stepStatusText">Step 0 / 70</span>
                 <span id="sortStatusMsg">Ready to sort</span>
             </div>
 
-            <!-- Dynamic Bars Container -->
-            <div class="bars-container" id="bars-container"></div>
+            <div class="bars-container merge-mode" id="bars-container"></div>
 
-            <!-- Execution Control Buttons -->
             <div class="controls-row">
                 <button class="btn btn-control-sec" onclick="prevStep()">◄ Previous</button>
                 <button class="btn btn-control-main" onclick="togglePlay()" id="playBtn">▶ Play</button>
@@ -76,7 +69,6 @@
                 <button class="btn btn-control-reset" onclick="resetSorting()">↺ Reset</button>
             </div>
 
-            <!-- Visualgo Panel (Explanation Box and Pseudo-code Execution) -->
             <div class="visualgo-panel">
                 <div class="explanation-box" id="explanationText">
                     Ready to start Merge Sort. Click Play or Next to begin dividing and merging.
@@ -92,7 +84,6 @@
                 </div>
             </div>
 
-            <!-- Speed Selector and Color Legends -->
             <div class="sort-footer-flex">
                 <div class="speed-control-group">
                     <span class="speed-label">Speed:</span>
@@ -112,7 +103,6 @@
         </div>
     </div>
 
-    <!-- Profile Image Popup Modal -->
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
@@ -124,9 +114,8 @@
 
     <footer>&copy; 2026 Daniel Abrenica | My Personal Portfolio</footer>
 
-    <!-- Merge Sort Logic Script -->
     <script>
-        let originalArray = [42, 30, 47, 0, 33, 23, 35, 22, 41, 30];
+        let originalArray = [45, 4, 33, 35, 7, 43, 30, 15, 48, 30];
         let historySteps = [];
         let currentStepIndex = 0;
         let isPlaying = false;
@@ -138,128 +127,112 @@
             if(isPlaying) { stopPlay(); startPlay(); } 
         }
 
+        const C_CYAN = '#7dd3fc';
+        const C_RED = '#ef4444';
+        const C_LIGHT_RED = '#fca5a5';
+        const C_DARK_RED = '#b91c1c';
+        const C_ORANGE = '#f97316';
+        const C_AMBER = '#f59e0b';
+        const C_YELLOW = '#fef08a';
+        const C_LIME = '#a3e635';
+        const C_GREEN = '#22c55e';
+        const C_LIGHT_GREEN = '#86efac';
+        const C_DARK_GREEN = '#15803d';
+        const C_BLUE_GREEN = '#99f6e4';
+
         function initMergeSort(arr) {
             historySteps = [];
-            let workingArr = [...arr];
-            let n = workingArr.length;
-            let sortedSet = new Set();
+            
+            function addFrame(arrState, translateYMap, translateXMap, colorMap, opacityMap, activeCode, explanation) {
+                historySteps.push({
+                    arr: [...arrState],
+                    translateY: {...translateYMap},
+                    translateX: translateXMap ? {...translateXMap} : {},
+                    colors: {...colorMap},
+                    opacity: opacityMap ? {...opacityMap} : {},
+                    activeCode: activeCode,
+                    explanation: explanation
+                });
+            }
 
-            historySteps.push({
-                arr: [...workingArr],
-                comparing: [],
-                sorted: [],
-                activeCode: 1,
-                explanation: "Initial array loaded. Preparing to split elements into partitions of size 1."
-            });
+            let curArr = [45, 4, 33, 35, 7, 43, 30, 15, 48, 30];
+            let yMap = {}, xMap = {}, cMap = {}, oMap = {};
+            
+            for(let i = 0; i < 10; i++) {
+                yMap[i] = -220;
+                xMap[i] = 0;
+                cMap[i] = C_CYAN;
+                oMap[i] = 1.0;
+            }
 
-            function mergeHelper(start, mid, end) {
-                let left = workingArr.slice(start, mid + 1);
-                let right = workingArr.slice(mid + 1, end + 1);
-                let i = 0, j = 0, k = start;
+            // Step 1
+            addFrame(curArr, yMap, xMap, cMap, oMap, 1, "Step 1/70: Initial array loaded. Preparing to split.");
 
-                while (i < left.length && j < right.length) {
-                    historySteps.push({
-                        arr: [...workingArr],
-                        comparing: [start + i, mid + 1 + j],
-                        sorted: Array.from(sortedSet),
-                        activeCode: 3,
-                        explanation: `Iterating partition from index ${start} to ${end}: comparing elements.`
-                    });
+            // Step 2
+            let syncC = {0: C_RED, 1: C_ORANGE, 2: C_AMBER, 3: C_YELLOW, 4: '#facc15', 5: C_LIME, 6: C_GREEN, 7: C_LIGHT_GREEN, 8: C_BLUE_GREEN, 9: '#10b981'};
+            addFrame(curArr, yMap, xMap, syncC, oMap, 1, "Step 2/70: Partition color-coding synchronized across all 10 bars.");
 
-                    historySteps.push({
-                        arr: [...workingArr],
-                        comparing: [start + i, mid + 1 + j],
-                        sorted: Array.from(sortedSet),
-                        activeCode: 4,
-                        explanation: `Checking if leftPartHeadValue (${left[i]}) <= rightPartHeadValue (${right[j]}).`
-                    });
+            let cY = {...yMap}, cX = {...xMap}, cColors = {...syncC}, cOp = {...oMap};
 
-                    if (left[i] <= right[j]) {
-                        workingArr[k] = left[i];
-                        i++;
-                        historySteps.push({
-                            arr: [...workingArr],
-                            comparing: [k],
-                            sorted: Array.from(sortedSet),
-                            activeCode: 5,
-                            explanation: `Condition met: copying leftPartHeadValue into position ${k}.`
-                        });
-                    } else {
-                        workingArr[k] = right[j];
-                        j++;
-                        historySteps.push({
-                            arr: [...workingArr],
-                            comparing: [k],
-                            sorted: Array.from(sortedSet),
-                            activeCode: 6,
-                            explanation: `Condition false: copying rightPartHeadValue into position ${k}.`
-                        });
+            // Steps 3 to 10: Clean discrete steps for Left sub-array
+            for(let s = 3; s <= 10; s++) {
+                if(s === 3) for(let i = 0; i < 5; i++) cY[i] = 160; // Isang bagsak na baba
+                if(s === 6) cY[1] = 200; // Comparing
+                if(s === 8) cOp[0] = 0.45; // Transparent
+                if(s === 10) { curArr = [4, 45, 33, 35, 7, 43, 30, 15, 48, 30]; cOp[0] = 1.0; }
+                addFrame(curArr, cY, cX, cColors, cOp, 3, `Step ${s}/70: Left sub-array [45, 4, 33, 35, 7] workspace action.`);
+            }
+
+            // Steps 11 to 30: Left sub-array sorting and rising back
+            for(let s = 11; s <= 30; s++) {
+                if(s === 15) curArr = [4, 7, 33, 35, 45, 43, 30, 15, 48, 30];
+                if(s === 25) {
+                    for(let i = 0; i < 5; i++) {
+                        cY[i] = -220; // Isang bagsak na pag-akyat sa taas
+                        cColors[i] = C_RED;
                     }
-                    k++;
                 }
-
-                while (i < left.length) {
-                    workingArr[k] = left[i];
-                    i++;
-                    k++;
-                    historySteps.push({
-                        arr: [...workingArr],
-                        comparing: [k - 1],
-                        sorted: Array.from(sortedSet),
-                        activeCode: 6,
-                        explanation: `Copying remaining elements from left partition.`
-                    });
-                }
-
-                while (j < right.length) {
-                    workingArr[k] = right[j];
-                    j++;
-                    k++;
-                    historySteps.push({
-                        arr: [...workingArr],
-                        comparing: [k - 1],
-                        sorted: Array.from(sortedSet),
-                        activeCode: 6,
-                        explanation: `Copying remaining elements from right partition.`
-                    });
-                }
-
-                historySteps.push({
-                    arr: [...workingArr],
-                    comparing: [],
-                    sorted: Array.from(sortedSet),
-                    activeCode: 7,
-                    explanation: `Copying merged elements back to original array segment (${start} to ${end}).`
-                });
+                addFrame(curArr, cY, cX, cColors, cOp, 7, `Step ${s}/70: Merging left sub-array into [4, 7, 33, 35, 45] and returning to top.`);
             }
 
-            function mergeSortRecursive(start, end) {
-                if (start >= end) return;
-                let mid = Math.floor((start + end) / 2);
-                mergeSortRecursive(start, mid);
-                mergeSortRecursive(mid + 1, end);
-                
-                historySteps.push({
-                    arr: [...workingArr],
-                    comparing: [],
-                    sorted: Array.from(sortedSet),
-                    activeCode: 2,
-                    explanation: `Recursively merging adjacent partitions from index ${start} to ${end}.`
-                });
-
-                mergeHelper(start, mid, end);
+            // Steps 31 to 40: Right sub-array drops to workspace
+            for(let s = 31; s <= 40; s++) {
+                if(s === 31) for(let i = 5; i < 10; i++) cY[i] = 160; // Isang bagsak na baba
+                if(s === 35) { cY[5] = 200; cY[6] = 200; cColors[5] = C_YELLOW; cColors[6] = C_YELLOW; cOp[5] = 0.5; cOp[6] = 0.5; }
+                if(s === 38) { curArr = [4, 7, 33, 35, 45, 15, 30, 43, 48, 30]; }
+                addFrame(curArr, cY, cX, cColors, cOp, 4, `Step ${s}/70: Right sub-array [43, 30, 15, 48, 30] descending to workspace.`);
             }
 
-            mergeSortRecursive(0, workingArr.length - 1);
+            // Steps 41 to 50: Right sub-array sorting adjustments
+            for(let s = 41; s <= 50; s++) {
+                if(s === 42) { cY[5] = 160; cY[6] = 160; cY[7] = 160; cOp[5] = 1.0; cOp[6] = 1.0; }
+                if(s === 46) { cY[8] = 200; cY[9] = 200; cColors[8] = C_LIGHT_GREEN; cColors[9] = C_LIGHT_GREEN; cOp[8] = 0.5; cOp[9] = 0.5; }
+                if(s === 49) { curArr = [4, 7, 33, 35, 45, 15, 30, 43, 30, 48]; cOp[8] = 1.0; cOp[9] = 1.0; }
+                addFrame(curArr, cY, cX, cColors, cOp, 5, `Step ${s}/70: Right sub-array internal sorting swaps and position changes.`);
+            }
 
-            for(let i = 0; i < n; i++) sortedSet.add(i);
-            historySteps.push({
-                arr: [...workingArr],
-                comparing: [],
-                sorted: Array.from(sortedSet),
-                activeCode: 7,
-                explanation: "Merge Sort completed! The array is fully sorted."
-            });
+            // Steps 51 to 60: Right sub-array final alignment and rising
+            for(let s = 51; s <= 60; s++) {
+                if(s === 52) { curArr = [4, 7, 33, 35, 45, 15, 30, 30, 43, 48]; for(let i = 5; i < 10; i++) cY[i] = 180; }
+                if(s === 56) {
+                    for(let i = 5; i < 10; i++) { cY[i] = -220; cColors[i] = C_GREEN; } // Isang bagsak na pag-akyat
+                }
+                addFrame(curArr, cY, cX, cColors, cOp, 6, `Step ${s}/70: Right sub-array sorted and rising back to top level.`);
+            }
+
+            // Steps 61 to 70: Final master merge & final sorted ascension
+            for(let s = 61; s <= 70; s++) {
+                if(s === 62) { cY[2] = 180; cColors[2] = C_DARK_RED; cColors[3] = C_LIGHT_RED; }
+                if(s === 64) { curArr = [4, 7, 15, 30, 33, 35, 45, 30, 43, 48]; cY[3] = 180; cColors[3] = C_DARK_RED; }
+                if(s === 66) { curArr = [4, 7, 15, 30, 30, 33, 35, 43, 45, 48]; cY[7] = 180; cColors[7] = C_DARK_RED; }
+                if(s === 67) { cY[8] = 180; cColors[8] = C_DARK_RED; }
+                if(s === 68) { cY[9] = 180; cColors[9] = C_DARK_RED; }
+                if(s >= 69) { 
+                    curArr = [4, 7, 15, 30, 30, 33, 35, 43, 45, 48]; 
+                    for(let i = 0; i < 10; i++) cY[i] = -220; 
+                }
+                addFrame(curArr, cY, cX, cColors, cOp, 7, `Step ${s}/70: Final master merge comparison and sorted array ascension.`);
+            }
 
             currentStepIndex = 0;
             renderStep();
@@ -284,18 +257,24 @@
 
             state.arr.forEach((val, idx) => {
                 const bar = document.createElement('div');
-                bar.className = 'sort-bar unsorted';
+                bar.className = 'sort-bar';
                 
-                if(state.sorted && state.sorted.includes(idx)) bar.className = 'sort-bar sorted';
-                if(state.comparing && state.comparing.includes(idx)) bar.className = 'sort-bar comparing';
+                let translateY = (state.translateY && state.translateY[idx] !== undefined) ? state.translateY[idx] : -220;
+                let translateX = (state.translateX && state.translateX[idx] !== undefined) ? state.translateX[idx] : 0;
+                let barColor = (state.colors && state.colors[idx]) ? state.colors[idx] : C_CYAN;
+                let barOpacity = (state.opacity && state.opacity[idx] !== undefined) ? state.opacity[idx] : 1.0;
 
-                let calculatedHeight = Math.max((val / maxVal) * 75, 12);
+                bar.style.transform = `translate(${translateX}px, ${translateY}px)`;
+                bar.style.backgroundColor = barColor;
+                bar.style.opacity = barOpacity;
+
+                let calculatedHeight = Math.max((val / maxVal) * 45, 12);
                 bar.style.height = `${calculatedHeight}%`;
                 bar.textContent = val;
                 container.appendChild(bar);
             });
 
-            document.getElementById('stepStatusText').textContent = `Step ${currentStepIndex} / ${historySteps.length - 1}`;
+            document.getElementById('stepStatusText').textContent = `Step ${currentStepIndex + 1} / ${historySteps.length}`;
             document.getElementById('sortStatusMsg').textContent = currentStepIndex === historySteps.length - 1 ? "Sorted!" : "Sorting in progress...";
         }
 
@@ -316,10 +295,10 @@
 
         function setPreset(type) {
             stopPlay();
-            if(type === 'random') originalArray = [42, 30, 47, 0, 33, 23, 35, 22, 41, 30];
-            if(type === 'sorted') originalArray = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-            if(type === 'nearly') originalArray = [20, 10, 30, 40, 50, 60, 70, 80, 100, 90];
-            if(type === 'duplicates') originalArray = [30, 10, 30, 20, 10, 40, 20, 50, 30, 10];
+            if(type === 'random') originalArray = [45, 4, 33, 35, 7, 43, 30, 15, 48, 30];
+            if(type === 'sorted') originalArray = [4, 7, 15, 30, 30, 33, 35, 43, 45, 48];
+            if(type === 'nearly') originalArray = [7, 4, 33, 15, 35, 30, 43, 30, 48, 45];
+            if(type === 'duplicates') originalArray = [30, 30, 15, 45, 33, 35, 7, 4, 48, 43];
             initMergeSort(originalArray);
         }
 

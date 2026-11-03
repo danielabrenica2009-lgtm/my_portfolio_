@@ -28,29 +28,31 @@
         <div class="tree-header-flex">
             <div>
                 <h1 class="tree-main-title">Binary Tree Interactive Visualizer</h1>
-                <p class="tree-subtitle">Custom roots, center nodes, level tracking, undo/redo, and comprehensive tree results summary.</p>
+                <p class="tree-subtitle">Edit root names, insert binary children, delete nodes, undo/redo, and view dynamic tree results.</p>
             </div>
             <!-- Back to Works button on Upper Right -->
             <a href="{{ url_for('main.works') }}" class="custom-back-btn">&#8592; Back to Works</a>
         </div>
 
-        <!-- Node Input Control Panel with Clear Buttons on Right -->
+        <!-- Node Input Control Panel -->
         <div class="tree-control-panel">
             <div class="control-row" style="justify-content: space-between; align-items: center;">
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-                    <input type="text" id="nodeValue" class="tree-input" placeholder="Node Name (e.g., Daniel)" style="width: 170px;">
-                    <select id="parentSelect" class="tree-select" style="width: 190px;">
-                        <option value="ROOT">Select Parent / Root</option>
+                    <input type="text" id="nodeValue" class="tree-input" placeholder="Node Name (e.g., A, B, C)" style="width: 170px;">
+                    <select id="parentSelect" class="tree-select" style="width: 210px;">
+                        <option value="ROOT">Select Target Node / Root</option>
                     </select>
-                    <select id="childPosition" class="tree-select" style="width: 140px;">
-                        <option value="center">Center (Root)</option>
+                    <select id="childPosition" class="tree-select" style="width: 160px;">
+                        <option value="rename_root">✏️ Edit Node Name</option>
                         <option value="left">Left Child</option>
                         <option value="right">Right Child</option>
+                        <option value="delete_node">❌ Delete Selected Node</option>
                     </select>
-                    <button class="btn-tree" onclick="addNode()">+ Add Node</button>
-                    <button class="btn-tree btn-tree-danger" onclick="resetDefaultTree()">Load Default</button>
+                    <button class="btn-tree" onclick="addNode()">+ Submit</button>
+                    <button class="btn-tree btn-tree-danger" onclick="clearAllTree()" style="background: #dc2626;">🗑️ Clear All</button>
+                    <button class="btn-tree" onclick="resetDefaultTree()" style="background: #0284c7; color: #fff;">Load Default</button>
                 </div>
-                <!-- Clear Action Buttons (Undo, Redo, Result) turning green on hover -->
+                <!-- Action Buttons (Undo, Redo, Result) -->
                 <div style="display: flex; gap: 8px;">
                     <button class="btn-action-clear" onclick="undoAction()" title="Undo last action">↺ Undo</button>
                     <button class="btn-action-clear" onclick="redoAction()" title="Redo action">Redo ↻</button>
@@ -132,16 +134,19 @@
             document.getElementById('traversalOutput').textContent = "Performed Redo.";
         }
 
-        // Default setup matching classroom graph
+        // Default setup matching Picture 2 (R -> A, B -> C, D, E, F -> G)
         function loadDefaultTree() {
             saveState();
-            rootNode = new TreeNode("Zenaida", 1);
-            rootNode.left = new TreeNode("Mario", 2);
-            rootNode.right = new TreeNode("Policarpio", 2);
-            rootNode.left.left = new TreeNode("Hannah", 3);
-            rootNode.left.right = new TreeNode("Daniel", 3);
-            rootNode.right.left = new TreeNode("James", 3);
-            rootNode.right.right = new TreeNode("Pollyvien", 3);
+            rootNode = new TreeNode("R", 1);
+            rootNode.left = new TreeNode("A", 2);
+            rootNode.right = new TreeNode("B", 2);
+            
+            rootNode.left.left = new TreeNode("C", 3);
+            rootNode.left.right = new TreeNode("D", 3);
+            
+            rootNode.right.left = new TreeNode("E", 3);
+            rootNode.right.right = new TreeNode("F", 3);
+            rootNode.right.right.left = new TreeNode("G", 4);
 
             updateParentDropdown();
             drawTree();
@@ -149,7 +154,17 @@
 
         function resetDefaultTree() {
             loadDefaultTree();
-            document.getElementById('traversalOutput').textContent = "Loaded default family tree model.";
+            document.getElementById('traversalOutput').textContent = "Loaded default diagram model (R, A, B, C, D, E, F, G).";
+        }
+
+        function clearAllTree() {
+            if (confirm("Are you sure you want to delete all nodes from the tree?")) {
+                saveState();
+                rootNode = null;
+                updateParentDropdown();
+                drawTree();
+                document.getElementById('traversalOutput').textContent = "Tree canvas cleared completely.";
+            }
         }
 
         function getNodesWithLevel(node, list = []) {
@@ -166,7 +181,7 @@
             
             const rootOpt = document.createElement('option');
             rootOpt.value = "ROOT";
-            rootOpt.textContent = rootNode ? `Change Root / Center (${rootNode.value})` : "Set Root / Center (Level 1)";
+            rootOpt.textContent = rootNode ? `Root Node (${rootNode.value})` : "Set Root (Level 1)";
             select.appendChild(rootOpt);
             
             if (rootNode) {
@@ -174,7 +189,7 @@
                 nodes.forEach(item => {
                     const opt = document.createElement('option');
                     opt.value = item.value;
-                    opt.textContent = `Parent: ${item.value} (L${item.level} → L${item.level + 1})`;
+                    opt.textContent = `Node: ${item.value} (Level ${item.level})`;
                     select.appendChild(opt);
                 });
             }
@@ -186,11 +201,39 @@
             return findNode(node.left, val) || findNode(node.right, val);
         }
 
+        function deleteSpecificNode(parent, node, targetVal) {
+            if (!node) return false;
+            if (node.value === targetVal) {
+                if (!parent) {
+                    rootNode = null;
+                } else if (parent.left === node) {
+                    parent.left = null;
+                } else if (parent.right === node) {
+                    parent.right = null;
+                }
+                return true;
+            }
+            return deleteSpecificNode(node, node.left, targetVal) || deleteSpecificNode(node, node.right, targetVal);
+        }
+
         function addNode() {
             const valInput = document.getElementById('nodeValue');
             const val = valInput.value.trim();
             const parentVal = document.getElementById('parentSelect').value;
             const pos = document.getElementById('childPosition').value;
+
+            if (pos === "delete_node") {
+                if (parentVal === "ROOT" && rootNode) {
+                    clearAllTree();
+                    return;
+                }
+                saveState();
+                deleteSpecificNode(null, rootNode, parentVal);
+                updateParentDropdown();
+                drawTree();
+                document.getElementById('traversalOutput').textContent = `Deleted node '${parentVal}'.`;
+                return;
+            }
 
             if (!val) {
                 alert("Please enter a node name or value.");
@@ -199,16 +242,26 @@
 
             saveState();
 
-            if (pos === "center" || parentVal === "ROOT" || !rootNode) {
+            if (pos === "rename_root") {
+                if (parentVal === "ROOT") {
+                    if (rootNode) rootNode.value = val;
+                    else rootNode = new TreeNode(val, 1);
+                } else {
+                    const target = findNode(rootNode, parentVal);
+                    if (target) target.value = val;
+                }
+            } else if (parentVal === "ROOT" || !rootNode) {
                 rootNode = new TreeNode(val, 1);
             } else {
                 const parent = findNode(rootNode, parentVal);
                 if (parent) {
                     const nextLevel = parent.level + 1;
                     if (pos === "left") {
-                        parent.left = new TreeNode(val, nextLevel);
+                        if (parent.left) parent.left.value = val;
+                        else parent.left = new TreeNode(val, nextLevel);
                     } else if (pos === "right") {
-                        parent.right = new TreeNode(val, nextLevel);
+                        if (parent.right) parent.right.value = val;
+                        else parent.right = new TreeNode(val, nextLevel);
                     }
                 }
             }
@@ -216,10 +269,9 @@
             valInput.value = '';
             updateParentDropdown();
             drawTree();
-            document.getElementById('traversalOutput').textContent = `Added node '${val}' successfully.`;
+            document.getElementById('traversalOutput').textContent = `Successfully updated/added node '${val}'.`;
         }
 
-        // Comprehensive Tree Summary Result Function
         function showTreeResult() {
             if (!rootNode) {
                 document.getElementById('traversalOutput').textContent = "Tree is empty. Please add nodes first.";
@@ -236,7 +288,7 @@
                 if (node.right) details.push(`Right Child: ${node.right.value}`);
                 
                 if (details.length > 0) {
-                    summary.push(`|-- Parent: ${node.value} (L${node.level}) ➔ ${details.join(' | ')}`);
+                    summary.push(`|-- Parent: ${node.value} (Level ${node.level}) ➔ ${details.join(' | ')}`);
                 }
                 collectRelationships(node.left);
                 collectRelationships(node.right);
@@ -321,30 +373,24 @@
         function runTraversal(type) {
             let result = [];
 
-            function preorder(node) {
-                if (!node) return;
-                result.push(node.value);
-                preorder(node.left);
-                preorder(node.right);
+            if (type === 'preorder') {
+                let pRes = [];
+                function pre(n) { if(n) { pRes.push(n.value); pre(n.left); pre(n.right); } }
+                pre(rootNode);
+                result = pRes;
             }
-
-            function inorder(node) {
-                if (!node) return;
-                inorder(node.left);
-                result.push(node.value);
-                inorder(node.right);
+            if (type === 'inorder') {
+                let iRes = [];
+                function ino(n) { if(n) { ino(n.left); iRes.push(n.value); ino(n.right); } }
+                ino(rootNode);
+                result = iRes;
             }
-
-            function postorder(node) {
-                if (!node) return;
-                postorder(node.left);
-                postorder(node.right);
-                result.push(node.value);
+            if (type === 'postorder') {
+                let poRes = [];
+                function post(n) { if(n) { post(n.left); post(n.right); poRes.push(n.value); } }
+                post(rootNode);
+                result = poRes;
             }
-
-            if (type === 'preorder') preorder(rootNode);
-            if (type === 'inorder') inorder(rootNode);
-            if (type === 'postorder') postorder(rootNode);
 
             document.getElementById('traversalOutput').textContent = result.join(' ');
         }
