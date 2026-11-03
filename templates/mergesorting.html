@@ -44,33 +44,35 @@
         <!-- Main Visualizer Card -->
         <div class="visualizer-card">
             <div class="preset-row">
-                <button class="preset-btn" onclick="setPreset('random')">VisuAlgo Reference</button>
-                <button class="preset-btn" onclick="setPreset('sorted')">Sorted</button>
-                <button class="preset-btn" onclick="setPreset('nearly')">Nearly Sorted</button>
-                <button class="preset-btn" onclick="setPreset('duplicates')">Many Duplicates</button>
+                <button class="preset-btn" id="random-btn">Random</button>
+                <button class="preset-btn" id="sorted-btn">Sorted</button>
+                <button class="preset-btn" id="nearly-btn">Nearly Sorted</button>
+                <button class="preset-btn" id="duplicates-btn">Many Duplicates</button>
             </div>
 
             <div class="custom-row">
-                <input type="text" id="customInput" class="custom-input" placeholder="e.g. 45, 4, 33, 35, 7, 43, 30, 15, 48, 30">
-                <button class="btn btn-go" onclick="applyCustomArray()">Go</button>
+                <input type="text" id="custom-array" class="custom-input" placeholder="e.g. 45, 4, 33, 35, 7, 43, 30, 15, 48, 30">
+                <button class="btn btn-go" id="custom-btn">Go</button>
             </div>
+            <div id="input-message" style="color: #fca5a5; font-size: 0.8rem; margin-bottom: 10px;"></div>
 
             <div class="sort-status-bar">
-                <span id="stepStatusText">Step 0 / 0</span>
-                <span id="sortStatusMsg">Ready to sort</span>
+                <span id="step-counter">Step 0 / 0</span>
+                <span id="array-status">Ready to sort</span>
             </div>
 
-            <div class="bars-container merge-mode" id="bars-container"></div>
+            <!-- Designated Bars Container matching our dark theme -->
+            <div class="bars-container merge-mode" id="sorting-bars"></div>
 
             <div class="controls-row">
-                <button class="btn btn-control-sec" onclick="prevStep()">◄ Previous</button>
-                <button class="btn btn-control-main" onclick="togglePlay()" id="playBtn">▶ Play</button>
-                <button class="btn btn-control-sec" onclick="nextStep()">Next ►</button>
-                <button class="btn btn-control-reset" onclick="resetSorting()">↺ Reset</button>
+                <button class="btn btn-control-sec" id="previous-btn">◄ Previous</button>
+                <button class="btn btn-control-main" id="play-btn">▶ Play</button>
+                <button class="btn btn-control-sec" id="next-btn">Next ►</button>
+                <button class="btn btn-control-reset" id="reset-btn">↺ Reset</button>
             </div>
 
             <div class="visualgo-panel">
-                <div class="explanation-box" id="explanationText">
+                <div class="explanation-box" id="sorting-message">
                     Ready to start Merge Sort. Click Play or Next to begin dividing and merging.
                 </div>
                 <div class="code-box">
@@ -87,7 +89,7 @@
             <div class="sort-footer-flex">
                 <div class="speed-control-group">
                     <span class="speed-label">Speed:</span>
-                    <select id="speedSelect" onchange="changeSpeed(this.value)" class="speed-select">
+                    <select id="speed-select" class="speed-select">
                         <option value="800">Slow</option>
                         <option value="400" selected>Moderate</option>
                         <option value="150">Fast</option>
@@ -103,6 +105,7 @@
         </div>
     </div>
 
+    <!-- Image Modal -->
     <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeImageModalDirect()">&times;</span>
@@ -115,239 +118,402 @@
     <footer>&copy; 2026 Daniel Abrenica | My Personal Portfolio</footer>
 
     <script>
-        let originalArray = [45, 4, 33, 35, 7, 43, 30, 15, 48, 30];
-        let historySteps = [];
-        let currentStepIndex = 0;
-        let isPlaying = false;
-        let playInterval = null;
-        let animSpeed = 400;
+        document.addEventListener("DOMContentLoaded", function () {
+            const barsContainer = document.getElementById("sorting-bars");
+            const stepCounter = document.getElementById("step-counter");
+            const arrayStatus = document.getElementById("array-status");
+            const message = document.getElementById("sorting-message");
+            const inputMessage = document.getElementById("input-message");
 
-        function changeSpeed(val) { 
-            animSpeed = parseInt(val); 
-            if(isPlaying) { stopPlay(); startPlay(); } 
-        }
+            const customArray = document.getElementById("custom-array");
 
-        const C_CYAN = '#7dd3fc';
-        const C_RED = '#ef4444';
-        const C_YELLOW = '#fef08a';
-        const C_GREEN = '#22c55e';
+            const randomButton = document.getElementById("random-btn");
+            const sortedButton = document.getElementById("sorted-btn");
+            const nearlyButton = document.getElementById("nearly-btn");
+            const duplicatesButton = document.getElementById("duplicates-btn");
+            const customButton = document.getElementById("custom-btn");
 
-        function initMergeSort(arr) {
-            historySteps = [];
-            let workingArr = [...arr];
-            let n = workingArr.length;
+            const previousButton = document.getElementById("previous-btn");
+            const playButton = document.getElementById("play-btn");
+            const nextButton = document.getElementById("next-btn");
+            const resetButton = document.getElementById("reset-btn");
+            const speedSelect = document.getElementById("speed-select");
 
-            // Helper to record each discrete animation frame
-            function pushState(arrState, translateYMap, colorMap, activeCode, explanation) {
-                let yCopy = {};
-                let cCopy = {};
-                for(let i = 0; i < n; i++) {
-                    yCopy[i] = translateYMap[i] !== undefined ? translateYMap[i] : -220;
-                    cCopy[i] = colorMap[i] !== undefined ? colorMap[i] : C_CYAN;
+            let startingArray = [45, 4, 33, 35, 7, 43, 30, 15, 48, 30];
+            let history = [];
+            let currentStep = 0;
+            let timer = null;
+            let isPlaying = false;
+
+            function stopPlaying() {
+                if (timer !== null) {
+                    clearTimeout(timer);
+                    timer = null;
                 }
-                historySteps.push({
-                    arr: [...arrState],
-                    translateY: yCopy,
-                    colors: cCopy,
-                    activeCode: activeCode,
-                    explanation: explanation
-                });
+                isPlaying = false;
+                playButton.textContent = "▶ Play";
             }
 
-            // Initial State (Step 0)
-            let base_y = {};
-            let base_c = {};
-            workingArr.forEach((_, i) => {
-                base_y[i] = -220;
-                base_c[i] = C_CYAN;
-            });
-            pushState(workingArr, base_y, base_c, 1, "Initial array loaded. Preparing to split elements into partitions of size 1.");
+            function buildHistory() {
+                const steps = [];
+                const n = startingArray.length;
 
-            // Color coding synchronization
-            let palette = [C_RED, '#f97316', '#f59e0b', C_YELLOW, '#facc15', '#a3e635', C_GREEN, '#86efac', '#99f6e4', '#10b981'];
-            let sync_c = {};
-            workingArr.forEach((_, i) => {
-                sync_c[i] = palette[i % palette.length];
-            });
-            pushState(workingArr, base_y, sync_c, 1, "Partition color-coding synchronized across all elements.");
+                const bars = startingArray.map((value, index) => ({
+                    id: index,
+                    value,
+                    x: index,
+                    y: 0,
+                    color: "normal"
+                }));
 
-            // Algorithmic Merge Sort Simulator generating step-by-step workspace actions
-            function mergeSortSim(start, end) {
-                if (start >= end) return;
-                let mid = Math.floor((start + end) / 2);
-                mergeSortSim(start, mid);
-                mergeSortSim(mid + 1, end);
-
-                // Frame: Sub-array dropping into workspace
-                let drop_y = {...base_y};
-                let sub_c = {...sync_c};
-                for (let i = start; i <= end; i++) {
-                    drop_y[i] = 160; // Workspace level
+                function record(text, status) {
+                    steps.push({
+                        items: bars.map(bar => ({ ...bar })),
+                        message: text,
+                        status
+                    });
                 }
-                pushState(workingArr, drop_y, sub_c, 2, `Recursively merging segment from index ${start} to ${end}. Sub-array moves to workspace.`);
 
-                // Merge helper simulation
-                let left = workingArr.slice(start, mid + 1);
-                let right = workingArr.slice(mid + 1, end + 1);
-                let i = 0, j = 0, k = start;
-                let tempArr = [...workingArr];
+                function setGroup(start, end, lane, color = "normal") {
+                    bars.forEach(bar => {
+                        if (bar.id >= start && bar.id <= end) {
+                            bar.y = lane;
+                            bar.color = color;
+                        }
+                    });
+                }
 
-                while (i < left.length && j < right.length) {
-                    // Comparing state
-                    let comp_y = {...drop_y};
-                    pushState(tempArr, comp_y, sub_c, 3, `Comparing elements in partition segment (${start} to ${end}).`);
+                function arrangeGroup(group, start, lane, color = "normal") {
+                    group.forEach((bar, index) => {
+                        bar.x = start + index;
+                        bar.y = lane;
+                        bar.color = color;
+                    });
+                }
 
-                    if (left[i] <= right[j]) {
-                        tempArr[k] = left[i];
-                        i++;
-                    } else {
-                        tempArr[k] = right[j];
-                        j++;
+                function mergeGroups(left, right, start, lane) {
+                    const merged = [];
+                    let i = 0;
+                    let j = 0;
+
+                    arrangeGroup(left, start, 1, "normal");
+                    arrangeGroup(right, start + left.length, 1, "normal");
+
+                    record(
+                        `Compare the groups [${left.map(b => b.value).join(", ")}] and [${right.map(b => b.value).join(", ")}].`,
+                        "Preparing to merge"
+                    );
+
+                    while (i < left.length && j < right.length) {
+                        const leftBar = left[i];
+                        const rightBar = right[j];
+
+                        leftBar.color = "compare";
+                        rightBar.color = "compare";
+
+                        record(
+                            `Compare ${leftBar.value} and ${rightBar.value}.`,
+                            "Comparing"
+                        );
+
+                        let selected;
+                        if (leftBar.value <= rightBar.value) {
+                            selected = leftBar;
+                            i++;
+                        } else {
+                            selected = rightBar;
+                            j++;
+                        }
+
+                        selected.x = start + merged.length;
+                        selected.y = 2;
+                        selected.color = "merging";
+
+                        merged.push(selected);
+
+                        record(
+                            `${selected.value} moves into position ${merged.length} of the merged group.`,
+                            "Merging"
+                        );
+
+                        left.forEach(bar => {
+                            if (!merged.includes(bar)) bar.color = "normal";
+                        });
+                        right.forEach(bar => {
+                            if (!merged.includes(bar)) bar.color = "normal";
+                        });
                     }
-                    let move_y = {...drop_y};
-                    pushState(tempArr, move_y, sub_c, 5, `Placing smaller element into sorted position ${k}.`);
-                    k++;
+
+                    while (i < left.length) {
+                        const selected = left[i++];
+                        selected.x = start + merged.length;
+                        selected.y = 2;
+                        selected.color = "merging";
+                        merged.push(selected);
+                        record(`Move ${selected.value} into the merged group.`, "Merging");
+                    }
+
+                    while (j < right.length) {
+                        const selected = right[j++];
+                        selected.x = start + merged.length;
+                        selected.y = 2;
+                        selected.color = "merging";
+                        merged.push(selected);
+                        record(`Move ${selected.value} into the merged group.`, "Merging");
+                    }
+
+                    arrangeGroup(merged, start, lane, "sorted");
+                    record(`Merged group: [${merged.map(b => b.value).join(", ")}].`, "Merged");
+
+                    return merged;
                 }
 
-                while (i < left.length) {
-                    tempArr[k] = left[i];
-                    i++;
-                    k++;
-                    pushState(tempArr, drop_y, sub_c, 6, `Copying remaining elements from left partition.`);
+                function sortSection(start, end) {
+                    const section = bars
+                        .filter(bar => bar.id >= start && bar.id <= end)
+                        .sort((a, b) => a.id - b.id);
+
+                    const length = section.length;
+                    setGroup(start, end, 1, "normal");
+
+                    record(`Now sorting the section: [${section.map(b => b.value).join(", ")}].`, "Sorting section");
+
+                    let current = section;
+
+                    for (let width = 1; width < length; width *= 2) {
+                        const nextPass = [];
+
+                        for (let offset = 0; offset < length; offset += width * 2) {
+                            const left = current.slice(offset, offset + width);
+                            const right = current.slice(offset + width, offset + width * 2);
+                            const groupStart = start + offset;
+
+                            if (right.length === 0) {
+                                arrangeGroup(left, groupStart, 1, "sorted");
+                                nextPass.push(...left);
+                            } else {
+                                const merged = mergeGroups(left, right, groupStart, 1);
+                                nextPass.push(...merged);
+                            }
+                        }
+
+                        current = nextPass;
+                        arrangeGroup(current, start, 1, "sorted");
+                        record(`The current section is now [${current.map(b => b.value).join(", ")}].`, "Section progress");
+                    }
+
+                    arrangeGroup(current, start, 0, "sorted");
+                    record(`Section completed: [${current.map(b => b.value).join(", ")}].`, "Section sorted");
+
+                    return current;
                 }
 
-                while (j < right.length) {
-                    tempArr[k] = right[j];
-                    j++;
-                    k++;
-                    pushState(tempArr, drop_y, sub_c, 6, `Copying remaining elements from right partition.`);
-                }
+                record("Starting array. The numbers are together before sorting begins.", "Original array");
 
-                workingArr = [...tempArr];
+                const middle = Math.ceil(n / 2);
+                const firstHalf = sortSection(0, middle - 1);
+                const secondHalf = sortSection(middle, n - 1);
 
-                // Frame: Segment rising back to main baseline, turning sorted color (Green/Red)
-                let rise_y = {...base_y};
-                let sorted_c = {...sync_c};
-                for (let idx = start; idx <= end; idx++) {
-                    rise_y[idx] = -220;
-                    sorted_c[idx] = C_GREEN;
-                }
-                pushState(workingArr, rise_y, sorted_c, 7, `Segment from index ${start} to ${end} successfully merged and returned to main level.`);
+                arrangeGroup(firstHalf, 0, 1, "normal");
+                arrangeGroup(secondHalf, middle, 1, "normal");
+
+                record(`Both sections are sorted. Now merge [${firstHalf.map(b => b.value).join(", ")}] and [${secondHalf.map(b => b.value).join(", ")}].`, "Final merge");
+
+                const finalResult = mergeGroups(firstHalf, secondHalf, 0, 1);
+                arrangeGroup(finalResult, 0, 0, "sorted");
+
+                record(`Merge Sort complete! [${finalResult.map(b => b.value).join(", ")}].`, "Completed");
+
+                return steps;
             }
 
-            mergeSortSim(0, workingArr.length - 1);
+            function renderStep() {
+                const step = history[currentStep];
+                barsContainer.innerHTML = "";
 
-            // Final Completed State
-            let final_y = {...base_y};
-            let final_c = {};
-            workingArr.forEach((_, i) => { final_c[i] = C_RED; });
-            pushState(workingArr, final_y, final_c, 7, "Merge Sort completed! The array is fully sorted.");
+                const rowGap = 200;
+                const baselineOffsetFromTop = 220; // Inusog pababa para hindi nakasadsad sa itaas pero sapat ang espasyo
 
-            currentStepIndex = 0;
-            renderStep();
-        }
+                const minValue = Math.min(...startingArray);
+                const maxValue = Math.max(...startingArray);
+                const range = Math.max(1, maxValue - minValue);
+                const maxRow = Math.max(...step.items.map(item => item.y));
 
-        function renderStep() {
-            if(historySteps.length === 0) return;
-            let state = historySteps[currentStepIndex];
+                barsContainer.style.position = "relative";
+                barsContainer.style.display = "block";
+                barsContainer.style.width = "100%";
+                barsContainer.style.height = `${(maxRow + 1) * rowGap + 160}px`;
+                barsContainer.style.overflow = "hidden";
 
-            document.getElementById('explanationText').textContent = state.explanation;
-            for(let c = 1; c <= 7; c++) {
-                let lineEl = document.getElementById(`code${c}`);
-                if(lineEl) {
-                    lineEl.className = `code-line ${state.activeCode === c ? 'active' : ''}`;
-                }
+                const totalBars = startingArray.length;
+                const containerWidthPercent = 88; 
+                const leftOffsetPercent = 6;
+
+                step.items.forEach(item => {
+                    const bar = document.createElement("div");
+                    bar.className = 'sort-bar';
+
+                    // Mas mahaba / mas mataas na bar proportions para punuin ang box spaces
+                    const height = Math.max(65, ((item.value - minValue) / range) * 140 + 65);
+                    
+                    // Bottom alignment batay sa row baseline
+                    const rowBaseline = baselineOffsetFromTop + (item.y * rowGap);
+                    const topPos = rowBaseline - height;
+
+                    bar.style.position = "absolute";
+                    const itemWidthPercent = containerWidthPercent / totalBars;
+                    const leftPos = leftOffsetPercent + (item.x * itemWidthPercent) + (itemWidthPercent / 2);
+
+                    bar.style.left = `${leftPos}%`;
+                    bar.style.top = `${topPos}px`;
+                    bar.style.transform = "translateX(-50%)";
+                    
+                    // Eksaktong makapal / malapad na lapad ng bawat bar (~1 inch / ~76px)
+                    bar.style.width = `76px`;
+                    bar.style.height = `${height}px`;
+                    bar.style.display = "flex";
+                    bar.style.flexDirection = "column";
+                    bar.style.justifyContent = "flex-end";
+                    bar.style.alignItems = "center";
+                    bar.style.paddingBottom = "12px";
+                    bar.style.borderRadius = "10px";
+                    bar.style.boxSizing = "border-box";
+                    bar.style.transition = "left 0.35s ease-in-out, top 0.35s ease-in-out, background-color 0.25s ease";
+                    bar.style.fontSize = "16px";
+                    bar.style.fontWeight = "600";
+                    bar.textContent = item.value;
+
+                    // Kulay batay sa state
+                    if (item.color === "compare") {
+                        bar.style.backgroundColor = "#f59e0b"; // Comparing amber
+                        bar.style.color = "#ffffff";
+                    } else if (item.color === "merging") {
+                        bar.style.backgroundColor = "#ef4444"; // Merging red
+                        bar.style.color = "#ffffff";
+                        bar.style.zIndex = "10";
+                    } else if (item.color === "sorted") {
+                        bar.style.backgroundColor = "#10b981"; // Sorted green
+                        bar.style.color = "#ffffff";
+                    } else {
+                        bar.style.backgroundColor = "#7dd3fc"; // Unsorted cyan
+                        bar.style.color = "#0f172a";
+                    }
+
+                    barsContainer.appendChild(bar);
+                });
+
+                stepCounter.textContent = `Step ${currentStep} / ${history.length - 1}`;
+                arrayStatus.textContent = step.status;
+                message.textContent = step.message;
+
+                previousButton.disabled = currentStep === 0;
+                nextButton.disabled = currentStep === history.length - 1;
             }
 
-            const container = document.getElementById('bars-container');
-            container.innerHTML = '';
+            function loadArray(values) {
+                stopPlaying();
+                startingArray = [...values];
+                currentStep = 0;
+                history = buildHistory();
+                inputMessage.textContent = "";
+                renderStep();
+            }
 
-            let maxVal = Math.max(...state.arr, 1);
+            function makeRandomArray(size) {
+                return Array.from({ length: size }, () => Math.floor(Math.random() * 45) + 5);
+            }
 
-            state.arr.forEach((val, idx) => {
-                const bar = document.createElement('div');
-                bar.className = 'sort-bar';
-                
-                let translateY = (state.translateY && state.translateY[idx] !== undefined) ? state.translateY[idx] : -220;
-                let barColor = (state.colors && state.colors[idx]) ? state.colors[idx] : C_CYAN;
-
-                bar.style.transform = `translateY(${translateY}px)`;
-                bar.style.backgroundColor = barColor;
-
-                let calculatedHeight = Math.max((val / maxVal) * 45, 12);
-                bar.style.height = `${calculatedHeight}%`;
-                bar.textContent = val;
-                container.appendChild(bar);
+            randomButton.addEventListener("click", function () {
+                loadArray(makeRandomArray(10));
             });
 
-            document.getElementById('stepStatusText').textContent = `Step ${currentStepIndex + 1} / ${historySteps.length}`;
-            document.getElementById('sortStatusMsg').textContent = currentStepIndex === historySteps.length - 1 ? "Sorted!" : "Sorting in progress...";
-        }
+            sortedButton.addEventListener("click", function () {
+                loadArray([4, 7, 15, 30, 30, 33, 35, 43, 45, 48]);
+            });
 
-        function nextStep() { if(currentStepIndex < historySteps.length - 1) { currentStepIndex++; renderStep(); } else { stopPlay(); } }
-        function prevStep() { if(currentStepIndex > 0) { currentStepIndex--; renderStep(); } }
-        function togglePlay() { if(isPlaying) { stopPlay(); } else { startPlay(); } }
+            nearlyButton.addEventListener("click", function () {
+                loadArray([7, 4, 33, 15, 35, 30, 43, 30, 48, 45]);
+            });
 
-        function startPlay() {
-            isPlaying = true;
-            document.getElementById('playBtn').textContent = "❚❚ Pause";
-            playInterval = setInterval(() => {
-                if(currentStepIndex < historySteps.length - 1) { nextStep(); } else { stopPlay(); }
-            }, animSpeed);
-        }
+            duplicatesButton.addEventListener("click", function () {
+                loadArray([30, 30, 15, 45, 33, 35, 7, 4, 48, 43]);
+            });
 
-        function stopPlay() { isPlaying = false; document.getElementById('playBtn').textContent = "▶ Play"; clearInterval(playInterval); }
-        function resetSorting() { stopPlay(); currentStepIndex = 0; renderStep(); }
-
-        function setPreset(type) {
-            stopPlay();
-            if(type === 'random') originalArray = [45, 4, 33, 35, 7, 43, 30, 15, 48, 30];
-            if(type === 'sorted') originalArray = [4, 7, 15, 30, 30, 33, 35, 43, 45, 48];
-            if(type === 'nearly') originalArray = [7, 4, 33, 15, 35, 30, 43, 30, 48, 45];
-            if(type === 'duplicates') originalArray = [30, 30, 15, 45, 33, 35, 7, 4, 48, 43];
-            initMergeSort(originalArray);
-        }
-
-        function applyCustomArray() {
-            stopPlay();
-            const inputVal = document.getElementById('customInput').value;
-            
-            if(!inputVal.trim()) {
-                alert("Please enter some numbers.");
-                return;
-            }
-
-            let cleanedStr = inputVal.replace(/[\s]+/g, ',').replace(/,,+/g, ',');
-            let rawItems = cleanedStr.split(',');
-            let parsed = [];
-
-            for (let item of rawItems) {
-                let trimmed = item.trim();
-                if (trimmed === "") continue;
-                
-                let num = parseFloat(trimmed);
-                if (isNaN(num)) {
-                    alert(`Invalid input found: "${trimmed}". Please enter only numbers.`);
+            customButton.addEventListener("click", function () {
+                const text = customArray.value.trim();
+                if (!text) {
+                    inputMessage.textContent = "Please enter numbers separated by commas.";
                     return;
                 }
-                parsed.push(Math.round(num));
+                const parts = text.split(",").map(item => item.trim());
+                if (parts.length < 2 || parts.length > 20 || parts.some(item => item === "" || !/^-?\d+$/.test(item))) {
+                    inputMessage.textContent = "Enter 2–20 whole numbers separated by commas.";
+                    return;
+                }
+                const values = parts.map(Number);
+                loadArray(values);
+            });
+
+            previousButton.addEventListener("click", function () {
+                stopPlaying();
+                if (currentStep > 0) {
+                    currentStep--;
+                    renderStep();
+                }
+            });
+
+            nextButton.addEventListener("click", function () {
+                stopPlaying();
+                if (currentStep < history.length - 1) {
+                    currentStep++;
+                    renderStep();
+                }
+            });
+
+            function advanceStep() {
+                if (!isPlaying) return;
+                if (currentStep < history.length - 1) {
+                    currentStep++;
+                    renderStep();
+                }
+                if (currentStep >= history.length - 1) {
+                    stopPlaying();
+                    return;
+                }
+                timer = setTimeout(advanceStep, Number(speedSelect.value));
             }
 
-            if(parsed.length < 2) {
-                alert("Enter two or more numbers to visualize the sorting.");
-                return;
-            }
+            playButton.addEventListener("click", function () {
+                if (isPlaying) {
+                    stopPlaying();
+                    return;
+                }
+                if (currentStep >= history.length - 1) {
+                    currentStep = 0;
+                    renderStep();
+                }
+                isPlaying = true;
+                playButton.textContent = "❚❚ Pause";
+                timer = setTimeout(advanceStep, Number(speedSelect.value));
+            });
 
-            originalArray = parsed;
-            initMergeSort(originalArray);
-            document.getElementById('sortStatusMsg').textContent = "Custom array loaded successfully!";
-        }
+            speedSelect.addEventListener("change", function () {
+                if (isPlaying) {
+                    stopPlaying();
+                    isPlaying = true;
+                    playButton.textContent = "❚❚ Pause";
+                    timer = setTimeout(advanceStep, Number(speedSelect.value));
+                }
+            });
 
-        initMergeSort(originalArray);
+            resetButton.addEventListener("click", function () {
+                stopPlaying();
+                currentStep = 0;
+                renderStep();
+            });
 
-        function openImageModal() { document.getElementById('imageModal').style.display = 'flex'; }
-        function closeImageModalDirect() { document.getElementById('imageModal').style.display = 'none'; }
-        function closeImageModal(event) { if (event.target.id === 'imageModal') document.getElementById('imageModal').style.display = 'none'; }
+            loadArray(startingArray);
+        });
     </script>
 </body>
 </html>
